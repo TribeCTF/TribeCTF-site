@@ -38,7 +38,7 @@ hostname = " WM"
 [[params.social]]
 key = 0
 name = "Join the conversation on Discord"
-url = "https://discord.gg/FGHUe3S6"
+url = "https://discord.gg"
 target = "_blank"
 aria = "Discord Server"
 
