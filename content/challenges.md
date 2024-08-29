@@ -25,4 +25,4 @@ Whether you're a coding wizard, a crypto enthusiast, or a digital detective, Tri
 
 Stay tuned for more details about the types of challenges. We'll be revealing more information as the competition draws near!
 
-Are you ready to seize the flag? [Register Now!](/registration)
+Are you ready to seize the flag? [Register Now!]({{< ref "registration" >}}   )
