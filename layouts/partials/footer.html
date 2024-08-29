@@ -1,0 +1,10 @@
+<footer class="footer">
+    {{ with .Site.Params.footerHtml }}
+        <span>{{ . | safeHTML }}</span>
+    {{ else }}
+        <span>
+            © {{ now.Format "2006" }} {{ .Site.Params.site.name }} - {{ i18n "organized_by" }}
+            <a href="https://cybersecurity.wm.edu" class="footerLink">WM CyberSecurity Center</a> 
+        </span>
+    {{ end }}
+</footer>

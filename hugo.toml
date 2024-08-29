@@ -1,0 +1,43 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'TribeCTF 2024'
+theme = "nightfall"
+
+[menu]
+  [[menu.header]]
+    name = "prizes"
+    weight = 1
+    url = "prizes"
+  [[menu.header]]
+    name = "schedule"
+    weight = 2
+    url = "schedule"
+  [[menu.header]]
+    name = "register"
+    weight = 3
+    url = "register"
+  [[menu.header]]
+    name = "faq"
+    weight = 3
+    url = "faq"
+
+[params]
+user = "TribeCTF "
+hostname = " WM"
+  [params.site]
+    name = "TribeCTF"  # Website and RSS feed author
+    tagline = "Challenges, Code, Conquer!"
+    detail = "The Tribe Has Spoken: It's CTF Time! Join William & Mary's inaugural cybersecurity challenge where tribal wisdom meets hacking prowess, and only the most skilled warriors will capture the flag."
+    email = "email@example.com"  # RSS feed email address
+
+
+readingTime = false  # Show reading time on post page
+published = false  # Show published data on post page
+
+[[params.social]]
+key = 0
+name = "discord"
+url = "https://discord.com/gohugoio"
+target = "_blank"
+aria = "Discord Server"
+
