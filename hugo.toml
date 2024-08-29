@@ -5,23 +5,25 @@ theme = "nightfall"
 
 [menu]
   [[menu.header]]
-    name = "prizes"
+    name = "about"
     weight = 1
-    url = "prizes"
+    url = "about"
   [[menu.header]]
-    name = "schedule"
+    name = "registration"
     weight = 2
+    url = "registration"
+  [[menu.header]]
+    name = "challenges"
+    weight = 3
     url = "schedule"
   [[menu.header]]
-    name = "register"
-    weight = 3
-    url = "register"
-  [[menu.header]]
-    name = "faq"
-    weight = 3
-    url = "faq"
+    name = "rules"
+    weight = 4
+    url = "rules"
 
 [params]
+readingTime = false  # Show reading time on post page
+published = false  # Show published data on post page
 user = "TribeCTF "
 hostname = " WM"
   [params.site]
@@ -31,8 +33,6 @@ hostname = " WM"
     email = "email@example.com"  # RSS feed email address
 
 
-readingTime = false  # Show reading time on post page
-published = false  # Show published data on post page
 
 [[params.social]]
 key = 0

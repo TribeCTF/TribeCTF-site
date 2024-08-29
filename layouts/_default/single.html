@@ -1,0 +1,18 @@
+{{ define "title"}}
+{{ .Title }} | {{ .Site.Params.author.name }}
+{{ end }}
+
+{{ define "main" }}
+<div class="postWrapper">
+    <h1>{{ .Title }}</h1>
+    {{ if .Description}}
+    	<p>{{.Description}}</p>
+    {{ end }}
+    {{ if .Params.showMetadata | default true }}
+
+    {{ end }}
+    <div>
+        {{ .Content }}
+    </div>
+</div>
+{{ end }}
