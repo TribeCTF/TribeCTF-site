@@ -25,4 +25,4 @@ description = ""
 \> We are proud to be sponsored by [ManTech International](https://mantech.com), a leading provider of innovative technologies and solutions for mission-critical national security programs.
 ManTech's support enables us to offer this exciting opportunity to cybersecurity talents. Their commitment to fostering the next generation of cyber professionals aligns perfectly with TribeCTF's mission.
 
-![Mantech Logo](../Mantech_logo.png)
+{{< mantech-logo >}}
