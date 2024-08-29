@@ -9,6 +9,12 @@ description = ""
 ## $ Our Mission
 \> Our goal is to foster cybersecurity skills, promote ethical hacking, and build a community of security enthusiasts at William & Mary and beyond.
 
+## $ Prizes
+\> The winning team bags a whopping $5K, the runner-up team takes $3K and the second runner-up gets $2K.
+
+## $ When and Where?
+\> TribeCTF is co-located with [&hacks](https://andhacks.cs.wm.edu) at William & Mary. Our challenges will be released after the opening ceremony on Oct 4th, 2024 and will be closed on 10 AM of Oct 6th, 2024.
+
 ## $ Who Can Participate?
 \> TribeCTF is open to all students, from curious beginners to experienced hackers. No prior experience is required – just bring your curiosity and willingness to learn!
 
