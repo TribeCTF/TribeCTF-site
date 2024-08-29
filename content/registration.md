@@ -6,8 +6,8 @@ description = "We're taking pre-registrations!"
 ### Eligibility
 
 - Open to all William & Mary students
-- Limited spots available for external participants, must be a student
-- Open to undergraduate as well as graduate students
+- Limited spots available for external participants, must be a student with a valid (`.edu`) email address
+- Open to undergraduate, graduate as well K-12 students
 - Open to participants from any background (non-CS too!)
 
 ### Fees

@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = ''
 languageCode = 'en-us'
 title = 'TribeCTF 2024'
 theme = "nightfall"
@@ -26,8 +26,10 @@ readingTime = false  # Show reading time on post page
 published = false  # Show published data on post page
 user = "TribeCTF "
 hostname = " WM"
+  [params.author]
+    name = "TribeCTF 2024"
   [params.site]
-    name = "TribeCTF"  # Website and RSS feed author
+    name = "TribeCTF 2024"  # Website and RSS feed author
     tagline = "Code, Crack, Conquer!"
     detail = "Join William & Mary's inaugural cybersecurity challenge where code breakers meet ethical hackers, and only the nerdiest will capture all flags."
 
