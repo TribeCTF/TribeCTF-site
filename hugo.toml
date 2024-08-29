@@ -15,7 +15,7 @@ theme = "nightfall"
   [[menu.header]]
     name = "challenges"
     weight = 3
-    url = "schedule"
+    url = "challenges"
   [[menu.header]]
     name = "rules"
     weight = 4
@@ -28,16 +28,15 @@ user = "TribeCTF "
 hostname = " WM"
   [params.site]
     name = "TribeCTF"  # Website and RSS feed author
-    tagline = "Challenges, Code, Conquer!"
-    detail = "The Tribe Has Spoken: It's CTF Time! Join William & Mary's inaugural cybersecurity challenge where tribal wisdom meets hacking prowess, and only the most skilled warriors will capture the flag."
-    email = "email@example.com"  # RSS feed email address
+    tagline = "Code, Crack, Conquer!"
+    detail = "Join William & Mary's inaugural cybersecurity challenge where code breakers meet ethical hackers, and only the nerdiest will capture all flags."
 
 
 
 [[params.social]]
 key = 0
-name = "discord"
-url = "https://discord.com/gohugoio"
+name = "Join the conversation on Discord"
+url = "https://discord.com/"
 target = "_blank"
 aria = "Discord Server"
 
