@@ -1,4 +1,4 @@
-baseURL = ''
+baseURL = 'https://tribectf.cs.wm.edu'
 languageCode = 'en-us'
 title = 'TribeCTF 2024'
 theme = "nightfall"
@@ -38,7 +38,7 @@ hostname = " WM"
 [[params.social]]
 key = 0
 name = "Join the conversation on Discord"
-url = "https://discord.com/"
+url = "https://discord.gg/FGHUe3S6"
 target = "_blank"
 aria = "Discord Server"
 
