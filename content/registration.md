@@ -25,6 +25,24 @@ description = "We're taking pre-registrations!"
 
 
 {{< rawhtml >}}
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeiSV2B7xTaZ_DTySzPL2SW1Elcj83udsACBdXn3wccpUx5mw/viewform?embedded=true" width="640" height="1400" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+<style>
+.responsive-iframe-container {
+    background-color: #292a2d;
+    position: relative;
+    padding-bottom: 150%;  /* Adjust based on your form's height */
+    height: 0;
+}
 
+.responsive-iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+</style>
+<div class="responsive-iframe-container">
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeKsZvFVAShB-BP2Lf1goWUY5z0_x79wd5Mc8R822wj7xUuKA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+</div>
 {{< /rawhtml >}}
