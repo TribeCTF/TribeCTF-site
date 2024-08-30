@@ -1,6 +1,5 @@
 +++
 title = "Registration"
-description = "We're taking pre-registrations!"
 +++
 
 ### Eligibility

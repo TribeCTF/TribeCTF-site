@@ -8,13 +8,33 @@
 
     {{ partial "head.html" . }}
 
+    <style>
+        .register-btn {
+            background-color: #292a2d;
+            color: white;
+            border: 2px solid white;
+            font-size: 1rem;
+            padding: 2em;
+            width: 20rem;
+            height: 5rem;
+            margin: auto;
+            margin-top: 3rem;
+        }
+
+        .register-btn:hover {
+            background-color: rgba(255, 255, 255, 0.343);
+            color: black;
+            border: 2px solid black;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="flexWrapper">
         {{ partial "header.html" . }}
-        
+
         <div class="content vertical">
             <main class="main">
                 <div class="indexWrapper">
@@ -23,9 +43,9 @@
                         <h2>{{ .Site.Params.site.tagline }}</h2>
                         <p>{{ .Site.Params.site.detail }} </p>
                     </div>
-                    {{ if isset .Site.Params "social" }}
-                        {{ partial "social.html" . }}
-                    {{ end }}
+                    <button class="register-btn" onclick="location.href = '/registration'">
+                        Register Now!
+                    </button>
                 </div>
             </main>
         </div>
