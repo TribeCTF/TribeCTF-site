@@ -13,7 +13,11 @@ description = ""
 \> The winning team bags a whopping $5K, the runner-up team takes $3K and the second runner-up gets $1K.
 
 ## $ When and Where?
-\> TribeCTF is co-located with [&hacks](https://andhacks.cs.wm.edu) at William & Mary. Our challenges will be released after the opening ceremony on Oct 4th, 2024 and will be closed on 10 AM of Oct 6th, 2024.
+\> TribeCTF is co-located with [&hacks](https://andhacks.cs.wm.edu) at William & Mary. Our challenges will be released after the opening ceremony on Oct 4th, 2024 and will be closed at noon of Oct 6th, 2024.
+
+- Friday (Oct 4th - Starts 6 PM - Workshop - 9 PM)
+- Saturday (Oct 5th - All Day)
+- Sunday (Oct 6th - Ending at 12PM - Winners Announcement along w/ [&hacks](https://andhacks.cs.wm.edu))
 
 ## $ Who Can Participate?
 \> TribeCTF is open to all students, from curious beginners to experienced hackers. No prior experience is required – just bring your curiosity and willingness to learn! All you need is a valid student ID and email address (`.edu`). All are welcome - K-12 to Graduate level!

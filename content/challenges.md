@@ -18,11 +18,17 @@ While we're keeping the specifics under wraps for now, here's a sneak peek at wh
    - Cryptography
    - Miscellaneous Challenges
 
-
-
 Whether you're a coding wizard, a crypto enthusiast, or a digital detective, TribeCTF has something to challenge and intrigue you.
 
+### $ Newbie here,  How do I Prepare
 
-Stay tuned for more details about the types of challenges. We'll be revealing more information as the competition draws near!
+If you are completely new and want to get started with some practice, here are some recommended resources you could get your feet wet with:
 
-Are you ready to seize the flag? [Register Now!]({{< ref "registration" >}})
+- [CTF 101](https://ctf101.org/)
+- [picoGym from PicoCTF](https://play.picoctf.org/practice)
+- [CTF Field Guide by Trail of Bits](https://trailofbits.github.io/ctf/)
+
+
+----
+
+Are you ready to seize the flag? [>>>>Register Now!<<<<]({{< ref "registration" >}})
