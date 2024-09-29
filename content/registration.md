@@ -8,6 +8,7 @@ title = "Registration"
 - Open to external participants, must be a student with a valid (`.edu`) email address
 - Open to undergraduate, graduate as well K-12 students
 - Open to participants from any background (non-CS too!)
+- No association with ManTech International (currently or in the past)
 
 ### $ Fees
 
