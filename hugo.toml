@@ -13,12 +13,16 @@ theme = "nightfall"
     weight = 2
     url = "registration"
   [[menu.header]]
-    name = "challenges"
+    name = "schedule"
     weight = 3
+    url = "schedule"
+  [[menu.header]]
+    name = "challenges"
+    weight = 4
     url = "challenges"
   [[menu.header]]
     name = "rules"
-    weight = 4
+    weight = 5
     url = "rules"
 
 [params]
@@ -42,3 +46,5 @@ url = "https://discord.gg"
 target = "_blank"
 aria = "Discord Server"
 
+[markup.goldmark.renderer]
+unsafe = true
