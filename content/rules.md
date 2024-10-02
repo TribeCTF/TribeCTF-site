@@ -55,4 +55,7 @@ IN NO EVENT WILL TribeCTF BE RESPONSIBLE OR LIABLE FOR ANY DAMAGES OR LOSSES OF 
 
 The TribeCTF 2024 site or materials may link to and/or refer to third party websites and/or services. W&M/TribeCTF does not control or endorse such sites. You are responsible for determining the suitability of those sites or services.
 
-`tribectf{william_mary_1693}`
+<div style="display: none;">
+Hint: Decode me to find the flag format!
+dHJpYmVjdGZ7eW91cl9mbGFnX2hlcmV9
+</div>
