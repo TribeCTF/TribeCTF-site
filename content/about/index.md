@@ -23,6 +23,14 @@ Check the [schedule page](https://tribectf.cs.wm.edu/schedule) for full details!
 ## $ The Organizing Committee
 \> TribeCTF is brought to you by a dedicated team of cybersecurity enthusiasts from the CyberSecurity Center @ William & Mary, Tribe Cyber and collaborators from the Industry. Our organizing committee includes students, faculty, and industry professionals committed to creating an exciting and educational event.
 
+{{< oc-team >}}
+
+From Left-to-Right (names in order with the picture above): 
+- Prof. Adwait Nadkarni & Prof. Stephen Herwig - **Co-Chairs**
+- Amit Seal Ami, Aashutosh Poudel, Pankaj Niroula - **PhD Students**
+- Nicholas Janis & Lily Gloudemans - **Undergraduate Students**
+
+
 ## $ Our Sponsor
 \> We are proud to be sponsored by [ManTech International](https://mantech.com), a leading provider of innovative technologies and solutions for mission-critical national security programs.
 ManTech's support enables us to offer this exciting opportunity to cybersecurity talents. Their commitment to fostering the next generation of cyber professionals aligns perfectly with TribeCTF's mission.
