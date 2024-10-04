@@ -10,7 +10,7 @@ description = ""
 
 - Registration (SWEM Entrance, 4 - 5 pm)
 - CTF Kick-off (~5:40 - 6 pm, SWEM Library, right after the &hacks commencement from 5 - 5:30 pm)
-- CTF 101 Workshop (8 pm, SWEM)
+- CTF 101 Workshop (7 pm @ Learning Center 134, SWEM)
  
 *Teams leave the location at ~9 pm*
 
