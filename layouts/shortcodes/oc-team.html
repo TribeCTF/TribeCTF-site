@@ -1,0 +1,6 @@
+{{ $path := "images/oc-group-pic.jpg" }}
+{{ with .Page.Resources.Get $path }}
+  <img src="{{ .RelPermalink }}" alt="The Organizing Committee">
+{{ else }}
+  {{ errorf "Unable to get page resource %q" $path }}
+{{ end }}
