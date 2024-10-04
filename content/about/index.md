@@ -28,7 +28,7 @@ Check the [schedule page](https://tribectf.cs.wm.edu/schedule) for full details!
 From Left-to-Right (names in order with the picture above): 
 - Prof. Adwait Nadkarni & Prof. Stephen Herwig - **Co-Chairs**
 - Amit Seal Ami, Aashutosh Poudel, Pankaj Niroula - **PhD Students**
-- Nicholas Janis & Lily Gloudemans - **Undergraduate Students**
+- Nicolas Janis & Lily Gloudemans - **Undergraduate Students**
 
 
 ## $ Our Sponsor
