@@ -1,0 +1,6 @@
+{{ $path := "images/top-10-teams.png" }}
+{{ with .Page.Resources.Get $path }}
+  <img src="{{ .RelPermalink }}" alt="The Top 10 teams">
+{{ else }}
+  {{ errorf "Unable to get page resource %q" $path }}
+{{ end }}

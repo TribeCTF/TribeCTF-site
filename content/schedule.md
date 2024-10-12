@@ -1,6 +1,6 @@
 +++
 title = "Schedule"
-description = ""
+meta_description = "Schedule of TribeCTF 2024"
 +++
 
 
