@@ -9,9 +9,9 @@ theme = "nightfall"
     weight = 1
     url = "about"
   [[menu.header]]
-    name = "registration"
+    name = "highlights"
     weight = 2
-    url = "registration"
+    url = "2024"
   [[menu.header]]
     name = "schedule"
     weight = 3
@@ -35,7 +35,7 @@ hostname = " WM"
   [params.site]
     name = "TribeCTF 2024"  # Website and RSS feed author
     tagline = "Code, Crack, Conquer!"
-    detail = "Join William & Mary's inaugural cybersecurity challenge where code breakers meet ethical hackers, and only the nerdiest will capture all flags."
+    detail = "William & Mary's inaugural cybersecurity challenge where code breakers meet ethical hackers, and only the nerdiest will capture all flags."
 
 
 

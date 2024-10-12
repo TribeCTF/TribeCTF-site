@@ -1,0 +1,6 @@
+{{ $path := "images/submission-percentages.png" }}
+{{ with .Page.Resources.Get $path }}
+  <img src="{{ .RelPermalink }}" alt="Solve Percentages">
+{{ else }}
+  {{ errorf "Unable to get page resource %q" $path }}
+{{ end }}
