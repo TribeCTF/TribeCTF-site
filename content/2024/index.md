@@ -16,6 +16,14 @@ Ultimately, a two-person team from W&M, composed of undergraduate students Luna 
 <center>TribeCTF 2024 1st Place Winners, Team 🐈‍⬛🐇💻 from W&M</center>
 
 
+<img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_2nd_place.jpg">
+<center>TribeCTF 2024 2nd Place Winners, Team MasonCC from GMU</center>
+
+
+<img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_3rd_place.jpg">
+<center>TribeCTF 2024 3rd Place Winners, Team Error404 from W&M</center>
+
+
 
 ## $ Quick Stats
 
