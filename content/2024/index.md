@@ -12,17 +12,21 @@ Ultimately, a two-person team from W&M, composed of undergraduate students Luna 
 
 **Read full coverage [> here! <](https://www.wm.edu/as/computerscience/about-contactus/news/tribectf-2024-wms-first-capture-the-flag-ctf-competition-is-a-resounding-success.php)**
 
+
+<figure>
 <img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_1st_place.jpg">
-<center>TribeCTF 2024 1st Place Winners, Team 🐈‍⬛🐇💻 from W&M</center>
+<figcaption><center>TribeCTF 2024 1st Place Winners, Team 🐈‍⬛🐇💻 from W&M</center></figcaption>
+</figure>
 
-
+<figure>
 <img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_2nd_place.jpg">
-<center>TribeCTF 2024 2nd Place Winners, Team MasonCC from GMU</center>
+<figcaption><center>TribeCTF 2024 2nd Place Winners, Team MasonCC from GMU</center></figcaption>
+</figure>
 
-
+<figure>
 <img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_3rd_place.jpg">
-<center>TribeCTF 2024 3rd Place Winners, Team Error404 from W&M</center>
-
+<figcaption><center>TribeCTF 2024 3rd Place Winners, Team Error404 from W&M</center></figcaption>
+</figure>
 
 
 ## $ Quick Stats
