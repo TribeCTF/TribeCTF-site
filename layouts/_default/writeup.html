@@ -1,0 +1,27 @@
+{{ define "title"}}
+{{ .Title }} | {{ .Site.Params.author.name }}
+{{ end }}
+
+{{ define "main" }}
+<div class="postWrapper">
+    <h1>$ {{ .Title }}</h1>
+    <div style="padding: 0.5em 1em; margin-bottom:2em; border: 1px white solid;">
+
+    <p><span style="font-weight: bolder;">Challenge Category:  </span>{{ .Params.category }} </p>
+    <p><span style="font-weight: bolder;">Points:  </span>{{ .Params.points }} </p>
+    <p><span style="font-weight: bolder;">Time spent:  </span>{{ .Params.time_spent }} </p>
+    <p><span style="font-weight: bolder;">Tools required: </span>{{ .Params.tools_used }} </p> 
+
+    {{ if .Description}}
+    	<p><span style="font-weight: bolder;">Description: {{.Description}}</p>
+    {{ end }}
+    {{ if .Params.showMetadata | default true }}
+
+    {{ end }}
+</div>
+   
+    <div>
+        {{ .Content }}
+    </div>
+</div>
+{{ end }}

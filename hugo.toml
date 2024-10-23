@@ -9,13 +9,13 @@ theme = "nightfall"
     weight = 1
     url = "about"
   [[menu.header]]
-    name = "highlights"
+    name = "2024-recap"
     weight = 2
     url = "2024"
   [[menu.header]]
-    name = "schedule"
+    name = "write-ups"
     weight = 3
-    url = "schedule"
+    url = "writeups/"
   [[menu.header]]
     name = "challenges"
     weight = 4
