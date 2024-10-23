@@ -32,6 +32,17 @@ Ultimately, a two-person team from W&M, composed of undergraduate students Luna 
 
 {{< top-10-teams >}}
 
+## $ Leaderboard
 
-
-
+| Position | Team Name           | Points |
+|----------|---------------------|--------|
+|     1    | 🐈‍⬛🐇💻               | 6450   |
+|     2    | MasonCC             | 5950   |
+|     3    | Error404            | 5650   |
+|     4    | pwn@vt              | 5450   |
+|     5    | hunt@vt             | 3850   |
+|     6    | pecunia             | 3250   |
+|     7    | Musketeers          | 3250   |
+|     8    | *hacks              | 2450   |
+|     9    | MxM@RB3S            | 1950   |
+|    10    | return null;        | 1450   |
