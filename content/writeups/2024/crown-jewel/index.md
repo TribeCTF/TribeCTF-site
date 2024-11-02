@@ -89,3 +89,5 @@ if __name__ == "__main__":
 ```
 
 You can retrieve the flag.
+
+`tribectf{h1dd3n_1n_th3_bricks}`
