@@ -4,7 +4,7 @@ description = ""
 layout = "writeup"
 category = "Reverse Engineering"
 points = "1000 pts"
-time_spent = "X mins"
+time_spent = "40 mins"
 tools_used = "Ghidra, ImHex"
 date = "2024-11-03"
 +++
