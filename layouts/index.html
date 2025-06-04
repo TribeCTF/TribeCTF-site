@@ -29,6 +29,22 @@
             cursor: pointer;
         }
     </style>
+
+    <script>
+        const messages = ["Woohoo!!", "Stay Tuned!!", "Getting there!!", "Almost there!!", "Click again!!", "Keep clicking!!", "Registration opening soon!!", "Exciting times ahead!!", "Get ready!!", "Countdown begins!!", "🤓💻🏁💰"];
+        let currentMessageIndex = 0;
+        // Function to handle the button click
+        function registerNow() {
+            
+            const button = document.querySelector('.register-btn');
+            // Change the button text to the current message
+            button.textContent = messages[currentMessageIndex];
+
+            // Move to the next message index for the next click
+            currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+            button.style.filter = 'grayscale(100%)';
+        }
+    </script>
 </head>
 
 <body>
@@ -44,11 +60,15 @@
                         <h2>{{ .Site.Params.site.tagline }}</h2>
                         <p>{{ .Site.Params.site.detail }} </p>
                     </div>
-                    <h2>The Flags for 2024 have been captured! <br>Winners took home $5K, $3K or $1K !!!</h2>
+
+                    <h3>Details for 2025 Event to unravel soon!</h3>
+                    <button class="register-btn" onclick="registerNow()">
+                        Register Now!!
+                    </button>
+
+                    <h2>TribeCTF 2024 was a hit!</h2>
+                    </h3>Winners bagged $5K, $3K or $1K !!!</h3>
                     <a href="/2024" style="color: white; font-weight: bolder;">Find out more!</a>
-                    <!-- <button class="register-btn" onclick="location.href = '/registration'">
-                        Register Now!
-                    </button> -->
                     <!-- <h2>Registered already? Check out the <a href="/schedule">Schedule!</a></h2> -->
 
                 </div>
