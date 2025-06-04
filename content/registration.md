@@ -1,5 +1,6 @@
 +++
 title = "Registration"
+description = "ℹ️ This is from 2024. Stick around for new updates."
 +++
 
 ### $ Eligibility
