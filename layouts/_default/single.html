@@ -6,12 +6,12 @@
 <div class="postWrapper">
     <h1>{{ .Title }}</h1>
     {{ if .Description}}
-    	<p>{{.Description}}</p>
+    	<span style="border: 1px solid white; padding: 1em; margin-bottom:2em;">{{.Description}}</span>
     {{ end }}
     {{ if .Params.showMetadata | default true }}
 
     {{ end }}
-    <div>
+    <div style="margin-top:2em">
         {{ .Content }}
     </div>
 </div>

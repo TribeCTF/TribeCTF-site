@@ -4,18 +4,18 @@ description = ""
 +++
 
 ## $ What is TribeCTF?
-\> TribeCTF is William & Mary's inaugural Capture The Flag cybersecurity competition. It's designed to challenge, inspire, and educate participants in various aspects of information security.
+\> TribeCTF is William & Mary's annual Capture The Flag cybersecurity competition. It's designed to challenge, inspire, and educate participants in various aspects of information security.
 
 ## $ Our Mission
 \> Our goal is to foster cybersecurity skills, promote ethical hacking, and build a community of security enthusiasts at William & Mary and beyond.
 
 ## $ Prizes
-\> The winning team bags a whopping $5K, the runner-up team takes $3K and the second runner-up gets $1K.
+\> For 2024, the winning team bagged a whopping $5K, the runner-up team took $3K and the second runner-up got $1K. Stick around and check again for 2025 prize deets 💰💰 !!
 
 ## $ When and Where?
-\> TribeCTF is co-located with [&hacks](https://andhacks.cs.wm.edu) at William & Mary. Our challenges will be released after the opening ceremony on Oct 4th, 2024 and will be closed at noon of Oct 6th, 2024.
+\> We're figuring this out. Stay tuned. You'll be the first to know-- from you know where!
 
-Check the [schedule page](https://tribectf.cs.wm.edu/schedule) for full details!
+<!-- Check the [schedule page](https://tribectf.cs.wm.edu/schedule) for full details! -->
 
 ## $ Who Can Participate?
 \> TribeCTF is open to all students, from curious beginners to experienced hackers. No prior experience is required – just bring your curiosity and willingness to learn! All you need is a valid student ID and email address (`.edu`). All are welcome - K-12 to Graduate level!
@@ -32,7 +32,8 @@ From Left-to-Right (names in order with the picture above):
 
 
 ## $ Our Sponsor
-\> We are proud to be sponsored by [ManTech International](https://mantech.com), a leading provider of innovative technologies and solutions for mission-critical national security programs.
+\> We're looking for sponsors. Get in touch with [WM CyberSecurity Center](https://cybersecurity.wm.edu/) if you want to amp up the fun with your presence and support. 
+<!-- \> We are proud to be sponsored by [ManTech International](https://mantech.com), a leading provider of innovative technologies and solutions for mission-critical national security programs.
 ManTech's support enables us to offer this exciting opportunity to cybersecurity talents. Their commitment to fostering the next generation of cyber professionals aligns perfectly with TribeCTF's mission.
 
-{{< mantech-logo >}}
+{{< mantech-logo >}} -->

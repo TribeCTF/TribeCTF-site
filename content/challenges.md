@@ -1,6 +1,6 @@
 +++
 title = "Challenges"
-description = ""
+description = "ℹ️ This is from 2024. Stick around for new updates."
 +++
 
 Get ready to put your cybersecurity skills to the test! TribeCTF will feature a diverse array of challenges designed to challenge and excite participants of all skill levels.
@@ -31,4 +31,4 @@ If you are completely new and want to get started with some practice, here are s
 
 ----
 
-Are you ready to seize the flag? [>>>>Register Now!<<<<]({{< ref "registration" >}})
+<!-- Are you ready to seize the flag? [>>>>Register Now!<<<<]({{< ref "registration" >}}) -->

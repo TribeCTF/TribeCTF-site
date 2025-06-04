@@ -31,11 +31,11 @@ published = false  # Show published data on post page
 user = "TribeCTF "
 hostname = " WM"
   [params.author]
-    name = "TribeCTF 2024"
+    name = "TribeCTF 2025"
   [params.site]
-    name = "TribeCTF 2024"  # Website and RSS feed author
-    tagline = "Code, Crack, Conquer!"
-    detail = "William & Mary's inaugural cybersecurity challenge where code breakers meet ethical hackers, and only the nerdiest will capture all flags."
+    name = "TribeCTF 2025"  # Website and RSS feed author
+    tagline = "Code, Crack, Conquer... Again!"
+    detail = "William & Mary's annual cybersecurity challenge where code breakers meet ethical hackers, and only the nerdiest will capture all flags."
 
 
 
