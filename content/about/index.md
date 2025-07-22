@@ -13,7 +13,7 @@ description = ""
 \> For 2024, the winning team bagged a whopping $5K, the runner-up team took $3K and the second runner-up got $1K. Stick around and check again for 2025 prize deets 💰💰 !!
 
 ## $ When and Where?
-\> We're figuring this out. Stay tuned. You'll be the first to know-- from you know where!
+\> **TribeCTF 2025** will take place **September 26-28** as an **in-person event** at William & Mary. More details coming soon!
 
 <!-- Check the [schedule page](https://tribectf.cs.wm.edu/schedule) for full details! -->
 
