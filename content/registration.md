@@ -1,15 +1,14 @@
 +++
 title = "Registration"
-description = "ℹ️ This is from 2024. Stick around for new updates."
+description = ""
 +++
 
 ### $ Eligibility
 
-- Open to all William & Mary students
-- Open to external participants, must be a student with a valid (`.edu`) email address
-- Open to undergraduate, graduate as well K-12 students
+- Open to all students (K-12, Undergraduate, and Graduate levels)
+- Must have a valid student ID and email address with `.edu` domain
 - Open to participants from any background (non-CS too!)
-- No association with ManTech International (currently or in the past)
+- Can participate individually or form teams of up to 4 students
 
 ### $ Fees
 
@@ -19,10 +18,13 @@ description = "ℹ️ This is from 2024. Stick around for new updates."
 ### $ What's Included
 
 - Access to all CTF challenges
-- Opportunity to win exciting prizes
-- Networking events with sponsors and cybersecurity professionals
+- Opportunity to win cash prizes (Winner: **$2,500** | Runner-up: **$1,000** | Third: **$500**)
+- Free food throughout the event
+- Networking opportunities with cybersecurity professionals
+- Co-location with &hacks XI hackathon
 
-### > Register now and prepare to test your skills in William & Mary's inaugural Capture The Flag competition!
+### > Registration is now open! 
+Register below to test your skills in TribeCTF 2025!
 
 
 {{< rawhtml >}}
@@ -44,6 +46,6 @@ description = "ℹ️ This is from 2024. Stick around for new updates."
 }
 </style>
 <div class="responsive-iframe-container">
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeKsZvFVAShB-BP2Lf1goWUY5z0_x79wd5Mc8R822wj7xUuKA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdCf-5Cn6kDCLVsMeQjVVUvU90z452drEufRDzfykZ3eZUESg/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 </div>
 {{< /rawhtml >}}

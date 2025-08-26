@@ -1,6 +1,6 @@
 baseURL = 'https://tribectf.cs.wm.edu'
 languageCode = 'en-us'
-title = 'TribeCTF 2024'
+title = 'TribeCTF 2025'
 theme = "nightfall"
 
 [menu]
