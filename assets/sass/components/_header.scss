@@ -11,12 +11,14 @@
 }
 
 .headerWrapper {
-  overflow: auto;
+  overflow: visible;
   box-sizing: border-box;
   background-color: v.$backgroundDarker;
   display: flex;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1000;
 }
 
 .headerLinks {
@@ -27,9 +29,63 @@
     li {
       display: inline;
       margin: 5px;
+      position: relative;
+      
       a {
         color: v.$white;
         text-decoration: none;
+      }
+      
+      &.dropdown {
+        .dropdown-toggle {
+          cursor: pointer;
+          &:after {
+            content: " ▼";
+            font-size: 0.7em;
+            margin-left: 5px;
+          }
+        }
+        
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background-color: v.$backgroundDark;
+          border: 1px solid v.$backgroundDarker;
+          border-radius: 4px;
+          min-width: 150px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 0.3s ease;
+          z-index: 9999;
+          
+          li {
+            display: block;
+            margin: 0;
+            
+            a {
+              display: block;
+              padding: 10px 15px;
+              border-bottom: 1px solid v.$backgroundDarker;
+              
+              &:hover {
+                background-color: v.$backgroundDarker;
+              }
+              
+              &:last-child {
+                border-bottom: none;
+              }
+            }
+          }
+        }
+        
+        &:hover .dropdown-menu {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
       }
     }
   }
