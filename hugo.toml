@@ -9,21 +9,29 @@ theme = "nightfall"
     weight = 1
     url = "about"
   [[menu.header]]
-    name = "2024-recap"
+    name = "register"
     weight = 2
-    url = "2024"
-  [[menu.header]]
-    name = "write-ups"
-    weight = 3
-    url = "writeups/"
+    url = "registration"
   [[menu.header]]
     name = "challenges"
-    weight = 4
+    weight = 3
     url = "challenges"
   [[menu.header]]
     name = "rules"
-    weight = 5
+    weight = 4
     url = "rules"
+  [[menu.header]]
+    name = "2024"
+    weight = 5
+    identifier = "2024"
+  [[menu.header]]
+    name = "↳ recap"
+    parent = "2024"
+    url = "2024-recap"
+  [[menu.header]]
+    name = "↳ writeups"
+    parent = "2024"
+    url = "2024-writeups"
 
 [params]
 readingTime = false  # Show reading time on post page
