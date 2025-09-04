@@ -56,3 +56,9 @@ aria = "Discord Server"
 
 [markup.goldmark.renderer]
 unsafe = true
+
+# URL redirects
+[[redirects]]
+from = "/2024"
+to = "/2024-recap"
+status = 301
