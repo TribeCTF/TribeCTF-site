@@ -8,16 +8,21 @@ meta_description = "Schedule of TribeCTF 2025"
 
 ### Saturday, September 27th
 
-- CTF Kick-off in the morning @ ISC 1221 (co-located with &hacks XI)
-- Competition begins!
-- CTF continues through the night! 
- 
+- **9:00 AM onwards:** Registration (ISC Entrance)
+- **9:30 AM - 10:15 AM:** CTF 101 Workshop (ISC 1227)
+- **10:30 AM - 11:00 AM:** CTF Commencement (ISC 1221)
+- **11:00 AM onwards:** CTF Kick-off
+- **2:00 PM - 4:00 PM:** Career fair
+- CTF continues through the night!
+
 
 ### Sunday, September 28th
 
-- CTF wrap-up in the afternoon @ ISC 1221
-- Winners announcement along with [&hacks XI](https://andhacks.cs.wm.edu)
- 
+- CTF continues from the previous night
+- **10:00 AM - 11:00 AM:** Check-in desk open
+- **2:00 PM:** CTF ends
+- **3:45 PM - 4:00 PM:** Closing ceremony and winners announced (along with &hacks XI)
+
 
 ## $ What about Food? 
 \> Free food throughout the event:
