@@ -23,8 +23,10 @@ description = ""
 - Networking opportunities with cybersecurity professionals
 - Co-location with &hacks XI hackathon
 
-### > Registration is now open! 
+### > Registration is now open!
 Register below to test your skills in TribeCTF 2025!
+
+**📅 Need to know when events happen? Check out the [Schedule](/schedule)!**
 
 
 {{< rawhtml >}}
