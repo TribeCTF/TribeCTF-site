@@ -13,9 +13,11 @@ While we're keeping the specifics under wraps for now, here's a sneak peek at wh
 - Challenge Categories:
 
    - Reverse Engineering
-   - Coding
    - Forensics
    - Cryptography
+   - Web
+   - Hardware
+   - Coding
    - Miscellaneous Challenges
 
 Whether you're a coding wizard, a crypto enthusiast, or a digital detective, TribeCTF has something to challenge and intrigue you.
