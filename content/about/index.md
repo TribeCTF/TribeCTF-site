@@ -37,5 +37,10 @@ From Left-to-Right (names in order with the picture above):
 - Nicolas Janis & Aashutosh Poudel - **Students**
 
 
-## $ Our Sponsor
-\> We're looking for sponsors. Get in touch with [WM CyberSecurity Center](https://cybersecurity.wm.edu/) if you want to amp up the fun with your presence and support. 
+## $ Our Sponsors
+\> We're grateful to our generous sponsors and supporters who make TribeCTF possible:
+- **<a href="https://anthropic.com" target="_blank">Anthropic</a>** - Event sponsorship
+- **<a href="https://google.com" target="_blank">Google</a>** - Event sponsorship
+- **<a href="https://mantech.com" target="_blank">ManTech</a>** - Challenge development and support
+
+\> Interested in sponsoring now or for future events? Get in touch with [WM CyberSecurity Center](https://cybersecurity.wm.edu/) if you want to amp up the fun with your presence and support. 
