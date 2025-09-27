@@ -9,7 +9,7 @@ meta_description = "Schedule of TribeCTF 2025"
 ### Saturday, September 27th
 
 - **9:00 AM onwards:** Registration (ISC Entrance)
-- **9:30 AM - 10:15 AM:** CTF 101 Workshop (ISC 1227)
+- **9:30 AM - 10:15 AM:** CTF 101 Workshop (ISC 1127)
 - **10:45 AM - 11:15 AM:** CTF Commencement (ISC 1221)
 - **11:15 AM onwards:** CTF Kick-off
 - **2:00 PM - 4:00 PM:** Career fair
