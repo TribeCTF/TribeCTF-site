@@ -9,21 +9,27 @@ theme = "nightfall"
     weight = 1
     url = "about"
   [[menu.header]]
-    name = "register"
-    weight = 2
-    url = "registration"
-  [[menu.header]]
     name = "challenges"
-    weight = 3
+    weight = 2
     url = "challenges"
   [[menu.header]]
     name = "rules"
-    weight = 4
+    weight = 3
     url = "rules"
+  [[menu.header]]
+    name = "2025"
+    weight = 4
+    identifier = "2025"
+    url = "2025-recap"
+  [[menu.header]]
+    name = "↳ recap"
+    parent = "2025"
+    url = "2025-recap"
   [[menu.header]]
     name = "2024"
     weight = 5
     identifier = "2024"
+    url = "2024-recap"
   [[menu.header]]
     name = "↳ recap"
     parent = "2024"
@@ -61,4 +67,9 @@ unsafe = true
 [[redirects]]
 from = "/2024"
 to = "/2024-recap"
+status = 301
+
+[[redirects]]
+from = "/2025"
+to = "/2025-recap"
 status = 301
