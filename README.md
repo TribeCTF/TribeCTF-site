@@ -1,9 +1,9 @@
-# TribeCTF 2024 Website
+# TribeCTF Website
 
 The following dependencies for development have to installed based on your OS before proceeding. 
 ```bash
 hugo
-dart-sss
+dart-sass
 ```
 
 
