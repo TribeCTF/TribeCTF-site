@@ -1,0 +1,39 @@
+@use "../utils/variables" as v;
+
+// Markdown tables (sponsorship tiers, recap leaderboards). Neither Nightfall nor
+// our overrides styled these previously, so they rendered as bare borderless text.
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid v.$darkGrey;
+  vertical-align: top;
+}
+
+thead th {
+  font-family: v.$fontHeader;
+  background: v.$backgroundDarker;
+  border-bottom: 2px solid v.$darkGrey;
+  white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+// Narrow viewports: let a wide table scroll horizontally rather than crushing
+// the content column.
+@media screen and (max-width: v.$breakLarge) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: normal;
+  }
+}

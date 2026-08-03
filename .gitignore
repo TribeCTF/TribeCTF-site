@@ -84,3 +84,7 @@ Temporary Items
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/hugo,visualstudiocode,macos,linux
+
+.playwright-mcp/
+.claude/settings.local.json
+*.log

@@ -1,6 +1,7 @@
 +++
 title = "TribeCTF 2025"
 description = ""
+aliases = ["/2025"]
 +++
 
 ## $ Highlights
