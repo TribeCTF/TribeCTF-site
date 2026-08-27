@@ -41,7 +41,7 @@ funding prizes, food, and infrastructure for the event.
 
 | Tier | Amount | What you get |
 |---|---|---|
-| `root` | **$3,000** | Naming rights on a challenge track, logo on site + merch + venue banner, speaking slot at the opening ceremony, on-site recruiting table, resume book |
+| `root` | **$3,000+** | Naming rights on a challenge track, logo on site + merch + venue banner, speaking slot at the opening ceremony, on-site recruiting table, resume book |
 | `sudo` | **$2,000** | Logo on site + merch, on-site recruiting table, resume book |
 | `daemon` | **$1,000** | Logo on site + merch |
 
