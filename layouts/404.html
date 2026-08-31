@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+
+<head>
+    <title>404 | {{ .Site.Params.author.name }}</title>
+
+    {{ partial "head.html" . }}
+
+    <style>
+        .notFoundWrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: 'Fira Mono', monospace;
+        }
+
+        .notFoundWrapper h1 {
+            font-size: 3em;
+            text-shadow: -1.5px 0 rgba(255, 56, 96, 0.45), 1.5px 0 rgba(0, 255, 249, 0.45);
+        }
+
+        .shell {
+            text-align: left;
+            display: inline-block;
+            margin: 0 auto 2rem;
+            background: #252627;
+            border: 1px solid #323232;
+            border-radius: 4px;
+            padding: 1rem 1.5rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .shell .prompt {
+            color: #7ee787;
+        }
+
+        .shell .err {
+            color: #ff3860;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="flexWrapper">
+        {{ partial "header.html" . }}
+
+        <div class="content vertical">
+            <main class="main">
+                <div class="notFoundWrapper">
+                    <h1>404</h1>
+
+                    <div class="shell">
+                        <div><span class="prompt">$</span> cat ./this_page</div>
+                        <div class="err">cat: ./this_page: No such file or directory</div>
+                        <div><span class="prompt">$</span> echo ZmxhZ3s0MDRfcDRnM19uMHRfZjB1bmR9 | base64 -d</div>
+                        <div>flag{404_p4g3_n0t_f0und}</div>
+                        <div><span class="prompt">$</span> cd <a href="{{ "/" | relURL }}">~</a></div>
+                    </div>
+
+                    <p>This flag doesn't exist. Head <a href="{{ "/" | relURL }}">home</a> and capture a real one.</p>
+                </div>
+            </main>
+        </div>
+
+        {{ partial "footer.html" . }}
+    </div>
+
+</body>
+
+</html>
