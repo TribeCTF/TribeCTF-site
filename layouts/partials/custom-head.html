@@ -1,7 +1,9 @@
-<!-- Favicons. The Nightfall theme ships no favicon markup, so these are ours. -->
-<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | absURL }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32.png" | absURL }}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ "apple-touch-icon.png" | absURL }}">
+<!-- Favicons. The Nightfall theme ships no favicon markup, so these are ours.
+     relURL, not absURL: root-relative hrefs inherit the page's scheme and can never
+     trip the browser's mixed-content block. -->
+<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32.png" | relURL }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ "apple-touch-icon.png" | relURL }}">
 
 <!-- Google Site Verification -->
 <meta name="google-site-verification" content="iKPbyD_knjOrZXIDwUzBLGpqngcNRzKXaFr-b-x7jxw" />
