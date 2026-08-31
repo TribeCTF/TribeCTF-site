@@ -24,7 +24,7 @@ description = ""
 \> TribeCTF is open to currently enrolled college students (Undergraduate and Graduate levels) who are **18 or older**, from curious beginners to experienced hackers. No prior experience is required – just bring your curiosity and willingness to learn! You'll need to register with a valid `.edu` email address and bring a student ID to the event. You can participate individually or form teams of up to 4 students!
 
 ## $ How Do I Register?
-\> Registration for TribeCTF 2026 opens soon. Keep an eye on our [registration page](/registration) — participation is free. **Pre-registration is strongly encouraged**; a limited number of walk-ins will be accepted on the day, subject to space.
+\> Registration for TribeCTF 2026 is now open on our [registration page](/registration) — participation is free. **Pre-registration is strongly encouraged**; a limited number of walk-ins will be accepted on the day, subject to space.
 
 ## $ The Organizing Committee
 \> TribeCTF is brought to you by a dedicated team of cybersecurity enthusiasts from the CyberSecurity Center @ William & Mary, Tribe Cyber and collaborators from the Industry. Our organizing committee includes students, faculty, and industry professionals committed to creating an exciting and educational event.
