@@ -38,3 +38,22 @@ code {
 @-ms-viewport{
   width: device-width;
 }
+
+::selection {
+  background: #7ee787;
+  color: v.$backgroundDarker;
+}
+
+// Subpage titles read as shell prompts: green "$ " prefix plus a static
+// red/cyan fringe echoing the homepage title (no animation off the homepage).
+// Direct children only — markdown content h1s inside the page stay plain.
+.postWrapper > h1::before,
+.listHeader > h1::before {
+  content: '$ ';
+  color: #7ee787;
+}
+
+.postWrapper > h1,
+.listHeader > h1 {
+  text-shadow: -1.5px 0 rgba(255, 56, 96, 0.35), 1.5px 0 rgba(0, 255, 249, 0.35);
+}

@@ -53,6 +53,8 @@ hostname = " WM"
     name = "TribeCTF 2026"  # Website and RSS feed author
     tagline = "Code, Crack, Conquer... Again!"
     detail = "William & Mary's annual cybersecurity challenge where code breakers meet ethical hackers, and only the nerdiest will capture all flags."
+  [params.styles]
+    color = "#7ee787"  # terminal green — matches homepage countdown/console accents
 
 
 
