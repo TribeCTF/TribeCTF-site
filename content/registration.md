@@ -30,9 +30,29 @@ description = ""
 - Free food throughout the event
 - Networking opportunities with cybersecurity professionals
 
-### > Registration opens soon!
+### $ Register
 
 TribeCTF 2026 runs **October 3-4** in **ISC 4 (CDSP Building)** at William & Mary — Saturday morning through Sunday evening.
 
-The registration form isn't live yet. Check back shortly, or reach out to the
-[WM CyberSecurity Center](https://cybersecurity.wm.edu/) to be notified when it opens.
+{{< rawhtml >}}
+<style>
+.responsive-iframe-container {
+    background-color: #292a2d;
+    position: relative;
+    padding-bottom: 150%;  /* Adjust based on your form's height */
+    height: 0;
+}
+
+.responsive-iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+</style>
+<div class="responsive-iframe-container">
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdWIddm-g44pdsyNKt6k9-YHd_i_woUQoniuTxAF9yJrcHRvQ/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+</div>
+{{< /rawhtml >}}
