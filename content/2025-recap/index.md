@@ -10,6 +10,15 @@ TribeCTF 2025 was an incredible success, bringing together 95 students from 9 di
 
 Team MasonCC from George Mason University claimed first place with 5,450 points, followed closely by CNS@UVa from University of Virginia with 4,650 points in second place. Third place went to honey bee's, a collaborative team from Georgia Tech and Arizona State, who secured 4,450 points. The competition was fierce, with multiple teams tied at 3,850 points for fifth place, and three challenges remaining unsolved until the very end.
 
+**Read full coverage [> here! <](https://cdsp.wm.edu/about/news-events/news/code-crack-conquer-tribectf-brings-together-students-and-cybersecurity.php)**
+
+
+{{< slideshow >}}
+images/2025-1st-place.jpg | TribeCTF 2025 1st Place Winners, Team MasonCC from GMU
+images/2025-2nd-place.jpg | TribeCTF 2025 2nd Place Winners, Team CNS@UVa from UVA
+images/2025-3rd-place.jpg | TribeCTF 2025 3rd Place Winners, Team honey bee's from Georgia Tech & Arizona State
+{{< /slideshow >}}
+
 <br><br>
 
 ## $ Quick Stats
