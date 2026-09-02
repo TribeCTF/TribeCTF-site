@@ -1,0 +1,77 @@
+{{- /*
+  Manual slideshow. One "path | caption" per line in the shortcode body; paths
+  are page-bundle resources (e.g. images/foo.jpg). No autoplay: prev/next
+  arrows, dots, and left/right keys while the slideshow is focused.
+*/ -}}
+{{- $slides := slice -}}
+{{- range split (trim .Inner "\n ") "\n" -}}
+  {{- $line := trim . " " -}}
+  {{- if $line -}}
+    {{- $parts := split $line "|" -}}
+    {{- $path := trim (index $parts 0) " " -}}
+    {{- $caption := "" -}}
+    {{- if gt (len $parts) 1 }}{{ $caption = trim (index $parts 1) " " }}{{ end -}}
+    {{- with $.Page.Resources.Get $path -}}
+      {{- $slides = $slides | append (dict "src" .RelPermalink "caption" $caption) -}}
+    {{- else -}}
+      {{- errorf "slideshow: unable to get page resource %q" $path -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $id := printf "slideshow-%s" (md5 .Inner | first 8) -}}
+<div class="slideshow" id="{{ $id }}" tabindex="0" aria-roledescription="carousel" aria-label="Photo slideshow">
+  <div class="slideshow-frame">
+    {{- range $i, $s := $slides }}
+    <figure class="slideshow-slide{{ if eq $i 0 }} is-active{{ end }}" aria-hidden="{{ if eq $i 0 }}false{{ else }}true{{ end }}">
+      <img src="{{ $s.src }}" alt="{{ $s.caption }}" loading="{{ if eq $i 0 }}eager{{ else }}lazy{{ end }}">
+      {{- with $s.caption }}<figcaption>{{ . }}</figcaption>{{ end }}
+    </figure>
+    {{- end }}
+    <button class="slideshow-btn slideshow-prev" type="button" aria-label="Previous photo">&lsaquo;</button>
+    <button class="slideshow-btn slideshow-next" type="button" aria-label="Next photo">&rsaquo;</button>
+  </div>
+  <div class="slideshow-dots" role="tablist">
+    {{- range $i, $s := $slides }}
+    <button class="slideshow-dot{{ if eq $i 0 }} is-active{{ end }}" type="button" role="tab" aria-label="Photo {{ add $i 1 }}"></button>
+    {{- end }}
+  </div>
+</div>
+<style>
+.slideshow { outline: none; margin: 1.5em 0; }
+.slideshow:focus-visible .slideshow-frame { box-shadow: 0 0 0 2px #7ee787; }
+.slideshow-frame { position: relative; aspect-ratio: 4 / 3; background: #1c1d1f; border: 1px solid #3a3b3e; overflow: hidden; }
+.slideshow-slide { position: absolute; inset: 0; margin: 0; display: flex; flex-direction: column; opacity: 0; transition: opacity .35s ease; pointer-events: none; }
+.slideshow-slide.is-active { opacity: 1; pointer-events: auto; }
+.slideshow-slide img { flex: 1 1 auto; min-height: 0; width: 100%; object-fit: contain; }
+.slideshow-slide figcaption { flex: 0 0 auto; text-align: center; font-size: .85em; padding: .5em .75em; color: #f8f8ff; background: rgba(0,0,0,.55); }
+.slideshow-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 2.2em; height: 2.2em; border: 1px solid #7ee787; border-radius: 50%; background: rgba(0,0,0,.6); color: #7ee787; font: 1.6em/1 'Fira Mono', monospace; cursor: pointer; opacity: .75; transition: opacity .15s ease, background .15s ease; }
+.slideshow-btn:hover, .slideshow-btn:focus-visible { opacity: 1; background: rgba(0,0,0,.85); outline: none; }
+.slideshow-prev { left: .5em; }
+.slideshow-next { right: .5em; }
+.slideshow-dots { display: flex; justify-content: center; gap: .5em; margin-top: .6em; }
+.slideshow-dot { width: .6em; height: .6em; padding: 0; border: 1px solid #7ee787; border-radius: 50%; background: transparent; cursor: pointer; }
+.slideshow-dot.is-active { background: #7ee787; }
+@media (prefers-reduced-motion: reduce) { .slideshow-slide { transition: none; } }
+</style>
+<script>
+(function () {
+  var root = document.getElementById({{ $id }});
+  if (!root || root.dataset.ready) return;
+  root.dataset.ready = '1';
+  var slides = root.querySelectorAll('.slideshow-slide');
+  var dots = root.querySelectorAll('.slideshow-dot');
+  var i = 0;
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    slides.forEach(function (s, k) { s.classList.toggle('is-active', k === i); s.setAttribute('aria-hidden', k !== i); });
+    dots.forEach(function (d, k) { d.classList.toggle('is-active', k === i); });
+  }
+  root.querySelector('.slideshow-prev').addEventListener('click', function () { show(i - 1); });
+  root.querySelector('.slideshow-next').addEventListener('click', function () { show(i + 1); });
+  dots.forEach(function (d, k) { d.addEventListener('click', function () { show(k); }); });
+  root.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { show(i - 1); e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { show(i + 1); e.preventDefault(); }
+  });
+})();
+</script>
