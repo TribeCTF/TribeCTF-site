@@ -11,27 +11,14 @@ TribeCTF 2024 was a resounding success. Over three days, 33 teams (70 participan
 
 Ultimately, a two-person team from W&M, composed of undergraduate students Luna Harrison (luna) and Walker Knapp (wtknapp), won first place (and the $5,000 prize). Luna and Walker solved all but one challenge and scored 6450/7450 points. A team from GMU (Mason Competitive Cyber), consisting of students Tanner Laventry (Txnner), Jax Dunfee (jjj), Sanskar Pokharel (sans), and Nicholas Stormer (salochi) won second place ($3,000 prize), solving 14/16 challenges and securing 5950/7450 points. Another two-person team from W&M consisting of undergraduates Celia Schaefers (CeliaS) and Zachary Bowden (lexzach) closely followed with 5650/7450 points by solving 13/16 challenges, securing third place and a prize of $1,000. Five other teams that ranked from 4th – 8th also received an honorable mention.
 
-**Read full coverage [> here! <](https://www.wm.edu/as/computerscience/about-contactus/news/tribectf-2024-wms-first-capture-the-flag-ctf-competition-is-a-resounding-success.php)**
+**Read full coverage [> here! <](https://web.archive.org/web/20250912065042/https://www.wm.edu/as/computerscience/about-contactus/news/tribectf-2024-wms-first-capture-the-flag-ctf-competition-is-a-resounding-success.php)**
 
 
-<figure>
-<img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_1st_place.jpg">
-<figcaption><center>TribeCTF 2024 1st Place Winners, Team 🐈‍⬛🐇💻 from W&M</center></figcaption>
-</figure>
-
-<br><br>
-
-<figure>
-<img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_2nd_place.jpg">
-<figcaption><center>TribeCTF 2024 2nd Place Winners, Team MasonCC from GMU</center></figcaption>
-</figure>
-
-<br><br>
-
-<figure>
-<img src="https://www.wm.edu/as/computerscience/_images/news_story_images/2024-news-story-images/ctf_2024_3rd_place.jpg">
-<figcaption><center>TribeCTF 2024 3rd Place Winners, Team Error404 from W&M</center></figcaption>
-</figure>
+{{< slideshow >}}
+images/2024-1st-place.jpg | TribeCTF 2024 1st Place Winners, Team 🐈‍⬛🐇💻 from W&M
+images/2024-2nd-place.jpg | TribeCTF 2024 2nd Place Winners, Team MasonCC from GMU
+images/2024-3rd-place.jpg | TribeCTF 2024 3rd Place Winners, Team Error404 from W&M
+{{< /slideshow >}}
 
 <br><br>
 
