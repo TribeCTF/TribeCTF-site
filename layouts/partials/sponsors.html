@@ -1,0 +1,45 @@
+{{- /* Tiered sponsor logo wall, driven by data/sponsors.yaml.
+
+     Call with a dict:
+       ctx     — the page context (required)
+       showCta — show the "want your logo here?" line. False on /about, where the
+                 tier table sits directly below the wall and repeats the link.
+       heading — override the section heading (default "$ Sponsors").
+       tagline — optional one-liner rendered under the heading.
+
+     Tiers render root -> sudo -> daemon; a tier with no sponsors is skipped, and
+     the whole section disappears when the data file is empty. */ -}}
+{{- $ctx := .ctx -}}
+{{- $showCta := .showCta | default false -}}
+{{- $heading := .heading | default "$ Sponsors" -}}
+{{- $tagline := .tagline -}}
+{{- $sponsors := $ctx.Site.Data.sponsors -}}
+{{- with $sponsors }}
+<section class="sponsors">
+  <h2 class="sponsorsHeading">{{ $heading }}</h2>
+  {{- with $tagline }}
+  <p class="sponsorsTagline">{{ . | safeHTML }}</p>
+  {{- end }}
+  {{- $all := . }}
+  {{- range $tier := slice "root" "sudo" "daemon" }}
+    {{- with where $all "tier" $tier }}
+  <div class="sponsorTier sponsorTier--{{ $tier }}">
+    <p class="sponsorTierLabel"><code>{{ $tier }}</code></p>
+    <div class="sponsorCards">
+      {{- range . }}
+      <a class="sponsorCard" href="{{ .url }}" target="_blank" rel="noopener">
+        <img class="sponsorLogo" src="{{ .logo | relURL }}" alt="{{ .name }}" loading="lazy">
+        {{- with .note }}
+        <span class="sponsorNote">{{ . }}</span>
+        {{- end }}
+      </a>
+      {{- end }}
+    </div>
+  </div>
+    {{- end }}
+  {{- end }}
+  {{- if $showCta }}
+  <p class="sponsorsCta">Want your logo here? See our <a href="/about#-sponsor-tribectf-2026">sponsorship tiers</a>.</p>
+  {{- end }}
+</section>
+{{- end }}

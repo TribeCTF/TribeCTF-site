@@ -153,7 +153,7 @@
 
                     <a href="/registration"><button class="register-btn">Register Now</button></a>
 
-                    <p style="color: #ccc; margin-bottom: 1rem;">🤝 <strong>Sponsors wanted!</strong> Help us level up TribeCTF 2026 &mdash; see our <a href="/about#-sponsor-tribectf-2026">sponsorship tiers</a>.</p>
+                    {{ partial "sponsors.html" (dict "ctx" . "showCta" true "heading" "$ ./thanks" "tagline" "The folks funding the prizes, the pizza, and the servers.") }}
 
                     <h3>Missed last year? Read the <a href="/2025-recap">2025 recap!</a></h3>
 
