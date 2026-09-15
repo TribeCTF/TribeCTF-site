@@ -1,0 +1,157 @@
+@use "hugo:vars" as h;
+@use "../utils/variables" as v;
+
+// Tiered sponsor logo wall (layouts/partials/sponsors.html).
+//
+// Sponsor logos arrive in whatever palette the sponsor ships — the W&M VP for
+// Research mark is dark green + gold on transparent, which is invisible against
+// the dark theme — so every logo sits on a light plate. That also normalises
+// mismatched logo treatments into one consistent row.
+//
+// Hover-only motion: no ambient/looping animation in this section.
+
+$sponsorPlate: #f4f4f0;
+$sponsorInk: #2f2f2f;
+
+.sponsors {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 2.5rem 0;
+}
+
+// .postWrapper already pads its content by 20px, but the homepage wrapper has no
+// side gutter of its own, so the wall supplies one there. Scoped rather than set
+// on .sponsors so /about's heading stays flush with the surrounding h2s.
+.indexWrapper .sponsors {
+  padding: 0 16px;
+}
+
+.sponsorsHeading {
+  margin-bottom: 1.25rem;
+}
+
+// Optional one-liner under the heading (homepage only). Tightens up to the
+// heading and pushes the first tier down instead.
+.sponsorsHeading + .sponsorsTagline {
+  margin: -0.5rem 0 1.5rem;
+  color: #ccc;
+}
+
+.sponsorTier {
+  margin-bottom: 1.75rem;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+// Echoes the `root` / `sudo` / `daemon` cells in the tier table on /about.
+.sponsorTierLabel {
+  margin: 0 0 0.6rem;
+
+  code {
+    font-family: v.$fontCode;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: h.$color;
+  }
+}
+
+.sponsorCards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.sponsorCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 1.25rem 1.5rem;
+  background: $sponsorPlate;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.03);
+    border-color: h.$color;
+    box-shadow: 0 0 16px rgba(h.$color, 0.45);
+    text-decoration: none;
+  }
+}
+
+.sponsorLogo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.sponsorNote {
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: $sponsorInk;
+}
+
+// Tier sizing. The logos carry fixed intrinsic dimensions (the VP Research SVG
+// is 7.3in x 3.1in); max-width/max-height on the <img> override that and the
+// browser scales to fit while preserving aspect ratio.
+.sponsorTier--root {
+  .sponsorCard {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .sponsorLogo {
+    max-height: 180px;
+  }
+}
+
+.sponsorTier--sudo .sponsorLogo {
+  max-height: 120px;
+}
+
+.sponsorTier--daemon .sponsorLogo {
+  max-height: 80px;
+}
+
+.sponsorsCta {
+  margin-top: 1.5rem;
+  color: #ccc;
+}
+
+@media screen and (max-width: 600px) {
+  .sponsorCard {
+    padding: 1rem;
+  }
+
+  .sponsorTier--root .sponsorCard {
+    padding: 1.25rem;
+  }
+
+  // Keep the tallest tier from eating the fold on a phone.
+  .sponsorTier--root .sponsorLogo {
+    max-height: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsorCard {
+    transition: none;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+}

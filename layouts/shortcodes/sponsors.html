@@ -1,0 +1,4 @@
+{{- /* Markdown can't call partials, so pages that want the sponsor wall inline
+     use {{< sponsors >}}. The CTA is off here: every page that embeds the
+     shortcode today (/about) already carries the tier table. */ -}}
+{{ partial "sponsors.html" (dict "ctx" .Page "showCta" false "tagline" "&gt; TribeCTF is grateful to the organizations fueling this year's hacking.") }}

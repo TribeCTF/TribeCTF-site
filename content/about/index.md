@@ -33,6 +33,8 @@ description = ""
 on deck this year!
 
 
+{{< sponsors >}}
+
 ## $ Sponsor TribeCTF 2026
 \> **We're looking for sponsors to level up TribeCTF 2026!** Sponsorship puts your
 organization in front of hundreds of driven students from across the region — the

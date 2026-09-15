@@ -1,0 +1,15 @@
+# Sponsor wall. Rendered by layouts/partials/sponsors.html (homepage + /about).
+#
+# Schema, one entry per sponsor:
+#   name  — full legal/display name, also used as the logo's alt text
+#   tier  — root | sudo | daemon, matching the tier table in content/about/index.md
+#           (root $3,000+, sudo $2,000, daemon $1,000). Tiers render in that order
+#           and empty tiers are skipped, so an entry's tier alone sets its size.
+#   url   — sponsor homepage, opened in a new tab
+#   logo  — path under /static; prefer SVG. Logos sit on a light card, so a dark or
+#           full-colour logo on a transparent background is fine.
+#   note  — optional one-line caption shown under the logo
+- name: "Office of the Vice Provost for Research, William & Mary"
+  tier: sudo
+  url: "https://www.wm.edu/offices/research/"
+  logo: "/sponsors/wm-vp-research.svg"
