@@ -32,7 +32,7 @@ description = ""
 
 ### $ Register
 
-TribeCTF 2026 runs **October 3-4** in **ISC 4 (CDSP Building)** at William & Mary — Saturday morning through Sunday evening.
+TribeCTF 2026 runs **October 3-4** in **ISC 4 (CDSP Building)** at William & Mary — Saturday morning to Sunday morning. See the [full schedule](/schedule).
 
 {{< rawhtml >}}
 <style>

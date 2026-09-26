@@ -17,14 +17,18 @@ theme = "nightfall"
     weight = 3
     url = "rules"
   [[menu.header]]
-    name = "registration"
+    name = "schedule"
     weight = 4
+    url = "schedule"
+  [[menu.header]]
+    name = "registration"
+    weight = 5
     url = "registration"
   # Past events. The header template renders only one level of children, so these
   # stay flat rather than nesting a dropdown per year.
   [[menu.header]]
     name = "past"
-    weight = 5
+    weight = 6
     identifier = "past"
   [[menu.header]]
     name = "↳ 2025 recap"
