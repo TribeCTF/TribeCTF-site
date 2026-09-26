@@ -16,9 +16,9 @@ description = ""
 - Third place receives **$500!!**
 
 ## $ When and Where?
-\> **TribeCTF 2026** will take place **October 3-4** as an **in-person event** at William & Mary in **ISC 4 (CDSP Building)**. The competition runs a day and a half, from Saturday morning through Sunday evening.
+\> **TribeCTF 2026** will take place **October 3-4** as an **in-person event** at William & Mary in **ISC 4 (CDSP Building)**. The competition runs 25 hours, from Saturday 9:30 AM to Sunday 10:30 AM.
 
-<!-- Check the [schedule page](https://tribectf.cs.wm.edu/schedule) for full details! -->
+Check the [schedule page](/schedule) for the full timeline and meals!
 
 ## $ Who Can Participate?
 \> TribeCTF is open to currently enrolled college students (Undergraduate and Graduate levels) who are **18 or older**, from curious beginners to experienced hackers. No prior experience is required – just bring your curiosity and willingness to learn! You'll need to register with a valid `.edu` email address and bring a student ID to the event. You can participate individually or form teams of up to 4 students!
