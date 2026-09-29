@@ -33,9 +33,6 @@ meta_description = "Schedule of TribeCTF 2026"
 
 
 ## $ What about Food?
-\> Free food throughout the event:
-
-  - Breakfast + Lunch + Dinner on Saturday
-  - Midnight snacks + breakfast on Sunday
+\> Every meal is free and on the timeline above — breakfast through Sunday breakfast, plus midnight snacks.
 
 **You won't be hungry, we promise!!**
