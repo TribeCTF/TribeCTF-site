@@ -16,7 +16,7 @@ description = ""
 - Third place receives **$500!!**
 
 ## $ When and Where?
-\> **TribeCTF 2026** will take place **October 3-4** as an **in-person event** at William & Mary in **ISC 4 (CDSP Building)**. The competition runs 25 hours, from Saturday 9:30 AM to Sunday 10:30 AM.
+\> **TribeCTF 2026** will take place **October 3-4** as an **in-person event** at William & Mary in **ISC 4 (CDSP Building)**. The competition runs ~24 hours, from Saturday 10:00 AM to Sunday 10:30 AM.
 
 Check the [schedule page](/schedule) for the full timeline and meals!
 

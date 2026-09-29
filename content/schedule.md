@@ -7,7 +7,7 @@ meta_description = "Schedule of TribeCTF 2026"
 ## $ What's the event timeline like?
 
 **TribeCTF 2026 runs October 3-4** in **ISC 4 (CDSP Building)** at William & Mary —
-25 hours of hacking, from Saturday morning to Sunday morning.
+~24 hours of hacking, from Saturday morning to Sunday morning.
 
 ### Saturday, October 3
 
@@ -15,7 +15,8 @@ meta_description = "Schedule of TribeCTF 2026"
 |---|---|
 | 9:00 AM | Check-in opens |
 | 9:15 AM | Breakfast |
-| **9:30 AM** | **Opening ceremony + CTF begins** |
+| **9:45 AM** | **Commencement ceremony (ISC 4, Room 0350)** |
+| **10:00 AM** | **CTF kick-off** |
 | 12:00 PM | Lunch |
 | 6:00 PM | Dinner |
 | Overnight | CTF continues with midnight snacks |
