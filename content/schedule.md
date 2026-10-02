@@ -14,7 +14,7 @@ meta_description = "Schedule of TribeCTF 2026"
 | Time | Event |
 |---|---|
 | 9:00 AM | Check-in opens |
-| 9:15 AM | Breakfast |
+| 9:00 AM | Breakfast |
 | **9:45 AM** | **Commencement ceremony (ISC 4, Room 0350)** |
 | **10:00 AM** | **CTF kick-off** |
 | 12:00 PM | Lunch |
