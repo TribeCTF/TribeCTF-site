@@ -13,7 +13,7 @@ meta_description = "Schedule of TribeCTF 2026"
 
 | Time | Event |
 |---|---|
-| 9:00 AM | Check-in opens |
+| 9:00 AM | Check-in opens (2nd Floor) |
 | 9:00 AM | Breakfast |
 | **9:45 AM** | **Commencement ceremony (ISC 4, Room 0350)** |
 | **10:00 AM** | **CTF kick-off** |
@@ -28,8 +28,6 @@ meta_description = "Schedule of TribeCTF 2026"
 | 8:15 AM | Breakfast |
 | **10:30 AM** | **CTF ends** |
 | 11:30 AM | Closing ceremony and winners announced |
-
-\> The schedule is still being ironed out; times may change. Check back for updates.
 
 
 ## $ What about Food?
