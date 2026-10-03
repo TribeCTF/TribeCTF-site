@@ -21,9 +21,9 @@ theme = "nightfall"
     weight = 4
     url = "schedule"
   [[menu.header]]
-    name = "registration"
+    name = "cage"
     weight = 5
-    url = "registration"
+    url = "cage"
   # Past events. The header template renders only one level of children, so these
   # stay flat rather than nesting a dropdown per year.
   [[menu.header]]
