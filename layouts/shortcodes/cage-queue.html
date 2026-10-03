@@ -631,7 +631,7 @@
       if (w) return 'leaving: ' + dur(w - n);
       var e = parseT(s.ends_at);
       if (!e) return 'walk-in · ' + dur(n - (parseT(s.started_at) || n));
-      if (s.overtime || n >= e) return 'overtime +' + dur(n - e);
+      if (s.overtime || n >= e) return 'free time +' + dur(n - e) + ' · queue empty';
       return dur(e - n) + ' left · until ' + hhmm(e);
     }
     if (st === 'INVITED') {
@@ -667,8 +667,8 @@
         $.sessCount.textContent = 'walk-in · ' + dur(n - (parseT(ss.started_at) || n));
         $.sessSub.textContent = 'Out of hours: you can stay until another team is waiting.';
       } else if (ss.overtime || n >= e) {
-        $.sessCount.textContent = 'overtime +' + dur(n - e);
-        $.sessSub.textContent = 'Your booking ended at ' + hhmm(e) + '.' + (w ? '' : ' Keep hacking until another team is waiting; you will get a 10-minute warning.');
+        $.sessCount.textContent = 'free time +' + dur(n - e);
+        $.sessSub.textContent = 'Your booking ended at ' + hhmm(e) + '.' + (w ? '' : ' Nobody is waiting, so this extra time is free and does not count toward your 2 hours. If a team joins the queue, you get a 10-minute warning.');
       } else {
         $.sessCount.textContent = dur(e - n) + ' left';
         $.sessSub.textContent = 'Booked until ' + hhmm(e) + '. Save your work to your backup drive.';
