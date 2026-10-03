@@ -128,7 +128,7 @@
 </div>
 
 <style>
-.cq { --g:#7ee787; --r:#F26E74; --y:#FFB300; --bg:#252627; --line:#3a3b3e; --mut:#a8a8b3; text-align:left; margin-top:1.5em; }
+.cq { --g:#7ee787; --r:#F26E74; --y:#FFB300; --b:#80AADD; --bg:#252627; --line:#3a3b3e; --mut:#a8a8b3; text-align:left; margin-top:1.5em; }
 .cq [hidden] { display:none !important; }
 .cq h3 { margin:.2em 0 .6em; }
 .cq h3, .cq-h4, .cq-box-title, .cq-btn, .cq-big, .cq-badge, .cq-kv, .cq-st, .cq-queue, .cq-invite { font-family:'Fira Mono', monospace; }
@@ -185,15 +185,19 @@
 .cq-invite.cq-late { background:var(--r); box-shadow:0 0 0 3px var(--r); }
 .cq-stations { display:grid; grid-template-columns:repeat(auto-fit, minmax(10em, 1fr)); gap:.6em; }
 .cq-st { border:1px solid var(--line); padding:.6em; min-width:0; }
-.cq-st-head { display:flex; flex-wrap:wrap; justify-content:space-between; gap:0 .4em; font-size:.85em; }
-.cq-st-state { color:var(--mut); }
+.cq-st-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:.2em .4em; font-size:.85em; }
+.cq-st-state { color:var(--mut); padding:.1em .45em; border-radius:3px; font-size:.85em; text-transform:uppercase; letter-spacing:.06em; }
 .cq-st-team { overflow-wrap:anywhere; margin:.4em 0 .2em; min-height:1.3em; font-family:'Open Sans', sans-serif; font-weight:bold; }
 .cq-st-time { font-size:.9em; color:var(--mut); }
-.cq-st.s-ready { border-color:var(--g); } .cq-st.s-ready .cq-st-state { color:var(--g); }
-.cq-st.s-invited .cq-st-state { color:var(--y); }
-.cq-st.s-in_session .cq-st-state { color:#80AADD; }
+/* free: open, dashed outline; occupied: solid filled block */
+.cq-st.s-ready { border:1px dashed var(--g); } .cq-st.s-ready .cq-st-state { color:var(--g); border:1px solid var(--g); }
+.cq-st.s-ready .cq-st-team { color:var(--mut); font-weight:normal; }
+.cq-st.s-invited { border-color:var(--y); background:rgba(255,179,0,.08); } .cq-st.s-invited .cq-st-state { color:#1b1b1b; background:var(--y); }
+.cq-st.s-in_session { border:1px solid var(--b); background:rgba(128,170,221,.16); } .cq-st.s-in_session .cq-st-state { color:#14202e; background:var(--b); }
+.cq-st.s-in_session .cq-st-time { color:#c9daf0; }
+.cq-st.s-resetting, .cq-st.s-offline { opacity:.6; border-style:dotted; }
 .cq-st.s-warned { border-color:var(--r); } .cq-st.s-warned .cq-st-time { color:var(--r); }
-.cq-st.s-overdue { border-color:var(--r); background:rgba(242,110,116,.12); } .cq-st.s-overdue .cq-st-state { color:var(--r); }
+.cq-st.s-overdue { border-color:var(--r); background:rgba(242,110,116,.14); } .cq-st.s-overdue .cq-st-state { color:#1b1b1b; background:var(--r); }
 .cq-st.s-mine { box-shadow:inset 0 0 0 1px var(--g); }
 .cq-queue { list-style:none; padding:0; margin:0; }
 .cq-queue li { display:flex; flex-wrap:wrap; gap:.3em .6em; align-items:baseline; padding:.4em 0; border-bottom:1px dashed var(--line); font-size:.9em; }
@@ -576,7 +580,7 @@
     return '~' + hhmm(t) + (mins > 0 ? ', in ~' + mins + ' min' : '') + ' (estimate)';
   }
 
-  var STATE_LABEL = { READY: 'free', INVITED: 'team called', IN_SESSION: 'in use', RESETTING: 'resetting', OFFLINE: 'offline' };
+  var STATE_LABEL = { READY: 'free', INVITED: 'team called', IN_SESSION: 'occupied', RESETTING: 'resetting', OFFLINE: 'offline' };
   function renderBoard() {
     if (!board) { if (lost) $.boardMeta.textContent = 'Cannot reach the CAGE server. Retrying every few seconds.'; return; }
     var openAt = parseT(board.open_at), closeAt = parseT(board.close_at), n = now();
