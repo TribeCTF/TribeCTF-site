@@ -29,8 +29,9 @@ Check the [schedule page](/schedule) for the full timeline and meals!
 ## $ The Organizing Committee
 \> TribeCTF is brought to you by a dedicated team of cybersecurity enthusiasts from the CyberSecurity Center @ William & Mary, Tribe Cyber and collaborators from the Industry. Our organizing committee includes students, faculty, and industry professionals committed to creating an exciting and educational event.
 
-\> The full 2026 organizing committee will be announced soon — we've got more hands
-on deck this year!
+![TribeCTF 2026 Organizing Committee](images/oc-2026.jpg)
+
+\> **Left to right:** Adwait Nadkarni, Lily Gloudemans, Pankaj Niroula, Asher Montague, Victor Olaiya, Stephen Herwig, Nicholas Janis, Chengao Du, Aashutosh Poudel, and Md Akram Khan. Not pictured: Yue Xiao.
 
 
 {{< sponsors >}}
