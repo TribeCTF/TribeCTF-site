@@ -9,3 +9,4 @@
     {{ end }}
 </footer>
 {{ partial "console-egg.html" . }}
+{{ if eq .RelPermalink "/rules/" }}{{ partial "first-flag.html" . }}{{ end }}
