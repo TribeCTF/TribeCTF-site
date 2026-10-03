@@ -1,0 +1,164 @@
+<script>
+(function () {
+    var C = 'color:#00fff9;font-weight:bold';
+    var G = 'color:#7ee787';
+    var Y = 'color:#ffd866';
+    var CT = [3,27,7,5,22,4,6,15,29,85,31,93,25,28,38,10,91,2,25,87,5,54,91,19,71,21,6,92,57,17,88,89,3,58,77,61,12,81,28,81,71,5,93,26];
+    var RIDDLE = 'SSBoYXZlIGtleXMgYnV0IG9wZW4gbm8gbG9ja3MuIEkgaGF2ZSBzcGFjZSBidXQgaG9sZCBubyByb29tLiBZb3UgY2FuIGVudGVyLCBidXQgbmV2ZXIgbGVhdmUuIFdoYXQgYW0gST8=';
+    var st = { stage: 0, name: 'friend', words: [], t0: 0, hints: 0, wrong: 0, knocks: 0, nudge: 0, streak: 0, rolled: false };
+    var ART = "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⡤⠶⠖⠚⠛⠛⠛⠛⠛⠓⠶⠦⣤⣄⡀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡴⠞⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠳⢦⣄\n⠀⠀⠀⠀⠀⠀⠀⢀⡴⠟⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢦⡀\n⠀⠀⠀⠀⠀⢀⡴⠋⠀⠀⣿⣶⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢦⡀\n⠀⠀⠀⠀⣴⠏⠀⠀⠀⠀⢿⣯⠙⠿⣷⣶⣦⣤⣤⣤⣤⣤⣤⣤⣤⣤⣿⣷⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠹⣦\n⠀⠀⢀⡾⠃⠀⠀⠀⠀⠀⠸⣿⣧⡀⠀⢤⣭⣉⣉⣉⣉⣉⡉⠉⠉⠛⠛⠳⠌⠛⠻⠿⣶⣤⡀⠀⠀⠀⠀⠈⢷⡀\n⠀⢀⡾⠁⠀⠀⠀⠀⠀⠀⠀⠙⣿⣷⣄⡀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀⠈⠉⠻⣦⠀⠀⠀⠀⠈⢷⡀\n⠀⣼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⠿⣇⡀⠠⣿⣿⣿⣿⣿⣿⣿⣿⠛⢷⣄⡀⠀⠀⠀⠀⢹⡇⠀⠀⠀⠀⠈⣧\n⢰⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣷⣾⣿⣿⣿⣿⣿⣿⣿⣧⡘⠻⢿⣷⣶⣶⣶⣾⣷⣄⡀⠀⠀⠀⢸⡆\n⣼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⣷\n⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡼⠟⠋⣡⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠈⠛⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⣿\n⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⣀⠀⠀⠀⠀⢺⡇⣀⡈⠙⣿⡿⠃⠀⠀⣿\n⢿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠛⠀⠀⠀⠀⡿\n⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⢸⠇\n⠀⢿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠟⠁⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡿\n⠀⠈⢷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠁\n⠀⠀⠈⢷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⠃⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠁\n⠀⠀⠀⠀⠻⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⡿⣿⣿⣿⣿⣿⣿⠙⠇⠀⠀⠀⠀⠀⠀⠀⣰⠟\n⠀⠀⠀⠀⠀⠈⢷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠇⠈⢻⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⣠⠞⠁\n⠀⠀⠀⠀⠀⠀⠀⠉⠳⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⡟⠀⠀⠀⠀⠀⣀⡴⠟⠁\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠳⢤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⠋⠀⠀⣀⣠⡴⠞⠉\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠶⠶⢤⣤⣤⣤⣤⣤⣤⠴⠶⠞⠛⠉";
+    var NUDGES = ['Not quite, {n}.', 'The Griffin tilts its head. Try again, {n}.', 'Nope, but every hacker misses a few.', 'So close... or not. Hard to say with griffins.', 'Hmm, not that one. Keep going, {n}!'];
+    var KNOCKS = ['Knock knock. Still a {r}.', 'The door has heard you. The door does not care.'];
+
+    function say(msg, style) { console.log('%c' + msg, style || G); }
+    function norm(s) { return String(s == null ? '' : s).trim().toLowerCase(); }
+    function done() { return undefined; }
+    function miss(tip, msg) {
+        st.wrong++;
+        say(msg || NUDGES[st.nudge++ % NUDGES.length].replace('{n}', st.name) + ' ' + tip, msg ? C : G);
+        if (++st.streak >= 3 && !st.rolled) {
+            st.rolled = true;
+            say('Stuck? Fine. Here\'s a direct link to the answer: https://www.youtube.com/watch?v=dQw4w9WgXcQ', Y);
+            say('...okay, a real one: ' + hints[st.stage === 1.5 ? 2 : 4], Y);
+        }
+    }
+    function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+    function stats() {
+        var s = Math.round((Date.now() - (st.t0 || Date.now())) / 1000);
+        var rank = s < 180 && st.hints === 0 ? 'Griffin (soaring, no help needed!)'
+            : s < 600 && st.hints <= 2 ? 'Fledgling (getting airborne!)'
+            : 'Hatchling (every griffin starts here)';
+        say('Solved in ' + Math.floor(s / 60) + 'm ' + (s % 60) + 's \u00b7 ' + plural(st.hints, 'hint') + ' \u00b7 ' +
+            plural(st.wrong, 'wrong guess').replace('guesss', 'guesses') + ' \u00b7 Rank: ' + rank, Y);
+        say('Screenshot this and flex on your table.');
+    }
+
+    var H1 = '44ff30f3c7242b3c1bc814ba06c74ad1bad6e0796e5e99f48898f65f93d815ca',
+        H3 = '91f060a9ad4b39eb228d9537292fab19d252faed06c169d0fdcb4a90560f5676';
+    function sha(s) {
+        return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function (b) {
+            return Array.from(new Uint8Array(b), function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+        });
+    }
+
+    function reveal() {
+        var k = st.words.join(''), out = '';
+        for (var i = 0; i < CT.length; i++) out += String.fromCharCode(CT[i] ^ k.charCodeAt(i % k.length));
+        return out;
+    }
+
+    function stage2() {
+        st.stage = 2; st.streak = 0;
+        try { localStorage.setItem('role', 'guest'); } catch (e) {}
+        say('Nice eye, ' + st.name + '! The feather was real.', C);
+        say('Stage 2: the Griffin\'s gate only opens for a griffin. Try door()');
+    }
+
+    function stage3() {
+        st.stage = 3; st.streak = 0;
+        st.words[1] = 'griffin';
+        say('The gate creaks open. Welcome, fellow griffin ' + st.name + '.', C);
+        say('Stage 3: the Griffin speaks in base64. Decode this riddle (atob() works right here):');
+        say(RIDDLE, Y);
+        say('Submit the one-word answer with answer("...")');
+    }
+
+    function win() {
+        var flag = reveal();
+        console.log('%c' + ART, 'color:#00fff9;line-height:1.1');
+        say(flag, 'color:#00fff9;font-size:16px;font-weight:bold');
+        say('Welcome to TribeCTF 2026, ' + st.name + '. Submit this on CTFd, then go hunt the rest. Happy hacking!');
+        stats();
+        say('(griffins have other calls too...)', 'color:#6e7681;font-style:italic');
+        document.title = '\ud83e\udd85 Griffin approved \u00b7 ' + document.title;
+        st.stage = 4;
+    }
+
+    var hints = [
+        'Start with welcome()',
+        'Tell the Griffin who you are: iam("your name")',
+        'Right-click near "Eligibility/Team Formation" and choose Inspect. Look for an element that is hidden from view, and read its attributes.',
+        'Your role lives in localStorage. Check DevTools > Application > Local Storage, or think about localStorage.setItem(...). Then door() again.',
+        'Decode the riddle with atob("..."), then answer("one word").',
+        'You already have the flag! Scroll up, or submit it on CTFd.'
+    ];
+
+    window.welcome = function () {
+        say('Hey there! Welcome to the Griffin\'s nest.', C);
+        say('Before the Griffin hands over your first flag, it wants to know you. Type iam("your name")');
+        if (!st.t0) st.t0 = Date.now();
+        if (st.stage < 1) st.stage = 1;
+        return done();
+    };
+
+    window.iam = function (name) {
+        if (st.stage < 1) { say('Say hello first: welcome()'); return done(); }
+        var n = String(name == null ? '' : name).trim();
+        if (!n) { say('The Griffin didn\'t catch that. Try iam("Ada")'); return done(); }
+        if (/^(admin|root|administrator|sudo)$/i.test(n)) { say('Nice try. Privilege escalation comes later. Your real name, please: iam("...")', C); return done(); }
+        st.name = n.slice(0, 40);
+        say('Nice to meet you, ' + st.name + '!', C);
+        if (st.stage <= 1) {
+            st.stage = 1.5;
+            say('Stage 1: a feather has been dropped somewhere on this page, hidden from view.');
+            say('Open the Elements tab (right-click > Inspect) and look near "Eligibility". Submit the word with answer("...")');
+        }
+        return done();
+    };
+
+    window.answer = function (a) {
+        var v = norm(a);
+        if (v.indexOf('tribectf{') === 0) { say('Flags go to CTFd, not me.', C); return done(); }
+        if (st.stage < 1.5) { say('Not yet! ' + (st.stage < 1 ? 'Start with welcome()' : 'Introduce yourself: iam("your name")')); return done(); }
+        if (st.stage === 1.5 || st.stage === 3) {
+            var s = st.stage;
+            sha(v).then(function (h) {
+                if (st.stage !== s) return;
+                if (s === 1.5) {
+                    if (h === H1) { st.words[0] = v; stage2(); }
+                    else if (v === 'feather') miss('', 'That\'s the drawer, not what\'s inside it.');
+                    else miss('Look closer at the hidden feather. hint() if you\'re stuck.');
+                } else {
+                    if (h === H3) { st.words[2] = v; win(); }
+                    else miss('Decode the riddle and try again. hint() helps.');
+                }
+            });
+        } else if (st.stage === 2) {
+            say('Not yet, ' + st.name + '. The gate comes first: door()');
+        } else {
+            say('You already earned your flag, ' + st.name + '!');
+        }
+        return done();
+    };
+
+    window.door = function () {
+        if (st.stage < 2) { say('Not yet! The door is past the feather. hint() if you need it.'); return done(); }
+        if (st.stage > 2) { say('The gate is already open, ' + st.name + '.'); return done(); }
+        var role = null;
+        try { role = localStorage.getItem('role'); } catch (e) {}
+        if (norm(role) === 'griffin') { stage3(); }
+        else if (st.knocks++ > 0) {
+            say(KNOCKS[(st.knocks - 2) % KNOCKS.length].replace('{r}', norm(role) || 'nobody'), C);
+        } else {
+            say((role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Nobody') + '? The gate stays shut.', C);
+            say('Only griffins get in. (Application tab > Local Storage, or think about localStorage.setItem...)');
+        }
+        return done();
+    };
+
+    window.hint = function () {
+        st.hints++;
+        var i = st.stage === 0 ? 0 : st.stage === 1 ? 1 : st.stage === 1.5 ? 2 : st.stage === 2 ? 3 : st.stage === 3 ? 4 : 5;
+        say('Hint: ' + hints[i], Y);
+        return done();
+    };
+
+    window.caw = window.fly = function () {
+        say('CAAAAAW!', 'color:#00fff9;font-size:20px;font-weight:bold');
+        say('  ~\\(^v^)/~  *flap flap*  The Griffin approves of your enthusiasm.');
+        return done();
+    };
+
+    say('Psst. The Griffin has your first flag. Type welcome()', C);
+})();
+</script>
