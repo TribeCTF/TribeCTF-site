@@ -51,6 +51,10 @@ readingTime = false  # Show reading time on post page
 published = false  # Show published data on post page
 user = "TribeCTF "
 hostname = " WM"
+# CAGE queue backend (tribectf-cage repo) used by /enter-the-cage/. Placeholder until the
+# VM exists: set to "https://<ip-with-dashes>.sslip.io" (no trailing slash).
+# For local testing, override per page load with /enter-the-cage/?api=http://localhost:8000
+cageApi = "https://35-196-40-58.sslip.io"
   [params.author]
     name = "TribeCTF 2026"
   [params.site]

@@ -1,0 +1,688 @@
+{{- /*
+  CAGE queue client for /enter-the-cage/. Talks to the tribectf-cage backend
+  (Public API in tribectf-cage/SPEC.md) cross-origin with Bearer auth.
+  API base: site param `cageApi`; `?api=<url>` overrides it for local testing
+  (loopback URLs only, unless the page itself is served from localhost).
+  All server-provided strings are rendered with textContent, never innerHTML.
+*/ -}}
+<div id="cage-app" class="cq" data-api="{{ site.Params.cageApi }}">
+  <div class="cq-notice cq-warn" data-el="apiNotice" hidden></div>
+  <div class="cq-notice cq-err" data-el="connLost" hidden role="status">Connection lost. Retrying&hellip;</div>
+
+  <!-- Invite banner: shown only while our request is invited -->
+  <section class="cq-invite" data-el="invite" hidden role="alert" aria-live="assertive">
+    <div class="cq-invite-kicker">You're up!</div>
+    <div class="cq-invite-station">Station <span data-el="inviteStation"></span></div>
+    <div class="cq-invite-text">Report to the CAGE door by <strong data-el="inviteBy"></strong>.</div>
+    <div class="cq-invite-code" data-el="inviteCodeBox" hidden>
+      <div class="cq-invite-code-label">Show this code at the CAGE door</div>
+      <div class="cq-invite-code-val" data-el="inviteCode"></div>
+    </div>
+    <div class="cq-invite-count" data-el="inviteCount" aria-live="off"></div>
+    <div class="cq-invite-sub">If you don't arrive in time, the slot passes to the next team.</div>
+  </section>
+
+  <!-- Signed out -->
+  <section class="cq-panel" data-el="signedOut" hidden>
+    <h3>$ Sign in</h3>
+    <ol class="cq-steps">
+      <li>Log in to the TribeCTF scoreboard (CTFd).</li>
+      <li>Open <strong>Settings &rarr; Access Tokens</strong> and click <strong>Generate</strong>.</li>
+      <li>Copy the token and paste it below.</li>
+    </ol>
+    <form data-el="authForm" class="cq-row" autocomplete="off">
+      <label class="cq-sr" for="cq-token">CTFd access token</label>
+      <input id="cq-token" data-el="token" type="password" placeholder="ctfd_..." spellcheck="false" autocapitalize="off" required>
+      <button type="submit" class="cq-btn cq-primary" data-el="authBtn">Sign in</button>
+    </form>
+    <p class="cq-fine">Your CTFd token is only used once, to confirm your team. It isn't stored, and you can delete it in CTFd afterwards. This browser stays signed in to the CAGE queue for the rest of the event.</p>
+    <div class="cq-error" data-el="authErr" hidden role="alert"></div>
+  </section>
+
+  <!-- Signed in -->
+  <section class="cq-panel" data-el="signedIn" hidden>
+    <div class="cq-teamline">
+      <h3>$ <span data-el="teamName"></span></h3>
+      <span class="cq-badge" data-el="firstTimer" hidden title="First-timers go to the front of the line">first-timer</span>
+      <button type="button" class="cq-btn cq-ghost cq-signout" data-el="signOut">Sign out</button>
+    </div>
+    <div class="cq-budget">
+      <div class="cq-budget-label"><span data-el="budgetText"></span></div>
+      <div class="cq-bar" role="progressbar" aria-label="CAGE time used" data-el="bar"><div class="cq-bar-fill" data-el="barFill"></div></div>
+    </div>
+    <div class="cq-error" data-el="meErr" hidden role="alert"></div>
+
+    <!-- In session -->
+    <div class="cq-box cq-session" data-el="session" hidden>
+      <div class="cq-box-title">In the CAGE &middot; station <span data-el="sessStation"></span></div>
+      <div class="cq-big" data-el="sessCount"></div>
+      <div class="cq-sub" data-el="sessSub"></div>
+      <div class="cq-warnbox" data-el="sessWarn" hidden>
+        <div>Another team is waiting. Save to your backup drive and leave.</div>
+        <div class="cq-big cq-red" data-el="sessWarnCount"></div>
+      </div>
+    </div>
+
+    <!-- Active request -->
+    <div class="cq-box" data-el="active" hidden>
+      <div class="cq-box-title" data-el="activeTitle"></div>
+      <dl class="cq-kv">
+        <dt>Position</dt><dd data-el="activePos"></dd>
+        <dt>Estimated wait</dt><dd data-el="activeEta"></dd>
+      </dl>
+      <p class="cq-fine" data-el="activeNote"></p>
+      <div class="cq-row">
+        <button type="button" class="cq-btn cq-ghost" data-el="cancelBtn">Cancel request</button>
+        <button type="button" class="cq-btn cq-danger" data-el="cancelConfirm" hidden>Yes, give up my spot</button>
+      </div>
+    </div>
+    <div class="cq-notice cq-warn" data-el="expiredNote" hidden>Your last invite expired before you checked in, so the slot went to the next team. You can request again below.</div>
+
+    <!-- Request form -->
+    <div class="cq-box" data-el="reqBox" hidden>
+      <div class="cq-box-title">Request CAGE time</div>
+      <div data-el="reqBooked">
+        <p class="cq-sub">How long? Your full booking counts against your 2 hours once your session starts.</p>
+        <div class="cq-mins" data-el="minBtns">
+          <button type="button" class="cq-btn cq-min" data-min="30">30 min</button>
+          <button type="button" class="cq-btn cq-min" data-min="60">60 min</button>
+          <button type="button" class="cq-btn cq-min" data-min="90">90 min</button>
+          <button type="button" class="cq-btn cq-min" data-min="120">120 min</button>
+        </div>
+      </div>
+      <div data-el="reqWalkin" hidden>
+        <p class="cq-sub">Less than 30 minutes of your 2 hours is left, so you can't book another block. You can still walk in (out of hours) when a station is free, and stay until another team is waiting. Walk-ins are served after all booked requests.</p>
+        <button type="button" class="cq-btn cq-primary" data-el="walkinBtn">Request a walk-in (out of hours)</button>
+      </div>
+      <p class="cq-fine" data-el="reqNote" hidden></p>
+      <div class="cq-error" data-el="reqErr" hidden role="alert"></div>
+    </div>
+
+    <!-- Discord -->
+    <details class="cq-box cq-discord" data-el="discordBox">
+      <summary>Discord ping <span class="cq-fine" data-el="discordState"></span></summary>
+      <p class="cq-sub">Optional. We post invites in <code>#cage-queue</code>; add your Discord user ID and we'll @mention you too.</p>
+      <p class="cq-fine">To copy it: Discord &rarr; User Settings &rarr; Advanced &rarr; turn on <strong>Developer Mode</strong>. Then right-click (or long-press) your name &rarr; <strong>Copy User ID</strong>. It's a 17&ndash;20 digit number, not your username.</p>
+      <form data-el="discordForm" class="cq-row" autocomplete="off">
+        <label class="cq-sr" for="cq-discord">Discord user ID</label>
+        <input id="cq-discord" data-el="discordInput" inputmode="numeric" pattern="[0-9]{17,20}" maxlength="20" placeholder="e.g. 123456789012345678">
+        <button type="submit" class="cq-btn">Save</button>
+        <button type="button" class="cq-btn cq-ghost" data-el="discordClear">Remove</button>
+      </form>
+      <div class="cq-error" data-el="discordErr" hidden role="alert"></div>
+      <div class="cq-ok" data-el="discordOk" hidden></div>
+    </details>
+    <p class="cq-fine" data-el="soundNote"></p>
+  </section>
+
+  <!-- Public live board -->
+  <section class="cq-panel">
+    <h3>$ Live board</h3>
+    <p class="cq-fine" data-el="boardMeta">Loading&hellip;</p>
+    <div class="cq-stations" data-el="stations"></div>
+    <h4 class="cq-h4">Queue</h4>
+    <ol class="cq-queue" data-el="queue"></ol>
+    <p class="cq-fine" data-el="queueEmpty" hidden>Nobody is waiting.</p>
+    <p class="cq-fine">All times are Eastern (America/New_York). Wait estimates are rough.</p>
+  </section>
+</div>
+
+<style>
+.cq { --g:#7ee787; --r:#F26E74; --y:#FFB300; --bg:#252627; --line:#3a3b3e; --mut:#a8a8b3; text-align:left; margin-top:1.5em; }
+.cq [hidden] { display:none !important; }
+.cq h3 { margin:.2em 0 .6em; }
+.cq h3, .cq-h4, .cq-box-title, .cq-btn, .cq-big, .cq-badge, .cq-kv, .cq-st, .cq-queue, .cq-invite { font-family:'Fira Mono', monospace; }
+.cq-h4 { margin:1.2em 0 .5em; color:var(--g); font-size:1em; }
+.cq-panel { background:var(--bg); border:1px solid var(--line); padding:1em; margin:0 0 1.2em; }
+.cq-box { border:1px solid var(--line); padding:.8em; margin:.9em 0 0; }
+.cq-box-title { color:var(--g); margin-bottom:.4em; }
+.cq-sub { margin:.3em 0 .6em; }
+.cq-fine { font-size:.85em; color:var(--mut); margin:.4em 0; }
+.cq-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.cq-row { display:flex; flex-wrap:wrap; gap:.5em; align-items:center; }
+.cq input { flex:1 1 12em; min-width:0; box-sizing:border-box; padding:.55em .6em; background:#1c1d1f; color:#f8f8ff; border:1px solid var(--line); font:inherit; font-family:'Fira Mono', monospace; }
+.cq input:focus { outline:none; border-color:var(--g); }
+.cq-btn { padding:.5em .9em; background:transparent; color:var(--g); border:1px solid var(--g); cursor:pointer; font-size:.95em; }
+.cq-btn:hover:not(:disabled), .cq-btn:focus-visible { background:rgba(126,231,135,.12); outline:none; }
+.cq-btn:disabled { opacity:.35; cursor:not-allowed; }
+.cq-primary { background:var(--g); color:#1c1d1f; }
+.cq-primary:hover:not(:disabled) { background:#9ff0a6; }
+.cq-ghost { color:#f8f8ff; border-color:var(--line); }
+.cq-danger { color:var(--r); border-color:var(--r); }
+.cq-mins { display:grid; grid-template-columns:repeat(4, 1fr); gap:.5em; }
+.cq-min { padding:.8em .3em; }
+.cq-error { color:var(--r); margin:.5em 0 0; font-size:.9em; }
+.cq-ok { color:var(--g); margin:.5em 0 0; font-size:.9em; }
+.cq-notice { padding:.6em .8em; margin:0 0 1em; border:1px solid; font-size:.9em; }
+.cq-warn { border-color:var(--y); color:var(--y); }
+.cq-err { border-color:var(--r); color:var(--r); }
+.cq-teamline { display:flex; flex-wrap:wrap; align-items:center; gap:.5em .8em; }
+.cq-teamline h3 { margin:0; flex:0 1 auto; min-width:0; overflow-wrap:anywhere; }
+.cq-signout { margin-left:auto; padding:.3em .7em; font-size:.8em; }
+.cq-badge { font-size:.75em; padding:.15em .5em; border:1px solid var(--y); color:var(--y); }
+.cq-budget { margin:.8em 0 0; }
+.cq-budget-label { font-size:.9em; margin-bottom:.3em; }
+.cq-bar { height:.7em; background:#1c1d1f; border:1px solid var(--line); }
+.cq-bar-fill { height:100%; width:0; background:var(--g); transition:width .4s ease; }
+.cq-kv { display:grid; grid-template-columns:max-content auto; gap:.2em 1em; margin:.3em 0; }
+.cq-kv dt::after { content:":"; }
+.cq-kv dd { margin:0; }
+.cq-big { font-size:1.8em; line-height:1.2; }
+.cq-red { color:var(--r); }
+.cq-session { border-color:var(--g); }
+.cq-warnbox { margin-top:.6em; padding:.6em; border:1px solid var(--r); color:var(--r); background:rgba(242,110,116,.08); }
+.cq-discord summary { cursor:pointer; color:var(--g); font-family:'Fira Mono', monospace; }
+.cq-discord[open] summary { margin-bottom:.4em; }
+.cq-invite { text-align:center; padding:1.2em 1em; margin:0 0 1.2em; background:var(--g); color:#1c1d1f; border:3px solid #f8f8ff; box-shadow:0 0 0 3px var(--g); }
+.cq-invite-kicker { font-size:1.2em; text-transform:uppercase; letter-spacing:.1em; }
+.cq-invite-station { font-size:2.6em; font-weight:bold; line-height:1.2; }
+.cq-invite-count { font-size:2.4em; margin:.2em 0; }
+.cq-invite-text, .cq-invite-sub { font-family:'Open Sans', sans-serif; }
+.cq-invite-sub { font-size:.85em; }
+.cq-invite-code { margin:.5em auto .2em; padding:.3em .8em .4em; display:inline-block; background:#1c1d1f; color:#f8f8ff; }
+.cq-invite-code-label { font-family:'Open Sans', sans-serif; font-size:.9em; }
+.cq-invite-code-val { font-size:3em; font-weight:bold; letter-spacing:.25em; padding-left:.25em; line-height:1.15; }
+.cq-invite.cq-late { background:var(--r); box-shadow:0 0 0 3px var(--r); }
+.cq-stations { display:grid; grid-template-columns:repeat(auto-fit, minmax(10em, 1fr)); gap:.6em; }
+.cq-st { border:1px solid var(--line); padding:.6em; min-width:0; }
+.cq-st-head { display:flex; flex-wrap:wrap; justify-content:space-between; gap:0 .4em; font-size:.85em; }
+.cq-st-state { color:var(--mut); }
+.cq-st-team { overflow-wrap:anywhere; margin:.4em 0 .2em; min-height:1.3em; font-family:'Open Sans', sans-serif; font-weight:bold; }
+.cq-st-time { font-size:.9em; color:var(--mut); }
+.cq-st.s-ready { border-color:var(--g); } .cq-st.s-ready .cq-st-state { color:var(--g); }
+.cq-st.s-invited .cq-st-state { color:var(--y); }
+.cq-st.s-in_session .cq-st-state { color:#80AADD; }
+.cq-st.s-warned { border-color:var(--r); } .cq-st.s-warned .cq-st-time { color:var(--r); }
+.cq-st.s-overdue { border-color:var(--r); background:rgba(242,110,116,.12); } .cq-st.s-overdue .cq-st-state { color:var(--r); }
+.cq-st.s-mine { box-shadow:inset 0 0 0 1px var(--g); }
+.cq-queue { list-style:none; padding:0; margin:0; }
+.cq-queue li { display:flex; flex-wrap:wrap; gap:.3em .6em; align-items:baseline; padding:.4em 0; border-bottom:1px dashed var(--line); font-size:.9em; }
+.cq-q-pos { color:var(--g); min-width:2em; }
+.cq-q-team { flex:1 1 8em; min-width:0; overflow-wrap:anywhere; font-family:'Open Sans', sans-serif; }
+.cq-q-meta { color:var(--mut); }
+.cq-q-tag { font-size:.8em; padding:0 .4em; border:1px solid var(--line); color:var(--mut); }
+.cq-q-tag.ft { border-color:var(--y); color:var(--y); }
+.cq-queue li.mine .cq-q-team { color:var(--g); }
+@media (max-width:480px) {
+  .cq-panel { padding:.8em; }
+  .cq-mins { grid-template-columns:repeat(2, 1fr); }
+  .cq-invite-station { font-size:2.1em; }
+  .cq-invite-count { font-size:2em; }
+  .cq-invite-code-val { font-size:2.4em; }
+}
+@media (prefers-reduced-motion: reduce) { .cq-bar-fill { transition:none; } }
+</style>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.getElementById('cage-app');
+  if (!root || root.dataset.ready) return;
+  root.dataset.ready = '1';
+
+  var TZ = 'America/New_York';
+  var POLL_MS = 5000;
+  var MINUTES = [30, 60, 90, 120];
+  var $ = {};
+  Array.prototype.forEach.call(root.querySelectorAll('[data-el]'), function (n) { $[n.getAttribute('data-el')] = n; });
+
+  // ---- API base (site param, optional ?api= override for local testing) ----
+  function isLoopback(host) { return host === 'localhost' || host === '127.0.0.1' || host === '[::1]'; }
+  var API = (root.getAttribute('data-api') || '').replace(/\/+$/, '');
+  var override = null;
+  try { override = new URLSearchParams(location.search).get('api'); } catch (e) {}
+  if (override) {
+    var u = null;
+    try { u = new URL(override); } catch (e) {}
+    if (u && (u.protocol === 'http:' || u.protocol === 'https:') && (isLoopback(u.hostname) || isLoopback(location.hostname))) {
+      API = u.origin + u.pathname.replace(/\/+$/, '');
+      show($.apiNotice, 'Testing mode: using API ' + API);
+    } else {
+      show($.apiNotice, 'Ignored ?api= override (only loopback URLs are allowed on this site).');
+    }
+  }
+  var configured = API && API.indexOf('CHANGE-ME') === -1;
+
+  // ---- storage (keyed per API so an override never sees the real session) ----
+  var KEY = 'cage-session:' + API;
+  function load() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function save(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+  function clear() { try { localStorage.removeItem(KEY); } catch (e) {} }
+  var session = load();
+
+  // ---- helpers ----
+  function show(n, text) { if (text !== undefined) n.textContent = text; n.hidden = false; }
+  function hide(n) { n.hidden = true; }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined && text !== null) n.textContent = String(text);
+    return n;
+  }
+  function parseT(s) {
+    if (!s) return null;
+    if (typeof s === 'number') return s < 1e12 ? s * 1000 : s;
+    var str = String(s);
+    // Backend stores UTC; treat a naive ISO timestamp as UTC.
+    if (/^\d{4}-\d\d-\d\dT[\d:.]+$/.test(str)) str += 'Z';
+    var t = Date.parse(str);
+    return isNaN(t) ? null : t;
+  }
+  var skew = 0; // server now - local now
+  function now() { return Date.now() + skew; }
+  var fmtTime;
+  try { fmtTime = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' }); }
+  catch (e) { fmtTime = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }); }
+  var fmtDay;
+  try { fmtDay = new Intl.DateTimeFormat('en-US', { timeZone: TZ, weekday: 'short', hour: 'numeric', minute: '2-digit' }); }
+  catch (e) { fmtDay = fmtTime; }
+  function hhmm(t) { return t == null ? '?' : fmtTime.format(new Date(t)); }
+  function dur(ms) {
+    var s = Math.max(0, Math.floor(ms / 1000));
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+    var mm = (h ? String(m).padStart(2, '0') : String(m));
+    return (h ? h + ':' : '') + mm + ':' + String(x).padStart(2, '0');
+  }
+  function errText(data, status) {
+    if (data && data.detail) {
+      if (typeof data.detail === 'string') return data.detail;
+      if (Array.isArray(data.detail)) return data.detail.map(function (d) { return d && d.msg ? d.msg : String(d); }).join('; ');
+    }
+    return 'Request failed (' + status + ').';
+  }
+
+  // ---- fetch wrapper: {ok, status, data, net} ----
+  function api(method, path, body, auth) {
+    var headers = {};
+    if (body !== undefined) headers['Content-Type'] = 'application/json';
+    if (auth && session) headers['Authorization'] = 'Bearer ' + session;
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, 10000) : null;
+    return fetch(API + path, {
+      method: method, headers: headers, mode: 'cors', cache: 'no-store', credentials: 'omit',
+      body: body === undefined ? undefined : JSON.stringify(body), signal: ctl ? ctl.signal : undefined
+    }).then(function (r) {
+      return r.text().then(function (t) {
+        var d = null; try { d = t ? JSON.parse(t) : null; } catch (e) {}
+        if (auth && r.status === 401) signOut('Your CAGE session expired or is invalid. Please sign in again.');
+        return { ok: r.ok, status: r.status, data: d };
+      });
+    }, function () { return { ok: false, status: 0, data: null, net: true }; })
+      .then(function (res) { if (timer) clearTimeout(timer); return res; });
+  }
+
+  // ---- sound + title (beep only after a user gesture, so autoplay policy never blocks it) ----
+  var actx = null, gestured = false;
+  function onGesture() {
+    gestured = true;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC && !actx) actx = new AC();
+      if (actx && actx.state === 'suspended') actx.resume();
+    } catch (e) {}
+    renderSoundNote();
+    window.removeEventListener('pointerdown', onGesture, true);
+    window.removeEventListener('keydown', onGesture, true);
+  }
+  window.addEventListener('pointerdown', onGesture, true);
+  window.addEventListener('keydown', onGesture, true);
+  function beep() {
+    if (!gestured || !actx) return;
+    try {
+      var t = actx.currentTime;
+      [0, 0.25].forEach(function (off) {
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = 'sine'; o.frequency.value = 880;
+        g.gain.setValueAtTime(0.0001, t + off);
+        g.gain.exponentialRampToValueAtTime(0.3, t + off + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + off + 0.18);
+        o.connect(g); g.connect(actx.destination);
+        o.start(t + off); o.stop(t + off + 0.2);
+      });
+    } catch (e) {}
+  }
+  function renderSoundNote() {
+    $.soundNote.textContent = gestured
+      ? 'Sound alert is on: this tab will beep when you are invited. Keep it open.'
+      : 'Tap or click anywhere on this page once to turn on the sound alert for your invite.';
+  }
+  var baseTitle = document.title;
+  var beepedFor = null;
+
+  // ---- state ----
+  var board = null, me = null, lost = false, lastDiscord = null;
+
+  // ---- auth ----
+  $.authForm.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var tok = $.token.value.trim();
+    if (!tok) return;
+    hide($.authErr);
+    $.authBtn.disabled = true;
+    api('POST', '/api/auth', { ctfd_token: tok }).then(function (r) {
+      $.authBtn.disabled = false;
+      if (r.ok && r.data && r.data.session_token) {
+        $.token.value = '';
+        session = r.data.session_token;
+        save(session);
+        render();
+        poll();
+      } else {
+        show($.authErr, r.net ? 'Could not reach the CAGE server. Check your connection and try again.' : errText(r.data, r.status));
+      }
+    });
+  });
+  function signOut(msg) {
+    session = null; me = null; clear();
+    lastDiscord = null; $.discordInput.value = ''; hide($.discordOk); hide($.discordErr); hide($.reqErr); hide($.meErr);
+    render();
+    if (msg) show($.authErr, msg);
+  }
+  $.signOut.addEventListener('click', function () { hide($.authErr); signOut(); });
+
+  // ---- request / cancel ----
+  function busy(on) {
+    Array.prototype.forEach.call(root.querySelectorAll('.cq-min'), function (b) { if (on) b.disabled = true; });
+    $.walkinBtn.disabled = !!on;
+  }
+  function submitRequest(body) {
+    hide($.reqErr);
+    busy(true);
+    api('POST', '/api/request', body, true).then(function (r) {
+      busy(false);
+      if (r.ok) { if (r.data) me = r.data; render(); poll(); }
+      else if (r.status !== 401) show($.meErr, r.net ? 'Could not reach the CAGE server.' : errText(r.data, r.status));
+      renderMe();
+    });
+  }
+  $.minBtns.addEventListener('click', function (ev) {
+    var b = ev.target.closest('.cq-min');
+    if (!b || b.disabled) return;
+    submitRequest({ minutes: parseInt(b.getAttribute('data-min'), 10), kind: 'booked' });
+  });
+  $.walkinBtn.addEventListener('click', function () { submitRequest({ minutes: 0, kind: 'walkin' }); });
+
+  var confirmTimer = null;
+  $.cancelBtn.addEventListener('click', function () {
+    hide($.cancelBtn); show($.cancelConfirm);
+    clearTimeout(confirmTimer);
+    confirmTimer = setTimeout(function () { hide($.cancelConfirm); show($.cancelBtn); }, 5000);
+  });
+  $.cancelConfirm.addEventListener('click', function () {
+    clearTimeout(confirmTimer);
+    $.cancelConfirm.disabled = true;
+    api('DELETE', '/api/request', undefined, true).then(function (r) {
+      $.cancelConfirm.disabled = false;
+      hide($.cancelConfirm); show($.cancelBtn);
+      if (r.ok) { if (r.data) me = r.data; render(); poll(); }
+      else if (r.status !== 401) show($.meErr, r.net ? 'Could not reach the CAGE server.' : errText(r.data, r.status));
+    });
+  });
+
+  // ---- discord ----
+  function putDiscord(val) {
+    hide($.discordErr); hide($.discordOk);
+    api('PUT', '/api/me/discord', { discord_id: val }, true).then(function (r) {
+      if (r.ok) {
+        if (me) me.discord_id = val;
+        show($.discordOk, val ? 'Saved. We will @mention you on Discord.' : 'Removed. No Discord pings.');
+        renderMe();
+      } else if (r.status !== 401) show($.discordErr, r.net ? 'Could not reach the CAGE server.' : errText(r.data, r.status));
+    });
+  }
+  $.discordForm.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var v = $.discordInput.value.replace(/\s+/g, '');
+    if (!/^\d{17,20}$/.test(v)) { show($.discordErr, 'A Discord user ID is 17 to 20 digits. See the steps above.'); return; }
+    putDiscord(v);
+  });
+  $.discordClear.addEventListener('click', function () { $.discordInput.value = ''; putDiscord(null); });
+
+  // ---- polling ----
+  var pollTimer = null, inflight = false;
+  function poll() {
+    clearTimeout(pollTimer);
+    if (!configured) return;
+    if (document.hidden) return;
+    if (inflight) { pollTimer = setTimeout(poll, 500); return; }
+    inflight = true;
+    var jobs = [api('GET', '/api/board')];
+    if (session) jobs.push(api('GET', '/api/me', undefined, true));
+    Promise.all(jobs).then(function (res) {
+      inflight = false;
+      var b = res[0];
+      lost = !!b.net || b.status >= 500;
+      if (b.ok && b.data) {
+        board = b.data;
+        var sn = parseT(board.now);
+        if (sn) skew = sn - Date.now();
+      }
+      if (res[1]) {
+        var m = res[1];
+        if (m.ok && m.data) { me = m.data; hide($.meErr); }
+        else if (m.net) lost = true;
+        else if (m.status !== 401) show($.meErr, errText(m.data, m.status));
+      }
+      render();
+      pollTimer = setTimeout(poll, POLL_MS);
+    });
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) clearTimeout(pollTimer); else poll();
+  });
+
+  // ---- rendering ----
+  // Server refuses requests before requests_open_at (its 400 detail is the fallback).
+  var gateWas = null;
+  function reqGated(n) {
+    var t = board && parseT(board.requests_open_at);
+    return !!t && n < t;
+  }
+  function activeReq() {
+    var r = me && me.request;
+    return r && (r.status === 'queued' || r.status === 'invited') ? r : null;
+  }
+  function render() {
+    lost ? show($.connLost) : hide($.connLost);
+    if (!configured) {
+      show($.apiNotice, 'The CAGE queue is not live yet. Check back when the CAGE opens.');
+      $.boardMeta.textContent = 'Board unavailable.';
+    }
+    $.authBtn.disabled = !configured;
+    if (session) { hide($.signedOut); show($.signedIn); } else { show($.signedOut); hide($.signedIn); hide($.invite); }
+    renderMe();
+    renderBoard();
+    tick();
+  }
+
+  function renderMe() {
+    if (!session) return;
+    if (!me) { $.teamName.textContent = 'Loading…'; hide($.reqBox); hide($.active); hide($.session); return; }
+    $.teamName.textContent = me.team_name || ('Team ' + me.team_id);
+    me.first_timer ? show($.firstTimer) : hide($.firstTimer);
+    var budget = Number(me.budget_min) || 120, used = Number(me.used_min) || 0, rem = Math.max(0, Number(me.remaining_min) || 0);
+    $.budgetText.textContent = used + ' min used · ' + rem + ' min left of ' + budget;
+    $.barFill.style.width = Math.min(100, Math.max(0, used / budget * 100)) + '%';
+    $.bar.setAttribute('aria-valuenow', String(used)); $.bar.setAttribute('aria-valuemax', String(budget));
+
+    $.discordState.textContent = me.discord_id ? '(on)' : '(off)';
+    var dId = me.discord_id || '';
+    if (dId !== lastDiscord && document.activeElement !== $.discordInput) { $.discordInput.value = dId; lastDiscord = dId; }
+
+    var r = activeReq();
+    var expired = me.missed_invite || (me.request && me.request.status === 'expired');
+    expired && !r ? show($.expiredNote) : hide($.expiredNote);
+
+    // Session
+    if (me.session) show($.session); else hide($.session);
+    // Active request
+    if (r) {
+      show($.active);
+      $.activeTitle.textContent = (r.status === 'invited' ? 'Invited' : 'In line') + ' · ' +
+        (r.kind === 'walkin' ? 'walk-in (out of hours)' : r.minutes + ' min');
+      $.activePos.textContent = r.status === 'invited' ? 'your turn' : (r.position != null ? '#' + r.position : '?');
+      $.activeEta.textContent = r.status === 'invited' ? 'now'
+        : (me.session && r.eta == null ? 'after your current session'
+          : (r.kind === 'walkin' && r.eta == null ? 'when a station is free and no booked team waits' : etaText(r.eta)));
+      $.activeNote.textContent = me.session ? 'You will be invited after your current session ends.'
+        : (r.status === 'queued' ? 'Keep this tab open. We will also post in #cage-queue on Discord when you are up.' : '');
+    } else hide($.active);
+
+    // Request form (allowed while in session, as long as there is no active request)
+    var closed = board && parseT(board.close_at) && now() >= parseT(board.close_at);
+    var gated = reqGated(now());
+    gateWas = gated;
+    if (r) hide($.reqBox);
+    else {
+      show($.reqBox);
+      var walk = rem < 30;
+      walk ? (hide($.reqBooked), show($.reqWalkin)) : (show($.reqBooked), hide($.reqWalkin));
+      Array.prototype.forEach.call(root.querySelectorAll('.cq-min'), function (b) {
+        var m = parseInt(b.getAttribute('data-min'), 10);
+        b.disabled = !!closed || gated || m > rem;
+        b.title = m > rem ? 'More than your remaining ' + rem + ' min' : '';
+      });
+      $.walkinBtn.disabled = !!closed || gated;
+      var openAt = board && parseT(board.open_at);
+      if (closed) show($.reqNote, 'The CAGE is closed. Thanks for playing!');
+      else if (gated) show($.reqNote, 'Requests open at ' + hhmm(parseT(board.requests_open_at)));
+      else if (openAt && now() < openAt) show($.reqNote, 'The CAGE opens ' + fmtDay.format(new Date(openAt)) + '. You can get in line now; invites start then.');
+      else if (me.session) show($.reqNote, 'You are in the CAGE now. You can request your next block; it will start after this session.');
+      else hide($.reqNote);
+    }
+
+    // Invite banner + title + beep
+    if (r && r.status === 'invited') {
+      show($.invite);
+      $.inviteStation.textContent = r.station_id != null ? String(r.station_id) : '?';
+      $.inviteBy.textContent = hhmm(parseT(r.invite_expires_at));
+      if (r.checkin_code) { show($.inviteCodeBox); $.inviteCode.textContent = String(r.checkin_code); }
+      else { hide($.inviteCodeBox); $.inviteCode.textContent = ''; }
+      if (beepedFor !== r.id) {
+        beepedFor = r.id; beep();
+        try { $.invite.scrollIntoView({ block: 'start', behavior: 'smooth' }); } catch (e) {}
+      }
+    } else {
+      hide($.invite);
+    }
+  }
+
+  function etaText(eta) {
+    if (eta == null) return 'unknown (estimate)';
+    if (typeof eta === 'number') return eta <= 0 ? 'any minute (estimate)' : '~' + Math.round(eta) + ' min (estimate)';
+    var t = parseT(eta);
+    if (t == null) return String(eta) + ' (estimate)';
+    var mins = Math.round((t - now()) / 60000);
+    return '~' + hhmm(t) + (mins > 0 ? ', in ~' + mins + ' min' : '') + ' (estimate)';
+  }
+
+  var STATE_LABEL = { READY: 'free', INVITED: 'team called', IN_SESSION: 'in use', RESETTING: 'resetting', OFFLINE: 'offline' };
+  function renderBoard() {
+    if (!board) { if (lost) $.boardMeta.textContent = 'Cannot reach the CAGE server. Retrying every few seconds.'; return; }
+    var openAt = parseT(board.open_at), closeAt = parseT(board.close_at), n = now();
+    $.boardMeta.textContent = (openAt && n < openAt) ? 'CAGE opens ' + fmtDay.format(new Date(openAt)) + '.'
+      : (closeAt && n >= closeAt) ? 'CAGE closed.'
+      : 'CAGE open' + (closeAt ? ' until ' + fmtDay.format(new Date(closeAt)) : '') + '. Updated ' + hhmm(n) + '.';
+
+    // "Mine" is matched by station id / queue position from /api/me, not by team name.
+    var myReq = session ? activeReq() : null;
+    var myStations = {};
+    if (session && me && me.session && me.session.station_id != null) myStations[me.session.station_id] = 1;
+    if (myReq && myReq.status === 'invited' && myReq.station_id != null) myStations[myReq.station_id] = 1;
+    var myPos = myReq && myReq.status === 'queued' ? myReq.position : null;
+    var frag = document.createDocumentFragment();
+    (board.stations || []).forEach(function (s) {
+      var st = String(s.state || '').toUpperCase();
+      var warned = st === 'IN_SESSION' && !!s.warning_ends_at;
+      var card = el('div', 'cq-st s-' + st.toLowerCase() + (warned ? ' s-warned' : '') + (s.overdue ? ' s-overdue' : '') +
+        (myStations[s.id] ? ' s-mine' : ''));
+      var head = el('div', 'cq-st-head');
+      head.appendChild(el('span', '', 'Station ' + s.id));
+      head.appendChild(el('span', 'cq-st-state', s.overdue ? 'overdue' : (STATE_LABEL[st] || st.toLowerCase())));
+      card.appendChild(head);
+      card.appendChild(el('div', 'cq-st-team', s.team_name || (st === 'READY' ? '—' : '')));
+      var time = el('div', 'cq-st-time');
+      time.setAttribute('data-st', '1');
+      time._s = s; time._st = st;
+      card.appendChild(time);
+      frag.appendChild(card);
+    });
+    $.stations.replaceChildren(frag);
+
+    var q = board.queue || [];
+    var qf = document.createDocumentFragment();
+    q.forEach(function (it) {
+      var li = el('li', myPos != null && it.position === myPos ? 'mine' : '');
+      li.appendChild(el('span', 'cq-q-pos', '#' + it.position));
+      li.appendChild(el('span', 'cq-q-team', it.team_name));
+      li.appendChild(el('span', 'cq-q-meta', it.kind === 'walkin' ? 'walk-in' : it.minutes + ' min'));
+      if (it.first_timer) li.appendChild(el('span', 'cq-q-tag ft', 'first-timer'));
+      if (it.in_session) li.appendChild(el('span', 'cq-q-tag', 'in CAGE now'));
+      qf.appendChild(li);
+    });
+    $.queue.replaceChildren(qf);
+    q.length ? hide($.queueEmpty) : show($.queueEmpty);
+  }
+
+  function stationTime(s, st, n) {
+    if (st === 'IN_SESSION') {
+      if (s.overdue) return 'warning expired';
+      var w = parseT(s.warning_ends_at);
+      if (w) return 'leaving: ' + dur(w - n);
+      var e = parseT(s.ends_at);
+      if (!e) return 'walk-in · ' + dur(n - (parseT(s.started_at) || n));
+      if (s.overtime || n >= e) return 'overtime +' + dur(n - e);
+      return dur(e - n) + ' left · until ' + hhmm(e);
+    }
+    if (st === 'INVITED') {
+      var x = parseT(s.invite_expires_at);
+      return x ? 'arrive within ' + dur(x - n) : 'waiting for team';
+    }
+    if (st === 'READY') return 'waiting for next team';
+    return '';
+  }
+
+  // 1 Hz countdown refresh, no network
+  function tick() {
+    var n = now();
+    if (session && me && gateWas !== null && reqGated(n) !== gateWas) renderMe();
+    Array.prototype.forEach.call($.stations.querySelectorAll('[data-st]'), function (t) { t.textContent = stationTime(t._s, t._st, n); });
+
+    var r = activeReq();
+    if (session && r && r.status === 'invited') {
+      var exp = parseT(r.invite_expires_at);
+      var left = exp ? exp - n : null;
+      $.inviteCount.textContent = left == null ? '' : (left > 0 ? dur(left) : '0:00');
+      $.invite.classList.toggle('cq-late', left != null && left <= 120000);
+      document.title = (Math.floor(n / 1000) % 2 ? '(!) ' : '>>> ') + 'Station ' + (r.station_id != null ? r.station_id : '?') + ': you\'re up!';
+    } else if (document.title !== baseTitle) {
+      document.title = baseTitle;
+    }
+
+    if (session && me && me.session) {
+      var ss = me.session;
+      $.sessStation.textContent = ss.station_id != null ? String(ss.station_id) : '?';
+      var e = parseT(ss.ends_at), w = parseT(ss.warning_ends_at);
+      if (!e) {
+        $.sessCount.textContent = 'walk-in · ' + dur(n - (parseT(ss.started_at) || n));
+        $.sessSub.textContent = 'Out of hours: you can stay until another team is waiting.';
+      } else if (ss.overtime || n >= e) {
+        $.sessCount.textContent = 'overtime +' + dur(n - e);
+        $.sessSub.textContent = 'Your booking ended at ' + hhmm(e) + '.' + (w ? '' : ' Keep hacking until another team is waiting; you will get a 10-minute warning.');
+      } else {
+        $.sessCount.textContent = dur(e - n) + ' left';
+        $.sessSub.textContent = 'Booked until ' + hhmm(e) + '. Save your work to your backup drive.';
+      }
+      if (w) {
+        show($.sessWarn);
+        $.sessWarnCount.textContent = w - n > 0 ? dur(w - n) + ' to leave' : 'Time is up. Please leave now.';
+      } else hide($.sessWarn);
+    }
+  }
+
+  renderSoundNote();
+  render();
+  setInterval(tick, 1000);
+  if (configured) poll();
+})();
+</script>
