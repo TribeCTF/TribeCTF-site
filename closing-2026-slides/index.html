@@ -695,7 +695,7 @@
 
             <!-- ===== CAGE TIER: Fought ===== -->
             <section class="slide coin coind" aria-label="Cage tier: Fought">
-                <h2 class="abs slide-title fringe reveal">Fought</h2>
+                <h2 class="abs slide-title fringe reveal">Fought <span style="color:var(--text-muted,#9aa0a6);font-size:.6em;font-weight:400;margin-left:.4em">(&gt;= 300 pts)</span></h2>
                 <div class="chamfer abs pic reveal-img d1"><img src="assets/coin-easy.png" alt="I Fought the Cage coin"></div>
                 <ul class="abs tl t1 reveal d3"><li>Pro(tein) Protein</li><li>Wu-Tang LAN</li><li>Griffins</li><li>BigOnes@VT</li><li>Team AWESOME</li><li>CNU_Plore</li></ul>
                 <ul class="abs tl t2 reveal d4"><li>tribe_h4ck3rs</li><li>laptop</li><li>huntatvt</li><li>JoJoGuys</li><li>CNU Hamsters</li><li>Rye</li></ul>
@@ -703,21 +703,21 @@
 
             <!-- ===== CAGE TIER: Survived ===== -->
             <section class="slide coin coine" aria-label="Cage tier: Survived">
-                <h2 class="abs slide-title fringe reveal">Survived</h2>
+                <h2 class="abs slide-title fringe reveal">Survived <span style="color:var(--text-muted,#9aa0a6);font-size:.6em;font-weight:400;margin-left:.4em">(900 pts)</span></h2>
                 <div class="chamfer abs pic reveal-img d1"><img src="assets/coin-medium.png" alt="I Survived the Cage coin"></div>
                 <ul class="abs tl t1 reveal d3"><li>pwn@vt</li></ul>
             </section>
 
             <!-- ===== CAGE TIER: Conquered ===== -->
             <section class="slide coin coine" aria-label="Cage tier: Conquered">
-                <h2 class="abs slide-title fringe reveal">Conquered</h2>
+                <h2 class="abs slide-title fringe reveal">Conquered <span style="color:var(--text-muted,#9aa0a6);font-size:.6em;font-weight:400;margin-left:.4em">(&gt;= 1400 pts)</span></h2>
                 <div class="chamfer abs pic reveal-img d1"><img src="assets/coin-medium2.png" alt="I Conquered the Cage coin"></div>
                 <ul class="abs tl t1 reveal d3"><li>WhatIsAstig</li><li>CNS@UVA</li><li>W VP@CNU</li></ul>
             </section>
 
             <!-- ===== CAGE TIER: Dominated (all three coins) ===== -->
             <section class="slide coin coing" aria-label="Cage tier: Dominated">
-                <h2 class="abs slide-title fringe reveal">Dominated</h2>
+                <h2 class="abs slide-title fringe reveal">Dominated <span style="color:var(--text-muted,#9aa0a6);font-size:.6em;font-weight:400;margin-left:.4em">(1900 pts)</span></h2>
                 <div class="chamfer abs pic p1 reveal-img d1"><img src="assets/coin-easy.png" alt="I Fought the Cage coin"></div>
                 <div class="chamfer abs pic p2 reveal-img d2"><img src="assets/coin-medium.png" alt="I Survived the Cage coin"></div>
                 <div class="chamfer abs pic p3 reveal-img d3"><img src="assets/coin-medium2.png" alt="I Conquered the Cage coin"></div>
@@ -841,7 +841,7 @@
     <!-- Stats injected by scripts/closing_stats.py (rewrites this block in place). -->
     <script id="stats" type="application/json">
 {
- "generated_at": "2026-10-04 11:17 EDT",
+ "generated_at": "2026-10-04 11:19 EDT",
  "export_file": "TribeCTF 2026.2026-10-04_14_31_24.zip",
  "export_time": "Sun Oct 04 10:31 AM EDT",
  "data_as_of": "Sun Oct 04 10:24 AM EDT",
@@ -1574,6 +1574,17 @@
                     else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); this.prev(); }
                     else if (e.key === 'Home') { this.showSlide(0); }
                     else if (e.key === 'End') { this.showSlide(this.slides.length - 1); }
+                    // F toggles fullscreen presentation mode
+                    else if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+                        e.preventDefault();
+                        const d = document, el = d.documentElement;
+                        if (d.fullscreenElement || d.webkitFullscreenElement) {
+                            (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+                        } else {
+                            const req = el.requestFullscreen || el.webkitRequestFullscreen;
+                            if (req) { const p = req.call(el); if (p && p.catch) p.catch(() => {}); }
+                        }
+                    }
                 });
                 document.getElementById('prevBtn').addEventListener('click', (e) => { e.stopPropagation(); this.prev(); });
                 document.getElementById('nextBtn').addEventListener('click', (e) => { e.stopPropagation(); this.next(); });
