@@ -493,8 +493,10 @@
   }
   function fsnap(s, n) {
     var e = parseT(s.ends_at), pu = parseT(s.protected_until), w = s.warning_ends_at || null, wt = parseT(w);
+    var ra = parseT(s.rotate_after);
     return {
       ten: !!e && e - n <= WARN_MS, end: !!e && (!!s.overtime || n >= e), prot: !e && !!pu && n >= pu,
+      rot: !!e && s.kind !== 'walkin' && !!ra && n >= ra,
       warn: w, warn2: !!wt && wt - n <= 120000, over: !!s.overdue
     };
   }
@@ -518,6 +520,7 @@
       if (c.end && !p.end) fAlert('booked-end', 'Booked time is over', 'Free time now: not charged, until a team waits.');
       else if (c.ten && !p.ten) fAlert('booked-10', '10 minutes of booked time left', 'Booking ends at ' + hhmm(parseT(s.ends_at)) + '. Save to your backup drive.');
       if (c.prot && !p.prot) fAlert('protect-end', 'Walk-in guarantee over', 'You can stay until another team is waiting.');
+      if (c.rot && p.rot === false) fAlert('rotate-end', 'Free-time protection ended', 'A waiting walk-in team can now also take this station (you get a 10-minute warning first).');
       if (c.warn && c.warn !== p.warn && !c.over) fAlert('warn:' + c.warn, '10-minute warning', 'Another team is waiting. Save to your backup drive and' + by(c.warn));
       else if (c.warn && c.warn2 && !p.warn2) fAlert('warn2:' + c.warn, '2 minutes left', 'Save to your backup drive and' + by(c.warn));
       if (p.warn && !c.warn && !c.over) fAlert('lift:' + p.warn, 'Warning lifted', 'Nobody is waiting any more. Keep going.');
@@ -563,7 +566,9 @@
       mode = 'booked'; count = dur(e - n); label = 'booked time left · until ' + hhmm(e);
       todo = e - n <= WARN_MS ? 'Booking ends soon. Save to your backup drive now.' : 'Save your work to your backup drive as you go.';
     } else if (e) {
-      mode = 'free'; count = '+' + dur(n - e); label = 'free time since ' + hhmm(e) + ' · not charged, until a team waits';
+      var fra = parseT(s.rotate_after);
+      mode = 'free'; count = '+' + dur(n - e); label = 'free time since ' + hhmm(e) + ' · not charged, until a team waits'
+        + (fra ? (n < fra ? ' · after ' + hhmm(fra) + ' a waiting walk-in team can also take it' : ' · a waiting walk-in team can now also take it') : '');
       todo = later;
     } else if (pu && n < pu) {
       mode = 'walk'; count = dur(pu - n); label = 'walk-in protected until ' + hhmm(pu) + ', then until a team waits';
@@ -883,7 +888,10 @@
         return pu && pu > n ? 'walk-in · protected ' + dur(pu - n) + ' more'
                             : 'walk-in · ' + dur(n - (parseT(s.started_at) || n)) + ' · until a team waits';
       }
-      if (s.overtime || n >= e) return 'free time +' + dur(n - e) + ' · queue empty';
+      if (s.overtime || n >= e) {
+        var ra = parseT(s.rotate_after);
+        return 'free time +' + dur(n - e) + (ra && n >= ra ? ' · until a team waits' : ' · queue empty');
+      }
       return dur(e - n) + ' left · until ' + hhmm(e);
     }
     if (st === 'INVITED') {
@@ -924,7 +932,10 @@
           : 'Out of hours: your guaranteed 30 minutes are over. You can stay until another team is waiting.';
       } else if (ss.overtime || n >= e) {
         $.sessCount.textContent = 'free time +' + dur(n - e);
-        $.sessSub.textContent = 'Your booking ended at ' + hhmm(e) + '.' + (w ? '' : ' Nobody is waiting, so this extra time is free and does not count toward your 2 hours. If a team joins the queue, you get a 10-minute warning.');
+        var ra2 = parseT(ss.rotate_after);
+        $.sessSub.textContent = 'Your booking ended at ' + hhmm(e) + '.' + (w ? '' : ' Nobody is waiting, so this extra time is free and does not count toward your 2 hours. If a team joins the queue, you get a 10-minute warning.'
+          + (ra2 ? (n < ra2 ? ' After ' + hhmm(ra2) + ', a waiting walk-in team can also take your station.'
+                            : ' Since ' + hhmm(ra2) + ', a waiting walk-in team can also take your station.') : ''));
       } else {
         $.sessCount.textContent = dur(e - n) + ' left';
         $.sessSub.textContent = 'Booked until ' + hhmm(e) + '. Save your work to your backup drive.';
