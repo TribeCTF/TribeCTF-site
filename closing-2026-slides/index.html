@@ -366,6 +366,28 @@
         .s3 .bar-row .bar { position: absolute; left: 0; top: 0; bottom: 0; }
         .s3 .bar-row .ct { color: var(--muted); text-align: left; }
         .s3 .bar-row.zero .ct { color: rgba(248, 248, 255, 0.35); }
+
+        /* Challenges build step 2: only cage-only rows stay (others fade out in place) */
+        /* Choreography (JS: cageChoreo): glitch-out non-cage rows, FLIP cage rows into a centred block,
+           re-grow bars, stamp a lock. Classes: .glitch-out on rows, .compact on the chart, .on on the stamp. */
+        @keyframes glitchOut {
+            0%   { opacity: 1; transform: translateX(0); filter: none; }
+            20%  { transform: translateX(-10px); filter: grayscale(1); }
+            40%  { transform: translateX(8px); opacity: 0.7; }
+            60%  { transform: translateX(-5px) scaleY(0.7); opacity: 0.4; }
+            100% { opacity: 0; transform: translateX(14px) scaleY(0.2); filter: grayscale(1); }
+        }
+        .s3b .bar-row.glitch-out { animation: glitchOut 0.38s steps(6, end) forwards; }
+        .s3b .chart.compact { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .s3b .chart.compact .col { display: contents; }
+        .s3b .chart.compact .bar-row:not(.cage) { display: none; }
+        .s3b .chart.compact .bar-row.cage { width: 1100px; height: calc(var(--row-h, 48px) * 1.35); }
+        .s3b .bar-row .nm { transition: font-weight 0s; }
+        .s3b .stamp { left: 760px; top: 168px; width: 64px; height: 64px; color: var(--text); opacity: 0; transform: scale(0.3); }
+        .s3b .stamp svg { width: 100%; height: 100%; }
+        .s3b .stamp.on { opacity: 1; transform: scale(1); transition: transform 0.45s cubic-bezier(0.34, 1.8, 0.64, 1), opacity 0.2s; }
+        .s3b .bar-row.cage .nm { color: var(--text); font-weight: 700; }
+        .s3b .bar-row.cage .trk { border-left-color: var(--text); }
         .s3 .empty { font-family: var(--font-display); font-size: 40px; color: var(--muted); }
 
         /* ===========================================
@@ -489,7 +511,8 @@
             font-family: var(--font-display); font-size: 64px; line-height: 1.25;
         }
         .s13 .hm li { white-space: nowrap; }
-        .s13 .hm li:last-child { grid-column: 1 / -1; text-align: center; }
+        .s13 .hm li:last-child:nth-child(odd) { grid-column: 1 / -1; text-align: center; }
+        .s13 .place { white-space: nowrap; left: 0; width: 1920px; text-align: center; }
         .s13 .claps { left: 110px; top: 560px; width: 290px; height: 307px; color: var(--accent); }
         .s13 .claps svg { width: 100%; height: 100%; }
 
@@ -525,6 +548,25 @@
             text-shadow: -3px 0 var(--fringe-red), 3px 0 var(--fringe-cyan);
         }
 
+
+        /* Funniest flags: one slide, two cards */
+        .flags .fcard { top: 290px; width: 780px; background: var(--bg-darker); border: 1px solid rgba(248, 248, 255, 0.12); border-left: 4px solid var(--accent); padding: 30px 40px 36px; }
+        .flags .g1 { left: 152px; } .flags .g2 { left: 988px; border-left-color: var(--blue); }
+        .flags .fh { font-family: var(--font-display); font-size: 50px; font-weight: 700; color: var(--accent); margin-bottom: 22px; }
+        .flags .g2 .fh { color: var(--blue); }
+        .flags .fl { list-style: none; white-space: nowrap; font-family: var(--font-display); font-size: 36px; line-height: 1.6; color: var(--text); }
+        .flags .fl li::before { content: '> '; color: var(--muted); }
+        /* Cage coin tiers */
+        .coin .slide-title { left: 152px; top: 84px; font-size: 72px; }
+        .coin .pic { --c: 44px; left: 152px; top: 280px; width: 600px; height: 600px; }
+        .coin .pic > img { object-fit: contain; background: #2b2b33; }
+        .coin .tl { top: 300px; list-style: none; font-family: var(--font-display); font-size: 46px; line-height: 1.55; color: var(--text); }
+        .coin .tl li::before { content: '\25B8  '; color: var(--muted); }
+        .coin .t1 { left: 860px; } .coin .t2 { left: 1440px; }
+        .coine .tl, .coinf .tl { top: 440px; font-size: 64px; }
+        .coing .pic { top: 260px; width: 440px; height: 440px; --c: 36px; }
+        .coing .p1 { left: 220px; } .coing .p2 { left: 740px; } .coing .p3 { left: 1260px; }
+        .coing .champ { left: 0; width: 1920px; top: 760px; text-align: center; font-family: var(--font-display); font-size: 140px; font-weight: 700; color: var(--text); }
         .flag.placeholder { color: var(--muted); font-style: italic; border-style: dashed; }
         /* Long flags wrap anywhere and shrink (fitText) to stay inside their slot */
         .flag { overflow-wrap: anywhere; overflow: hidden; }
@@ -604,12 +646,22 @@
             </section>
 
             <!-- ===== 3. THE CHALLENGES (bar chart rendered from stats.challenges) ===== -->
-            <section class="slide s3" aria-label="Slide 3">
+            <section class="slide s3" data-build="chal" aria-label="Slide 3">
                 <h2 class="abs slide-title fringe reveal">The Challenges</h2>
                 <p class="abs sub reveal d1"><span data-stat="counts.challenges">&mdash;</span> challenges &middot; <span data-stat="counts.solves">&mdash;</span> solves</p>
                 <p class="abs note reveal d1">bars = teams that solved</p>
-                <ul class="abs legend reveal d2" id="chartLegend"></ul>
-                <div class="abs chart reveal d2" id="chart"><p class="empty">Challenge data unavailable</p></div>
+                <ul class="abs legend reveal d2" data-legend></ul>
+                <div class="abs chart reveal d2" data-chart><p class="empty">Challenge data unavailable</p></div>
+            </section>
+
+            <!-- ===== 3+. THE CHALLENGES, cage-only step (same chart; non-cage rows fade out; build step 2/2) ===== -->
+            <section class="slide s3 s3b" data-build="chal" aria-label="Slide 3: cage-only challenges">
+                <h2 class="abs slide-title fringe">The Challenges</h2>
+                <p class="abs sub"><span data-stat="cage.challenges">&mdash;</span> cage-only challenges &middot; <span data-stat="cage.solves">&mdash;</span> solves</p>
+                <p class="abs note">bars = teams that solved</p>
+                <ul class="abs legend" data-legend></ul>
+                <div class="abs stamp" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><path d="M12 15v2"/></svg></div>
+                <div class="abs chart" data-chart data-cage-only><p class="empty">Challenge data unavailable</p></div>
             </section>
 
             <!-- ===== 3a. THE CAGE: section title (team count from stats.cage.queue) ===== -->
@@ -641,40 +693,42 @@
                 <p class="abs cap cap2 reveal d4">public live board</p>
             </section>
 
-            <!-- ===== 4. FUNNIEST FLAGS (build step 1/5; text from stats.funny_flags) ===== -->
-            <section class="slide flags s4" data-build="flags" aria-label="Slide 4">
+            <!-- ===== CAGE TIER: Fought ===== -->
+            <section class="slide coin coind" aria-label="Cage tier: Fought">
+                <h2 class="abs slide-title fringe reveal">Fought</h2>
+                <div class="chamfer abs pic reveal-img d1"><img src="assets/coin-easy.png" alt="I Fought the Cage coin"></div>
+                <ul class="abs tl t1 reveal d3"><li>Pro(tein) Protein</li><li>Wu-Tang LAN</li><li>Griffins</li><li>BigOnes@VT</li><li>Team AWESOME</li><li>CNU_Plore</li></ul>
+                <ul class="abs tl t2 reveal d4"><li>tribe_h4ck3rs</li><li>laptop</li><li>huntatvt</li><li>JoJoGuys</li><li>CNU Hamsters</li><li>Rye</li></ul>
+            </section>
+
+            <!-- ===== CAGE TIER: Survived ===== -->
+            <section class="slide coin coine" aria-label="Cage tier: Survived">
+                <h2 class="abs slide-title fringe reveal">Survived</h2>
+                <div class="chamfer abs pic reveal-img d1"><img src="assets/coin-medium.png" alt="I Survived the Cage coin"></div>
+                <ul class="abs tl t1 reveal d3"><li>pwn@vt</li></ul>
+            </section>
+
+            <!-- ===== CAGE TIER: Conquered ===== -->
+            <section class="slide coin coine" aria-label="Cage tier: Conquered">
+                <h2 class="abs slide-title fringe reveal">Conquered</h2>
+                <div class="chamfer abs pic reveal-img d1"><img src="assets/coin-medium2.png" alt="I Conquered the Cage coin"></div>
+                <ul class="abs tl t1 reveal d3"><li>WhatIsAstig</li><li>CNS@UVA</li><li>W VP@CNU</li></ul>
+            </section>
+
+            <!-- ===== CAGE TIER: Dominated (all three coins) ===== -->
+            <section class="slide coin coing" aria-label="Cage tier: Dominated">
+                <h2 class="abs slide-title fringe reveal">Dominated</h2>
+                <div class="chamfer abs pic p1 reveal-img d1"><img src="assets/coin-easy.png" alt="I Fought the Cage coin"></div>
+                <div class="chamfer abs pic p2 reveal-img d2"><img src="assets/coin-medium.png" alt="I Survived the Cage coin"></div>
+                <div class="chamfer abs pic p3 reveal-img d3"><img src="assets/coin-medium2.png" alt="I Conquered the Cage coin"></div>
+                <p class="abs champ reveal d4">MasonCC</p>
+            </section>
+
+            <!-- ===== 4. FUNNIEST FLAGS (one slide, text from tribectf-closing-2026.pptx) ===== -->
+            <section class="slide flags s4" aria-label="Funniest Flags">
                 <h2 class="abs slide-title fringe reveal">Funniest Flags</h2>
-                <p class="flag f1 reveal d1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
-            </section>
-            <!-- ===== 5. FUNNIEST FLAGS (build step 2/5; text from stats.funny_flags) ===== -->
-            <section class="slide flags s5" data-build="flags" aria-label="Slide 5">
-                <h2 class="abs slide-title fringe">Funniest Flags</h2>
-                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f2 reveal d1" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
-            </section>
-            <!-- ===== 6. FUNNIEST FLAGS (build step 3/5; text from stats.funny_flags) ===== -->
-            <section class="slide flags s6" data-build="flags" aria-label="Slide 6">
-                <h2 class="abs slide-title fringe">Funniest Flags</h2>
-                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f2" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f3 reveal d1" data-flag="2">[funny flag #3 &mdash; add to funny_flags.txt]</p>
-            </section>
-            <!-- ===== 7. FUNNIEST FLAGS (build step 4/5; text from stats.funny_flags) ===== -->
-            <section class="slide flags s7" data-build="flags" aria-label="Slide 7">
-                <h2 class="abs slide-title fringe">Funniest Flags</h2>
-                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f2" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f3" data-flag="2">[funny flag #3 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f4 reveal d1" data-flag="3">[funny flag #4 &mdash; add to funny_flags.txt]</p>
-            </section>
-            <!-- ===== 8. FUNNIEST FLAGS (build step 5/5; text from stats.funny_flags) ===== -->
-            <section class="slide flags s8" data-build="flags" aria-label="Slide 8">
-                <h2 class="abs slide-title fringe">Funniest Flags</h2>
-                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f2" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f3" data-flag="2">[funny flag #3 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f4" data-flag="3">[funny flag #4 &mdash; add to funny_flags.txt]</p>
-                <p class="flag f5 reveal d1" data-flag="4">[funny flag #5 &mdash; add to funny_flags.txt]</p>
+                <div class="abs fcard g1 reveal d1"><p class="fh">Griffin Droppings</p><ul class="fl"><li>drop_it_like_its_hot</li><li>mission_impossible</li><li>the_forensics_team_was_wrong</li><li>th3_f0r3ns1cs_t34m_w4s_r1ght</li><li>trust_but_verify</li><li>crypto_smoke_and_mirrors</li></ul></div>
+                <div class="abs fcard g2 reveal d2"><p class="fh">Griffin Games</p><ul class="fl"><li>tic_tac_toe</li><li>simon_says</li><li>global thermonuclear war</li><li>mission_impossible</li><li>the_forensics_team_was_wrong</li></ul></div>
             </section>
 
             <!-- ===== 9. QUOTE: 2024-specific (Musketeers quote + 2024 team photo). Skipped via data-skip;
@@ -742,7 +796,7 @@
             <!-- ===== 13. HONORABLE MENTION (filled from stats.honorable, places 4-8) ===== -->
             <section class="slide results s13" aria-label="Slide 13">
                 <h2 class="abs fringe reveal">TribeCTF 2026</h2>
-                <p class="abs place reveal d1">Honorable Mention</p>
+                <p class="abs place reveal d1">Honorable Mention (&gt; 8,000 pts)</p>
                 <ul class="abs hm" id="hmList">
                     <li class="reveal d3">4. TBA</li>
                 </ul>
@@ -764,7 +818,7 @@
 
             <!-- ===== 15. SEE YOU ===== -->
             <section class="slide s15" aria-label="Slide 15">
-                <h2 class="abs reveal d1">See you at TribeCTF&nbsp;'27!</h2>
+                <h2 class="abs reveal d1">See you at TribeCTF&nbsp;’27!</h2>
                 <div class="chamfer hero reveal-img"><img src="assets/organizers-2026.jpg" alt="TribeCTF organizers group photo"></div>
             </section>
 
@@ -787,7 +841,7 @@
     <!-- Stats injected by scripts/closing_stats.py (rewrites this block in place). -->
     <script id="stats" type="application/json">
 {
- "generated_at": "2026-10-04 10:51 EDT",
+ "generated_at": "2026-10-04 11:17 EDT",
  "export_file": "TribeCTF 2026.2026-10-04_14_31_24.zip",
  "export_time": "Sun Oct 04 10:31 AM EDT",
  "data_as_of": "Sun Oct 04 10:24 AM EDT",
@@ -868,7 +922,8 @@
    "value": 50,
    "difficulty": "Intro",
    "solves": 25,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "AltGriffin",
@@ -876,7 +931,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 4,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": true
   },
   {
    "name": "Registeel",
@@ -884,7 +940,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 15,
-   "first_blood": "Pro(tein) Protein"
+   "first_blood": "Pro(tein) Protein",
+   "cage": true
   },
   {
    "name": "RouterEasy",
@@ -892,7 +949,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": true
   },
   {
    "name": "catacombs",
@@ -900,7 +958,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 23,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Griffin & Ouroboros",
@@ -908,7 +967,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 21,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Dig Me Up!",
@@ -916,7 +976,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Who's that Pokemon?",
@@ -924,7 +985,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 19,
-   "first_blood": "Pro(tein) Protein"
+   "first_blood": "Pro(tein) Protein",
+   "cage": false
   },
   {
    "name": "MFC (Easy)",
@@ -932,7 +994,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "PokeCenter",
@@ -940,7 +1003,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Griffin-Corps-Career",
@@ -948,7 +1012,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": true
   },
   {
    "name": "Piscator",
@@ -956,7 +1021,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 2,
-   "first_blood": "CNS@UVA"
+   "first_blood": "CNS@UVA",
+   "cage": true
   },
   {
    "name": "RouterMedium",
@@ -964,7 +1030,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 4,
-   "first_blood": "WhatIsAstig"
+   "first_blood": "WhatIsAstig",
+   "cage": true
   },
   {
    "name": "iris",
@@ -972,7 +1039,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 14,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "jdvault",
@@ -980,7 +1048,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 13,
-   "first_blood": "Griffins"
+   "first_blood": "Griffins",
+   "cage": false
   },
   {
    "name": "Insider Threat",
@@ -988,7 +1057,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 19,
-   "first_blood": "CNS@UVA"
+   "first_blood": "CNS@UVA",
+   "cage": false
   },
   {
    "name": "MFC (Medium)",
@@ -996,7 +1066,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 14,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Griffin's Lullaby",
@@ -1004,7 +1075,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 8,
-   "first_blood": "Pro(tein) Protein"
+   "first_blood": "Pro(tein) Protein",
+   "cage": false
   },
   {
    "name": "Hidden In Differences",
@@ -1012,7 +1084,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 18,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "RouterHard",
@@ -1020,7 +1093,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": true
   },
   {
    "name": "CRCcle",
@@ -1028,7 +1102,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 6,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Rotom Phone",
@@ -1036,7 +1111,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 11,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Griffins Game",
@@ -1044,7 +1120,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 2,
-   "first_blood": "WhatIsAstig"
+   "first_blood": "WhatIsAstig",
+   "cage": false
   },
   {
    "name": "MFC (Hard)",
@@ -1052,7 +1129,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 9,
-   "first_blood": "Team AWESOME"
+   "first_blood": "Team AWESOME",
+   "cage": false
   },
   {
    "name": "GriffinCorp Project Keystone",
@@ -1060,7 +1138,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 10,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Ekans.pcap",
@@ -1068,7 +1147,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 15,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Griffin Droppings",
@@ -1076,7 +1156,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": false
   },
   {
    "name": "Griffin Tongues",
@@ -1084,7 +1165,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": false
   },
   {
    "name": "Project Keystone: Aftermath",
@@ -1092,7 +1174,8 @@
    "value": 1500,
    "difficulty": "Insane",
    "solves": 4,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "RouterInsane",
@@ -1100,7 +1183,8 @@
    "value": 2000,
    "difficulty": "Insane",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": true
   }
  ],
  "top10": [
@@ -1337,6 +1421,20 @@
    "eligible": true,
    "solves": 18,
    "place": 8
+  },
+  {
+   "rank": 9,
+   "team": "BigOnes@VT",
+   "score": 8450,
+   "members": [
+    "Big Ram",
+    "mmunoz",
+    "nosun",
+    "wheltzel"
+   ],
+   "eligible": true,
+   "solves": 18,
+   "place": 9
   }
  ],
  "eligible_min": 2000,
@@ -1530,6 +1628,8 @@
                     slide.classList.toggle('active', i === this.currentSlide);
                     slide.classList.toggle('visible', i === this.currentSlide);
                 });
+                if (typeof cageChoreo === 'function') cageChoreo(b, this.currentSlide < from || !this.started);
+                this.started = true;
                 const n = this.currentSlide + 1, total = this.slides.length;
                 this.counter.textContent = `${n} / ${total}`;
                 this.progress.style.width = `${(n / total) * 100}%`;
@@ -1544,7 +1644,7 @@
         class InlineEditor {
             constructor() {
                 this.isActive = false;
-                this.key = 'tribectf-closing-2026-edits-v2';
+                this.key = 'tribectf-closing-2026-edits-v3';
                 this.selector = '.slide h1, .slide h2, .slide h3, .slide p, .slide li, .slide .rank';
                 this.restore();
                 document.getElementById('deckStage').addEventListener('input', () => this.save());
@@ -1603,14 +1703,6 @@
                 if (v !== undefined && v !== null) el.textContent = String(v);
             });
 
-            // Funniest flags (placeholders when not chosen yet)
-            const flags = Array.isArray(S.funny_flags) ? S.funny_flags : [];
-            document.querySelectorAll('[data-flag]').forEach((el) => {
-                const i = +el.dataset.flag;
-                if (flags[i]) { el.textContent = flags[i]; el.classList.remove('placeholder'); }
-                else { el.classList.add('placeholder'); }
-            });
-
             // Winners
             document.querySelectorAll('[data-winner]').forEach((sec) => {
                 const w = (S.winners || [])[+sec.dataset.winner];
@@ -1634,9 +1726,9 @@
             }
 
             // Challenge chart: horizontal bars, two columns, colored by difficulty
-            const chart = document.getElementById('chart');
             const list = Array.isArray(S.challenges) ? S.challenges : [];
-            if (chart && list.length) {
+            document.querySelectorAll('[data-chart]').forEach((chart) => {
+            if (list.length) {
                 const colors = { Intro: '#b7b9c0', Easy: '#7ee787', Medium: '#79c0ff', Hard: '#f2cc60', Insane: '#ff7b72' };
                 const order = ['Intro', 'Easy', 'Medium', 'Hard', 'Insane'];
                 const rows = [...list].sort((a, b) => (order.indexOf(a.difficulty) - order.indexOf(b.difficulty)) || (b.solves - a.solves) || a.name.localeCompare(b.name));
@@ -1651,7 +1743,7 @@
                     col.className = 'col';
                     colRows.forEach((r) => {
                         const row = document.createElement('div');
-                        row.className = 'bar-row' + (r.solves ? '' : ' zero');
+                        row.className = 'bar-row' + (r.solves ? '' : ' zero') + (r.cage ? ' cage' : '');
                         row.title = `${r.name} (${r.category}, ${r.value} pts): ${r.solves} solves`;
                         const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = r.name;
                         const trk = document.createElement('span'); trk.className = 'trk';
@@ -1665,18 +1757,20 @@
                     });
                     chart.appendChild(col);
                 });
-                const legend = document.getElementById('chartLegend');
+                const legend = chart.closest('.slide').querySelector('[data-legend]');
                 if (legend) {
                     legend.innerHTML = '';
-                    order.filter((d) => rows.some((r) => r.difficulty === d)).forEach((d) => {
+                    const lr = chart.hasAttribute('data-cage-only') ? rows.filter((r) => r.cage) : rows;
+                    order.filter((d) => lr.some((r) => r.difficulty === d)).forEach((d) => {
                         const li = document.createElement('li');
-                        const n = rows.filter((r) => r.difficulty === d).length;
+                        const n = lr.filter((r) => r.difficulty === d).length;
                         li.innerHTML = `<span class="sw" style="background:${colors[d]}"></span>`;
                         li.append(`${d} (${n})`);
                         legend.appendChild(li);
                     });
                 }
             }
+            });
             fitText();
         }
 
@@ -1690,7 +1784,6 @@
                 while (over() && fs > minPx) { fs -= 2; el.style.fontSize = `${fs}px`; }
             };
             document.querySelectorAll('.results [data-field="team"]').forEach((el) => shrink(el, 40));
-            document.querySelectorAll('.flag').forEach((el) => shrink(el, 16));
             document.querySelectorAll('.results [data-field="members"]').forEach((el) => shrink(el, 30));
             const hm = document.getElementById('hmList');
             if (hm) {
@@ -1700,6 +1793,60 @@
             }
         }
 
+
+        // Challenges -> cage-only build step. Runs on entering .s3b; reset when leaving.
+        let cageTimers = [];
+        function cageReset(sec) {
+            cageTimers.forEach(clearTimeout); cageTimers = [];
+            const chart = sec.querySelector('[data-chart]');
+            chart.classList.remove('compact');
+            chart.querySelectorAll('.bar-row').forEach((r) => {
+                r.classList.remove('glitch-out'); r.style.animationDelay = ''; r.style.transform = ''; r.style.transition = '';
+                const bar = r.querySelector('.bar'); if (bar) { bar.style.transition = ''; bar.style.width = bar.dataset.w || bar.style.width; }
+            });
+            sec.querySelector('.stamp').classList.remove('on');
+        }
+        function cageChoreo(cur, instant) {
+            const sec = document.querySelector('.s3b');
+            if (!sec) return;
+            const chart = sec.querySelector('[data-chart]');
+            chart.querySelectorAll('.bar').forEach((b) => { if (!b.dataset.w) b.dataset.w = b.style.width; });
+            cageReset(sec);
+            if (cur !== sec) return;
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const cage = [...chart.querySelectorAll('.bar-row.cage')];
+            const others = [...chart.querySelectorAll('.bar-row:not(.cage)')];
+            if (instant || reduce) {
+                chart.classList.add('compact'); sec.querySelector('.stamp').classList.add('on');
+                return;
+            }
+            const T = (fn, ms) => cageTimers.push(setTimeout(fn, ms));
+            // 1. glitch out, staggered 20ms
+            others.forEach((r, i) => { r.style.animationDelay = `${i * 20}ms`; r.classList.add('glitch-out'); });
+            const outEnd = 380 + others.length * 20;
+            // 2. FLIP cage rows into a compact centred block
+            T(() => {
+                const first = cage.map((r) => r.getBoundingClientRect());
+                const scale = chart.getBoundingClientRect().width / chart.offsetWidth || 1;
+                chart.classList.add('compact');
+                cage.forEach((r, i) => {
+                    const last = r.getBoundingClientRect();
+                    r.style.transition = 'none';
+                    r.style.transform = `translate(${(first[i].left - last.left) / scale}px, ${(first[i].top - last.top) / scale}px)`;
+                    const bar = r.querySelector('.bar'); bar.style.transition = 'none'; bar.style.width = '0%';
+                });
+                void chart.offsetWidth;
+                cage.forEach((r) => { r.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'; r.style.transform = ''; });
+            }, outEnd);
+            // 3. bars re-grow, staggered
+            T(() => cage.forEach((r, i) => {
+                const bar = r.querySelector('.bar');
+                bar.style.transition = `width 0.45s cubic-bezier(0.16, 1, 0.3, 1) ${i * 40}ms`;
+                bar.style.width = bar.dataset.w;
+            }), outEnd + 450);
+            // 4. lock stamp
+            T(() => sec.querySelector('.stamp').classList.add('on'), outEnd + 650);
+        }
         const editor = new InlineEditor();
         renderStats();
         const deck = new SlidePresentation();

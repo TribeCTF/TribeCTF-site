@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-04 10:51 EDT",
+ "generated_at": "2026-10-04 11:17 EDT",
  "export_file": "TribeCTF 2026.2026-10-04_14_31_24.zip",
  "export_time": "Sun Oct 04 10:31 AM EDT",
  "data_as_of": "Sun Oct 04 10:24 AM EDT",
@@ -80,7 +80,8 @@
    "value": 50,
    "difficulty": "Intro",
    "solves": 25,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "AltGriffin",
@@ -88,7 +89,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 4,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": true
   },
   {
    "name": "Registeel",
@@ -96,7 +98,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 15,
-   "first_blood": "Pro(tein) Protein"
+   "first_blood": "Pro(tein) Protein",
+   "cage": true
   },
   {
    "name": "RouterEasy",
@@ -104,7 +107,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": true
   },
   {
    "name": "catacombs",
@@ -112,7 +116,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 23,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Griffin & Ouroboros",
@@ -120,7 +125,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 21,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Dig Me Up!",
@@ -128,7 +134,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Who's that Pokemon?",
@@ -136,7 +143,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 19,
-   "first_blood": "Pro(tein) Protein"
+   "first_blood": "Pro(tein) Protein",
+   "cage": false
   },
   {
    "name": "MFC (Easy)",
@@ -144,7 +152,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "PokeCenter",
@@ -152,7 +161,8 @@
    "value": 300,
    "difficulty": "Easy",
    "solves": 17,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Griffin-Corps-Career",
@@ -160,7 +170,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": true
   },
   {
    "name": "Piscator",
@@ -168,7 +179,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 2,
-   "first_blood": "CNS@UVA"
+   "first_blood": "CNS@UVA",
+   "cage": true
   },
   {
    "name": "RouterMedium",
@@ -176,7 +188,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 4,
-   "first_blood": "WhatIsAstig"
+   "first_blood": "WhatIsAstig",
+   "cage": true
   },
   {
    "name": "iris",
@@ -184,7 +197,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 14,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "jdvault",
@@ -192,7 +206,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 13,
-   "first_blood": "Griffins"
+   "first_blood": "Griffins",
+   "cage": false
   },
   {
    "name": "Insider Threat",
@@ -200,7 +215,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 19,
-   "first_blood": "CNS@UVA"
+   "first_blood": "CNS@UVA",
+   "cage": false
   },
   {
    "name": "MFC (Medium)",
@@ -208,7 +224,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 14,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Griffin's Lullaby",
@@ -216,7 +233,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 8,
-   "first_blood": "Pro(tein) Protein"
+   "first_blood": "Pro(tein) Protein",
+   "cage": false
   },
   {
    "name": "Hidden In Differences",
@@ -224,7 +242,8 @@
    "value": 500,
    "difficulty": "Medium",
    "solves": 18,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "RouterHard",
@@ -232,7 +251,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": true
   },
   {
    "name": "CRCcle",
@@ -240,7 +260,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 6,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "Rotom Phone",
@@ -248,7 +269,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 11,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Griffins Game",
@@ -256,7 +278,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 2,
-   "first_blood": "WhatIsAstig"
+   "first_blood": "WhatIsAstig",
+   "cage": false
   },
   {
    "name": "MFC (Hard)",
@@ -264,7 +287,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 9,
-   "first_blood": "Team AWESOME"
+   "first_blood": "Team AWESOME",
+   "cage": false
   },
   {
    "name": "GriffinCorp Project Keystone",
@@ -272,7 +296,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 10,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Ekans.pcap",
@@ -280,7 +305,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 15,
-   "first_blood": "pwn@vt"
+   "first_blood": "pwn@vt",
+   "cage": false
   },
   {
    "name": "Griffin Droppings",
@@ -288,7 +314,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": false
   },
   {
    "name": "Griffin Tongues",
@@ -296,7 +323,8 @@
    "value": 1000,
    "difficulty": "Hard",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": false
   },
   {
    "name": "Project Keystone: Aftermath",
@@ -304,7 +332,8 @@
    "value": 1500,
    "difficulty": "Insane",
    "solves": 4,
-   "first_blood": "MasonCC"
+   "first_blood": "MasonCC",
+   "cage": false
   },
   {
    "name": "RouterInsane",
@@ -312,7 +341,8 @@
    "value": 2000,
    "difficulty": "Insane",
    "solves": 0,
-   "first_blood": null
+   "first_blood": null,
+   "cage": true
   }
  ],
  "top10": [
@@ -549,6 +579,20 @@
    "eligible": true,
    "solves": 18,
    "place": 8
+  },
+  {
+   "rank": 9,
+   "team": "BigOnes@VT",
+   "score": 8450,
+   "members": [
+    "Big Ram",
+    "mmunoz",
+    "nosun",
+    "wheltzel"
+   ],
+   "eligible": true,
+   "solves": 18,
+   "place": 9
   }
  ],
  "eligible_min": 2000,
