@@ -122,6 +122,19 @@
   <!-- Public live board -->
   <section class="cq-panel">
     <h3>$ Live board</h3>
+    <p class="cq-fine" data-el="followEnded" hidden role="status"></p>
+    <!-- Follow panel: public, for the CAGE machines (no sign-in needed) -->
+    <div class="cq-follow" data-el="follow" hidden>
+      <div class="cq-follow-head">
+        <div class="cq-follow-title">Following station <span data-el="fStation"></span> &middot; <span data-el="fTeam"></span></div>
+        <button type="button" class="cq-btn cq-ghost cq-follow-un" data-el="unfollowBtn">Unfollow</button>
+      </div>
+      <div class="cq-big cq-follow-count" data-el="fCount"></div>
+      <div class="cq-follow-label" data-el="fLabel"></div>
+      <div class="cq-follow-do" data-el="fDo"></div>
+      <div class="cq-follow-alert" data-el="fAlert" hidden role="alert"></div>
+      <p class="cq-fine" data-el="fNote"></p>
+    </div>
     <p class="cq-fine" data-el="boardMeta">Loading&hellip;</p>
     <div class="cq-stations" data-el="stations"></div>
     <h4 class="cq-h4">Queue</h4>
@@ -204,6 +217,20 @@
 .cq-st.s-warned { border-color:var(--r); } .cq-st.s-warned .cq-st-time { color:var(--r); }
 .cq-st.s-overdue { border-color:var(--r); background:rgba(242,110,116,.14); } .cq-st.s-overdue .cq-st-state { color:#1b1b1b; background:var(--r); }
 .cq-st.s-mine { box-shadow:inset 0 0 0 1px var(--g); }
+.cq-st.s-follow { box-shadow:inset 0 0 0 2px var(--b); }
+.cq-st-follow { margin-top:.5em; padding:.2em .7em; font-size:.8em; }
+.cq-follow { border:2px solid var(--b); background:rgba(128,170,221,.10); padding:.8em 1em; margin:0 0 1em; }
+.cq-follow-head { display:flex; flex-wrap:wrap; align-items:center; gap:.4em .8em; }
+.cq-follow-title { flex:1 1 14em; min-width:0; overflow-wrap:anywhere; color:var(--b); font-family:'Fira Mono', monospace; font-size:1.1em; }
+.cq-follow-un { padding:.3em .7em; font-size:.8em; }
+.cq-follow-count { font-size:3.2em; line-height:1.1; margin:.2em 0 .1em; color:#f8f8ff; font-variant-numeric:tabular-nums; }
+.cq-follow-label { color:var(--mut); }
+.cq-follow-do { margin-top:.5em; font-weight:bold; font-family:'Open Sans', sans-serif; }
+.cq-follow-alert { margin-top:.6em; padding:.4em .6em; border:1px solid var(--y); color:var(--y); font-family:'Fira Mono', monospace; font-size:.9em; }
+.cq-follow.f-free { border-color:var(--g); } .cq-follow.f-free .cq-follow-count { color:var(--g); }
+.cq-follow.f-warn, .cq-follow.f-over { border-color:var(--r); background:rgba(242,110,116,.12); }
+.cq-follow.f-warn .cq-follow-count, .cq-follow.f-over .cq-follow-count, .cq-follow.f-warn .cq-follow-do, .cq-follow.f-over .cq-follow-do { color:var(--r); }
+.cq-follow.f-hl { box-shadow:0 0 0 3px var(--y); }
 .cq-queue { list-style:none; padding:0; margin:0; }
 .cq-queue li { display:flex; flex-wrap:wrap; gap:.3em .6em; align-items:baseline; padding:.4em 0; border-bottom:1px dashed var(--line); font-size:.9em; }
 .cq-q-pos { color:var(--g); min-width:2em; }
@@ -218,6 +245,8 @@
   .cq-invite-station { font-size:2.1em; }
   .cq-invite-count { font-size:2em; }
   .cq-invite-code-val { font-size:2.4em; }
+  .cq-follow { padding:.7em; }
+  .cq-follow-count { font-size:2.4em; }
 }
 @media (prefers-reduced-motion: reduce) { .cq-bar-fill { transition:none; } }
 </style>
@@ -230,7 +259,7 @@
   root.dataset.ready = '1';
 
   var TZ = 'America/New_York';
-  var POLL_MS = 5000, POLL_HIDDEN_MS = 10000;
+  var POLL_MS = 5000, POLL_HIDDEN_MS = 10000, WARN_MS = 10 * 60000;
   var MINUTES = [30, 60, 90, 120];
   var $ = {};
   Array.prototype.forEach.call(root.querySelectorAll('[data-el]'), function (n) { $[n.getAttribute('data-el')] = n; });
@@ -369,8 +398,7 @@
     else if (p === 'granted') show($.alertsNote, 'Desktop alerts are on.');
     else hide($.alertsNote);
   }
-  $.alertsBtn.addEventListener('click', function () {
-    onGesture(); // also unlocks the beep
+  function askPerm() {
     if (!NS) return renderAlerts();
     var done = false;
     function after() { if (!done) { done = true; renderAlerts(); } }
@@ -378,6 +406,10 @@
       var pr = Notification.requestPermission(after); // callback form for old Safari
       if (pr && pr.then) pr.then(after, after);
     } catch (e) { after(); }
+  }
+  $.alertsBtn.addEventListener('click', function () {
+    onGesture(); // also unlocks the beep
+    askPerm();
   });
   // Keys of events already notified, persisted so reloads / other tabs don't repeat them.
   var NKEY = 'cage-notified:' + API, notified = [];
@@ -385,12 +417,12 @@
   if (!Array.isArray(notified)) notified = [];
   function notify(key, title, body, noBeep) {
     try { var fresh = JSON.parse(localStorage.getItem(NKEY) || '[]'); if (Array.isArray(fresh)) notified = fresh; } catch (e) {}
-    if (notified.indexOf(key) !== -1) return;
+    if (notified.indexOf(key) !== -1) return false;
     notified.push(key);
     if (notified.length > 50) notified = notified.slice(-50);
     try { localStorage.setItem(NKEY, JSON.stringify(notified)); } catch (e) {}
     if (!noBeep) beep();
-    if (perm() !== 'granted') return;
+    if (perm() !== 'granted') return true;
     var opts = { body: body, tag: 'cage-' + key, renotify: true };
     try {
       var n = new Notification(title, opts);
@@ -405,6 +437,7 @@
         }
       } catch (e2) {}
     }
+    return true;
   }
   function snap(m) {
     var r = m.request || null, s = m.session || null;
@@ -437,6 +470,116 @@
 
   // ---- state ----
   var board = null, me = null, lost = false, lastDiscord = null;
+
+  // ---- follow a station (public, no sign-in: for the CAGE machines) ----
+  // One session = station id + started_at. Persisted with the last snapshot, so a
+  // reload diffs against it (no baseline re-alerts; gaps still alert once).
+  var FKEY = 'cage-follow:' + API, follow = null; // {sid, start, team, snap}
+  try { follow = JSON.parse(localStorage.getItem(FKEY) || 'null'); } catch (e) { follow = null; }
+  if (!follow || typeof follow !== 'object' || follow.sid == null || !follow.start) follow = null;
+  var fAlertText = '', fAlertUntil = 0;
+  function saveFollow() {
+    try { if (follow) localStorage.setItem(FKEY, JSON.stringify(follow)); else localStorage.removeItem(FKEY); } catch (e) {}
+  }
+  function bgPoll() { return !!session || !!follow; } // keep polling while the tab is hidden
+  function followedStation() {
+    var list = (follow && board && board.stations) || [];
+    for (var i = 0; i < list.length; i++) if (String(list[i].id) === String(follow.sid)) return list[i];
+    return null;
+  }
+  function sameSession(s) {
+    return !!(follow && s && String(s.state || '').toUpperCase() === 'IN_SESSION' && s.started_at &&
+      (s.started_at === follow.start || parseT(s.started_at) === parseT(follow.start)));
+  }
+  function fsnap(s, n) {
+    var e = parseT(s.ends_at), pu = parseT(s.protected_until), w = s.warning_ends_at || null, wt = parseT(w);
+    return {
+      ten: !!e && e - n <= WARN_MS, end: !!e && (!!s.overtime || n >= e), prot: !e && !!pu && n >= pu,
+      warn: w, warn2: !!wt && wt - n <= 120000, over: !!s.overdue
+    };
+  }
+  function fAlert(ev, title, body) {
+    var k = 'follow:' + follow.sid + '@' + follow.start + ':' + ev;
+    if (notify(k, 'Station ' + follow.sid + ': ' + title, body)) { fAlertText = title + '. ' + body; fAlertUntil = Date.now() + 120000; }
+  }
+  function evalFollow() {
+    if (!follow || !board) return;
+    var s = followedStation(), n = now(), p = follow.snap;
+    if (!sameSession(s)) {
+      if (p) fAlert('ended', 'Session ended', 'This session is over. Stopped following.');
+      show($.followEnded, 'Station ' + follow.sid + ': session ended. No longer following.');
+      follow = null; saveFollow();
+      renderBoard();
+      return;
+    }
+    var c = fsnap(s, n);
+    if (p) { // never alert on the baseline; only on crossings since the last snapshot
+      var by = function (w) { return ' leave by ' + hhmm(parseT(w)) + '.'; };
+      if (c.end && !p.end) fAlert('booked-end', 'Booked time is over', 'Free time now: not charged, until a team waits.');
+      else if (c.ten && !p.ten) fAlert('booked-10', '10 minutes of booked time left', 'Booking ends at ' + hhmm(parseT(s.ends_at)) + '. Save to your backup drive.');
+      if (c.prot && !p.prot) fAlert('protect-end', 'Walk-in guarantee over', 'You can stay until another team is waiting.');
+      if (c.warn && c.warn !== p.warn && !c.over) fAlert('warn:' + c.warn, '10-minute warning', 'Another team is waiting. Save to your backup drive and' + by(c.warn));
+      else if (c.warn && c.warn2 && !p.warn2) fAlert('warn2:' + c.warn, '2 minutes left', 'Save to your backup drive and' + by(c.warn));
+      if (p.warn && !c.warn && !c.over) fAlert('lift:' + p.warn, 'Warning lifted', 'Nobody is waiting any more. Keep going.');
+      if (c.over && !p.over) fAlert('overdue' + (c.warn ? ':' + c.warn : ''), 'Time is up', 'Time is up. Staff will end your session.');
+    }
+    var team = s.team_name || '';
+    if (JSON.stringify(c) !== JSON.stringify(p) || team !== follow.team) { follow.snap = c; follow.team = team; saveFollow(); }
+  }
+  function startFollow(s) {
+    onGesture(); // this click unlocks the beep
+    if (NS && perm() === 'default') askPerm(); // optional; beep + banner work without it
+    follow = { sid: s.id, start: s.started_at, team: s.team_name || '', snap: null };
+    fAlertText = ''; fAlertUntil = 0;
+    hide($.followEnded);
+    evalFollow(); // baseline
+    saveFollow();
+    renderBoard(); tick();
+    try { $.follow.scrollIntoView({ block: 'nearest' }); } catch (e) {}
+  }
+  function stopFollow() { follow = null; fAlertText = ''; saveFollow(); renderBoard(); tick(); }
+  $.unfollowBtn.addEventListener('click', stopFollow);
+  $.stations.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-follow]');
+    if (!b || !b._s) return;
+    if (sameSession(b._s) && String(follow.sid) === String(b._s.id)) stopFollow(); else startFollow(b._s);
+  });
+  function renderFollow(n) {
+    var s = followedStation();
+    if (!sameSession(s)) { hide($.follow); return; }
+    show($.follow);
+    $.fStation.textContent = String(follow.sid);
+    $.fTeam.textContent = s.team_name || follow.team || '';
+    var e = parseT(s.ends_at), pu = parseT(s.protected_until), w = parseT(s.warning_ends_at), t0 = parseT(s.started_at) || n;
+    var mode, count, label, todo;
+    var later = 'Keep going. If a team joins the queue, you get a 10-minute warning.';
+    if (s.overdue || (w && n >= w)) {
+      mode = 'over'; count = 'OVERDUE'; label = w ? 'warning ended at ' + hhmm(w) : 'time is up';
+      todo = 'Time is up. Staff will end your session. Save to your backup drive and log out now.';
+    } else if (w) {
+      mode = 'warn'; count = dur(w - n); label = 'to leave · by ' + hhmm(w) + ' · another team is waiting';
+      todo = 'Save to your backup drive now and leave by ' + hhmm(w) + '.';
+    } else if (e && !s.overtime && n < e) {
+      mode = 'booked'; count = dur(e - n); label = 'booked time left · until ' + hhmm(e);
+      todo = e - n <= WARN_MS ? 'Booking ends soon. Save to your backup drive now.' : 'Save your work to your backup drive as you go.';
+    } else if (e) {
+      mode = 'free'; count = '+' + dur(n - e); label = 'free time since ' + hhmm(e) + ' · not charged, until a team waits';
+      todo = later;
+    } else if (pu && n < pu) {
+      mode = 'walk'; count = dur(pu - n); label = 'walk-in protected until ' + hhmm(pu) + ', then until a team waits';
+      todo = 'Out-of-hours walk-in. Save your work to your backup drive as you go.';
+    } else {
+      mode = 'free'; count = '+' + dur(n - t0); label = 'walk-in since ' + hhmm(t0) + ' · until a team waits';
+      todo = later;
+    }
+    var hl = !!fAlertText && Date.now() < fAlertUntil;
+    $.follow.className = 'cq-follow f-' + mode + (hl ? ' f-hl' : '');
+    $.fCount.textContent = count; $.fLabel.textContent = label; $.fDo.textContent = todo;
+    if (hl) show($.fAlert, fAlertText); else hide($.fAlert);
+    var p = perm();
+    $.fNote.textContent = !gestured ? 'Click anywhere on this page to turn the beep back on.'
+      : 'Beep' + (p === 'granted' ? ' and desktop alerts are' : ' alert is') + ' on. Keep this tab open.' + (p === 'denied' ? ' Desktop alerts are blocked.' : '');
+  }
 
   // ---- auth ----
   $.authForm.addEventListener('submit', function (ev) {
@@ -530,7 +673,7 @@
   function poll() {
     clearTimeout(pollTimer);
     if (!configured) return;
-    if (document.hidden && !session) return; // signed in: keep polling in the background
+    if (document.hidden && !bgPoll()) return; // signed in or following: keep polling in the background
     if (inflight) { pollTimer = setTimeout(poll, 500); return; }
     inflight = true;
     var sess = session;
@@ -544,6 +687,7 @@
         board = b.data;
         var sn = parseT(board.now);
         if (sn) skew = sn - Date.now();
+        try { evalFollow(); } catch (e) {}
       }
       if (res[1]) {
         var m = res[1];
@@ -552,12 +696,12 @@
         else if (m.status !== 401) show($.meErr, errText(m.data, m.status));
       }
       render();
-      if (document.hidden && !session) return;
+      if (document.hidden && !bgPoll()) return;
       pollTimer = setTimeout(poll, document.hidden ? POLL_HIDDEN_MS : POLL_MS);
     });
   }
   document.addEventListener('visibilitychange', function () {
-    if (document.hidden) { if (!session) clearTimeout(pollTimer); }
+    if (document.hidden) { if (!bgPoll()) clearTimeout(pollTimer); }
     else { renderAlerts(); poll(); }
   });
 
@@ -684,8 +828,9 @@
     (board.stations || []).forEach(function (s) {
       var st = String(s.state || '').toUpperCase();
       var warned = st === 'IN_SESSION' && !!s.warning_ends_at;
+      var fol = sameSession(s) && String(follow.sid) === String(s.id);
       var card = el('div', 'cq-st s-' + st.toLowerCase() + (warned ? ' s-warned' : '') + (s.overdue ? ' s-overdue' : '') +
-        (myStations[s.id] ? ' s-mine' : ''));
+        (myStations[s.id] ? ' s-mine' : '') + (fol ? ' s-follow' : ''));
       var head = el('div', 'cq-st-head');
       head.appendChild(el('span', '', 'Station ' + s.id));
       head.appendChild(el('span', 'cq-st-state', s.overdue ? 'overdue' : (STATE_LABEL[st] || st.toLowerCase())));
@@ -695,9 +840,22 @@
       time.setAttribute('data-st', '1');
       time._s = s; time._st = st;
       card.appendChild(time);
+      if (st === 'IN_SESSION' && s.started_at) {
+        var fb = el('button', 'cq-btn cq-st-follow', fol ? 'Unfollow' : 'Follow');
+        fb.type = 'button';
+        fb.setAttribute('data-follow', String(s.id));
+        fb.setAttribute('aria-label', (fol ? 'Unfollow' : 'Follow') + ' station ' + s.id);
+        fb._s = s;
+        card.appendChild(fb);
+      }
       frag.appendChild(card);
     });
+    var ae = document.activeElement;
+    var refocus = ae && ae.getAttribute && $.stations.contains(ae) ? ae.getAttribute('data-follow') : null;
     $.stations.replaceChildren(frag);
+    if (refocus != null) Array.prototype.forEach.call($.stations.querySelectorAll('[data-follow]'), function (b) {
+      if (b.getAttribute('data-follow') === refocus) b.focus();
+    });
 
     var q = board.queue || [];
     var qf = document.createDocumentFragment();
@@ -741,6 +899,7 @@
     var n = now();
     if (session && me && gateWas !== null && reqGated(n) !== gateWas) renderMe();
     Array.prototype.forEach.call($.stations.querySelectorAll('[data-st]'), function (t) { t.textContent = stationTime(t._s, t._st, n); });
+    try { evalFollow(); renderFollow(n); } catch (e) {}
 
     var r = activeReq();
     if (session && r && r.status === 'invited') {
