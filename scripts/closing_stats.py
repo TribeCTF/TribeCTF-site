@@ -21,6 +21,9 @@ import zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from cage_stats import ctfd_cage  # noqa: E402
+
 REPO = Path(__file__).resolve().parent.parent
 ARCHIVE = REPO / "archive"
 DECK_DIR = REPO / "closing-2026-slides"
@@ -149,6 +152,14 @@ class Export:
         if isinstance(d, dict):
             return d.get("results", [])
         return d
+
+
+def _cage_queue_snapshot():
+    """CAGE queue numbers are a one-off snapshot (scripts/cage_stats.py DB); keep the last one."""
+    try:
+        return json.loads(STATS_JSON.read_text(encoding="utf-8")).get("cage", {}).get("queue")
+    except (OSError, ValueError):
+        return None
 
 
 def compute(path):
@@ -348,6 +359,7 @@ def compute(path):
         "honorable": [dict(pub(r), place=i + 4) for i, r in enumerate(honorable)],
         "eligible_min": ELIGIBLE_MIN,
         "funny_flags": funny,
+        "cage": dict(ctfd_cage(chal_list, solve_rows, teams), queue=_cage_queue_snapshot()),
     }
     extra = {"board": board, "school_raw": school_raw, "school_map": school_map, "chal_list": chal_list,
              "flags": flags, "chals": chals, "sub_types": sub_types, "first_solve": first_solve,
@@ -412,6 +424,10 @@ def report(path, stats, x):
     for f in sorted(x["flags"], key=lambda f: f["challenge_id"]):
         ch = x["chals"].get(f["challenge_id"], {})
         p(f"  [{ch.get('name', '?').strip()[:28]}] ({f.get('type')}) {f.get('content')}")
+    cg = stats["cage"]
+    p(f"CAGE: {cg['challenges']} cage-only challenges, {cg['solves']} solves by {cg['teams_solved']} teams; "
+      f"first: {cg['first_solve_team']} @ {cg['first_solve_at']}; unsolved: {cg['unsolved']}")
+    p(f"CAGE queue snapshot: {'present (' + str(cg['queue'].get('snapshot_at')) + ')' if cg['queue'] else 'MISSING - run scripts/cage_stats.py <db copy>'}")
     p(f"Funny flags currently on deck: {len(stats['funny_flags'])}")
 
 
