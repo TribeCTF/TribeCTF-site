@@ -318,7 +318,8 @@ def compute(path):
 
     eligible = [r for r in board if r["eligible"]]
     winners = eligible[:3]
-    honorable = eligible[3:8]
+    # Honorable mention: eligible teams after the top 3 scoring more than 8,000 pts
+    honorable = [r for r in eligible[3:] if (r["score"] or 0) > 8000]
 
     def pub(r):
         return {"rank": r["rank"], "team": r["team"], "score": r["score"],
@@ -352,7 +353,8 @@ def compute(path):
         },
         "schools": [{"name": n, "students": c} for n, c in schools.most_common()],
         "difficulty": by_diff,
-        "challenges": [{k: c[k] for k in ("name", "category", "value", "difficulty", "solves", "first_blood")}
+        "challenges": [dict({k: c[k] for k in ("name", "category", "value", "difficulty", "solves", "first_blood")},
+                            cage=c["category"].strip().lower() == "cage")
                        for c in visible],
         "top10": [pub(r) for r in board[:10]],
         "winners": [dict(pub(r), place=i + 1, prize=PRIZES[i]) for i, r in enumerate(winners)],
@@ -416,7 +418,7 @@ def report(path, stats, x):
     p("PRIZES (top 3 eligible):")
     for w in stats["winners"]:
         p(f"  {w['place']}. {w['team']} ({w['score']} pts, board rank {w['rank']}) {w['prize']}  [{', '.join(w['members'])}]")
-    p("Honorable mentions (eligible places 4-8):")
+    p("Honorable mentions (eligible, after top 3, > 8000 pts):")
     for h in stats["honorable"]:
         p(f"  {h['place']}. {h['team']} ({h['score']} pts, board rank {h['rank']})  [{', '.join(h['members'])}]")
     p()
