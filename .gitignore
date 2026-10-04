@@ -88,3 +88,4 @@ Temporary Items
 .playwright-mcp/
 .claude/settings.local.json
 *.log
+archive/

@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TribeCTF Closing Ceremony</title>
+
+    <!-- Fonts: the TribeCTF site's own faces (Nightfall theme): Fira Mono for headers/accents, Open Sans for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Open+Sans:wght@400;600;700&display=swap">
+
+    <style>
+        /* ===========================================
+           THEME TOKENS: derived from the TribeCTF site
+           (assets/sass/utils/_variables.scss, hugo.toml color, layouts/index.html)
+           =========================================== */
+        :root {
+            --stage-bg: #1d1e20;
+            --slide-bg: #292a2d;          /* $backgroundDark */
+            --bg-darker: #252627;         /* $backgroundDarker */
+            --panel: #2f3034;
+            --text: #f8f8ff;              /* $white */
+            --muted: #b7b9c0;
+            --accent: #7ee787;            /* site accent (terminal green) */
+            --accent-dim: rgba(126, 231, 135, 0.35);
+            --accent-faint: rgba(126, 231, 135, 0.12);
+            --blue: #79c0ff;
+            --red: #ff7b72;
+            --yellow: #f2cc60;
+            --fringe-red: rgba(255, 56, 96, 0.45);   /* homepage glitch fringe */
+            --fringe-cyan: rgba(0, 255, 249, 0.45);
+
+            --font-display: 'Fira Mono', ui-monospace, Menlo, Consolas, monospace;
+            --font-body: 'Open Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.7s;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===========================================
+           FIXED 16:9 STAGE: MANDATORY BASE STYLES (viewport-base.css, verbatim)
+           =========================================== */
+        /* 1. Lock the browser viewport */
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--stage-bg, #000);
+        }
+
+        /* 2. Full-window deck viewport */
+        .deck-viewport {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            background: var(--stage-bg, #000);
+        }
+
+        /* 3. Fixed 16:9 design canvas.
+           JavaScript sets transform: translate(...) scale(...). */
+        .deck-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            transform-origin: 0 0;
+            background: var(--slide-bg, #fff);
+        }
+
+        /* 4. Slides stack inside the fixed stage.
+           Content must be laid out at 1920×1080, not reflowed per device. */
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            background: var(--slide-bg, #fff);
+        }
+
+        .slide.active,
+        .slide.visible {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        /* 5. Keep media inside authored slide bounds */
+        img,
+        video,
+        canvas,
+        svg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* 6. Presentation chrome stays outside the slide design system */
+        .deck-controls {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        /* 7. Print one fixed-size slide per page */
+        @media print {
+            html,
+            body {
+                width: 1920px;
+                height: auto;
+                overflow: visible;
+                background: #fff;
+            }
+
+            .deck-viewport {
+                position: static;
+                overflow: visible;
+                background: #fff;
+            }
+
+            .deck-stage {
+                position: static;
+                width: auto;
+                height: auto;
+                transform: none !important;
+                background: none;
+            }
+
+            .slide {
+                position: relative;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                width: 1920px;
+                height: 1080px;
+                break-after: page;
+                page-break-after: always;
+            }
+
+            .slide:last-child {
+                break-after: auto;
+                page-break-after: auto;
+            }
+
+            .deck-controls {
+                display: none !important;
+            }
+        }
+
+        /* 8. Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+        }
+
+        /* ===========================================
+           SLIDE BASE: dark Nightfall ground, faint grid, thin frame
+           =========================================== */
+        .slide {
+            font-family: var(--font-body);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            transition: opacity 0.45s ease, visibility 0.45s;
+            background:
+                radial-gradient(ellipse 60% 55% at 85% 15%, rgba(126, 231, 135, 0.06), transparent 70%),
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 48px 48px,
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 48px 48px,
+                var(--slide-bg);
+        }
+        /* Thin frame echoing the original deck's border lines */
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 36px;
+            border: 1px solid rgba(248, 248, 255, 0.10);
+            pointer-events: none;
+        }
+        /* Corner ticks in accent green */
+        .slide::after {
+            content: '';
+            position: absolute;
+            inset: 36px;
+            pointer-events: none;
+            background:
+                linear-gradient(var(--accent), var(--accent)) top left / 28px 2px no-repeat,
+                linear-gradient(var(--accent), var(--accent)) top left / 2px 28px no-repeat,
+                linear-gradient(var(--accent), var(--accent)) bottom right / 28px 2px no-repeat,
+                linear-gradient(var(--accent), var(--accent)) bottom right / 2px 28px no-repeat;
+            opacity: 0.7;
+        }
+
+        .abs { position: absolute; }
+
+        h1, h2, h3, .mono { font-family: var(--font-display); font-weight: 500; }
+
+        /* Site-style heading: static red/cyan fringe like subpage titles */
+        .fringe { text-shadow: -2px 0 var(--fringe-red), 2px 0 var(--fringe-cyan); }
+
+        .slide-title {
+            font-size: 84px;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+        }
+        .c-green { color: var(--accent); }
+        .c-blue { color: var(--blue); }
+        .c-red { color: var(--red); }
+        .c-yellow { color: var(--yellow); }
+
+        /* Chamfered frame (snip2DiagRect from the source deck), accent outline */
+        .chamfer {
+            --c: 64px;
+            position: absolute;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--accent) 0%, rgba(126, 231, 135, 0.25) 45%, rgba(0, 255, 249, 0.35) 100%);
+            clip-path: polygon(0 0, calc(100% - var(--c)) 0, 100% var(--c), 100% 100%, var(--c) 100%, 0 calc(100% - var(--c)));
+        }
+        .chamfer > img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            object-fit: cover;
+            clip-path: polygon(0 0, calc(100% - var(--c) + 1px) 0, 100% calc(var(--c) - 1px), 100% 100%, calc(var(--c) - 1px) 100%, 0 calc(100% - var(--c) + 1px));
+        }
+        .chamfer.sm { --c: 32px; padding: 2px; }
+
+        /* ===========================================
+           ENTRANCE ANIMATIONS (transition-triggered, subtle)
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .reveal-img {
+            opacity: 0;
+            transform: scale(0.97);
+            transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+        }
+        .slide.visible .reveal,
+        .slide.visible .reveal-img { opacity: 1; transform: none; }
+        .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; } .d3 { transition-delay: 0.24s; }
+        .d4 { transition-delay: 0.32s; } .d5 { transition-delay: 0.40s; } .d6 { transition-delay: 0.48s; }
+        .d7 { transition-delay: 0.56s; } .d8 { transition-delay: 0.64s; } .d9 { transition-delay: 0.72s; }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-img { transform: none !important; }
+        }
+
+
+        /* Instant swap between steps of a progressive build (no cross-fade dip) */
+        .slide.instant, .slide.instant-all .reveal { transition: none !important; }
+
+        /* ===========================================
+           SLIDE 1: TITLE
+           =========================================== */
+        .s1 .hero { left: 80px; top: 100px; width: 650px; height: 880px; }
+        .s1 .title-block { left: 836px; top: 220px; width: 1000px; }
+        .s1 h1 {
+            font-size: 132px;
+            line-height: 1.05;
+            white-space: nowrap;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .s1 h1 .tag {
+            display: inline-block;
+            margin-top: 22px;
+            font-size: 46px;
+            line-height: 1.3;
+            font-weight: 500;
+            letter-spacing: 0;
+            color: var(--muted);
+            text-shadow: none;
+        }
+        .s1 .closing {
+            left: 836px; top: 640px;
+            font-family: var(--font-display);
+            font-size: 84px;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+        /* Ambient effect (only one on this slide): blinking block cursor, CSS-drawn */
+        .cursor {
+            display: inline-block;
+            width: 0.55em; height: 0.9em;
+            margin-left: 0.12em;
+            vertical-align: -0.08em;
+            background: var(--accent);
+            animation: blink 1.1s steps(1) infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+
+        /* ===========================================
+           SLIDE 2: THE NUMBERS
+           =========================================== */
+        .s2 .slide-title { left: 152px; top: 84px; }
+        .s2 .col { top: 300px; width: 502px; text-align: center; }
+        .s2 .c1 { left: 155px; } .s2 .c2 { left: 709px; } .s2 .c3 { left: 1262px; }
+        .s2 .ico {
+            --c: 36px; position: relative;
+            width: 212px; height: 212px; padding: 2px; margin: 0 auto;
+            background: currentColor;
+            clip-path: polygon(0 0, calc(100% - var(--c)) 0, 100% var(--c), 100% 100%, var(--c) 100%, 0 calc(100% - var(--c)));
+        }
+        .s2 .ico > div {
+            width: 100%; height: 100%;
+            background: var(--bg-darker);
+            display: flex; align-items: center; justify-content: center;
+            clip-path: polygon(0 0, calc(100% - var(--c) + 1px) 0, 100% calc(var(--c) - 1px), 100% 100%, calc(var(--c) - 1px) 100%, 0 calc(100% - var(--c) + 1px));
+        }
+        .s2 .ico svg { width: 116px; height: 116px; color: var(--text); opacity: 0.85; }
+        .s2 .num {
+            font-family: var(--font-display); font-weight: 700;
+            font-size: 168px; line-height: 1; margin-top: 52px;
+        }
+        .s2 .label { font-family: var(--font-display); font-size: 72px; line-height: 1.2; margin-top: 18px; }
+
+        /* ===========================================
+           SLIDE 3: THE CHALLENGES
+           =========================================== */
+        .s3 .slide-title { left: 152px; top: 84px; }
+        .s3 .sub { left: 152px; top: 190px; font-family: var(--font-display); font-size: 28px; color: var(--muted); }
+        .s3 .note { right: 152px; top: 128px; font-family: var(--font-display); font-size: 26px; color: var(--muted); }
+        .s3 .legend {
+            right: 152px; top: 188px; list-style: none;
+            display: flex; gap: 26px;
+            font-family: var(--font-display); font-size: 26px; line-height: 1.2;
+        }
+        .s3 .legend li { display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+        .s3 .legend .sw { width: 34px; height: 22px; flex: none; }
+        .s3 .chart {
+            left: 152px; top: 252px; width: 1616px; height: 760px;
+            display: grid; grid-template-columns: 1fr 1fr; column-gap: 72px;
+        }
+        .s3 .chart .col { display: flex; flex-direction: column; justify-content: flex-start; }
+        .s3 .bar-row {
+            display: grid; grid-template-columns: 410px 1fr 52px; align-items: center; column-gap: 16px;
+            height: var(--row-h, 48px);
+            font-family: var(--font-display); font-size: var(--row-fs, 25px);
+        }
+        .s3 .bar-row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; color: var(--text); }
+        .s3 .bar-row .trk { position: relative; height: 62%; background: rgba(248, 248, 255, 0.05); border-left: 2px solid rgba(248, 248, 255, 0.35); }
+        .s3 .bar-row .bar { position: absolute; left: 0; top: 0; bottom: 0; }
+        .s3 .bar-row .ct { color: var(--muted); text-align: left; }
+        .s3 .bar-row.zero .ct { color: rgba(248, 248, 255, 0.35); }
+        .s3 .empty { font-family: var(--font-display); font-size: 40px; color: var(--muted); }
+
+        /* ===========================================
+           SLIDES 4 to 8: FUNNIEST FLAGS (progressive build)
+           =========================================== */
+        .flags .slide-title { left: 152px; top: 84px; }
+        .flag {
+            position: absolute;
+            font-family: var(--font-display);
+            line-height: 1.38;
+            color: var(--text);
+            background: var(--bg-darker);
+            border: 1px solid rgba(248, 248, 255, 0.12);
+            border-left: 4px solid var(--accent);
+            padding: 18px 26px 18px 28px;
+        }
+        .flag.f1 { left: 623px; top: 292px; width: 630px; font-size: 34px; color: var(--accent); }
+        .flag.f2 { left: 623px; top: 443px; width: 630px; font-size: 32px; }
+        .flag.f3 { left: 623px; top: 640px; width: 630px; font-size: 32px; }
+        .flag.f4 { left: 90px;  top: 389px; width: 500px; font-size: 29px; }
+        .flag.f5 { left: 1290px; top: 272px; width: 570px; font-size: 30px; }
+        .flag.f2 { border-left-color: var(--red); }
+        .flag.f3 { border-left-color: var(--yellow); }
+        .flag.f5 { border-left-color: var(--blue); }
+        /* New flag enters from slightly lower and lands in place */
+        .flags .reveal.flag { transform: translateY(28px); }
+        .slide.visible .reveal.flag { transform: none; }
+
+        /* ===========================================
+           SLIDE 9: QUOTE
+           =========================================== */
+        .s9 .quote {
+            left: 150px; top: 330px; width: 805px;
+            text-align: right;
+            font-size: 64px; line-height: 1.25; font-weight: 600;
+        }
+        .s9 .attrib {
+            left: 150px; top: 650px; width: 855px;
+            text-align: right;
+            font-family: var(--font-display); font-size: 64px; font-weight: 700;
+            color: var(--accent);
+        }
+        .s9 .hero { left: 1056px; top: 100px; width: 714px; height: 880px; }
+
+        /* ===========================================
+           SLIDES 10 to 13: TRIBECTF 2026 RESULTS
+           =========================================== */
+        .results h2 {
+            left: 488px; top: 80px; width: 1112px; text-align: center;
+            font-size: 100px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em;
+        }
+        .results .place {
+            left: 488px; top: 228px; width: 1112px; text-align: center;
+            font-family: var(--font-display); font-size: 84px; font-weight: 500; line-height: 1.2;
+        }
+        .results sup { font-size: 0.55em; line-height: 0; vertical-align: 0.75em; }
+        .results .team {
+            left: 488px; top: 470px; width: 1112px; text-align: center;
+            font-family: var(--font-display); font-size: 100px; font-weight: 700; line-height: 1.2;
+        }
+        .results .members {
+            left: 440px; top: 676px; width: 1208px; text-align: center;
+            font-size: 64px; line-height: 1.25; color: var(--text);
+        }
+        .medal { left: 120px; top: 540px; width: 327px; height: 342px; }
+        .medal svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .medal .rank {
+            position: absolute; left: 0; width: 100%; top: 200px; height: 60px;
+            line-height: 60px; text-align: center;
+            font-family: var(--font-display); font-size: 46px; font-weight: 700;
+        }
+        .medal.gold { color: var(--yellow); }
+        .medal.silver { color: #c9d1d9; }
+        .medal.bronze { color: #e3a66f; }
+        .s10 .place, .s10 .medal .rank { color: var(--yellow); }
+        .s11 .place, .s11 .medal .rank { color: #c9d1d9; }
+        .s12 .place, .s12 .medal .rank { color: #e3a66f; }
+
+        .s13 h2 { top: 70px; }
+        .s13 .place { top: 214px; color: var(--accent); }
+        .s13 .hm {
+            left: 488px; top: 420px; width: 1112px;
+            display: grid; grid-template-columns: auto auto; justify-content: center; column-gap: 90px; row-gap: 28px;
+            list-style: none;
+            font-family: var(--font-display); font-size: 64px; line-height: 1.25;
+        }
+        .s13 .hm li { white-space: nowrap; }
+        .s13 .hm li:last-child { grid-column: 1 / -1; text-align: center; }
+        .s13 .claps { left: 110px; top: 560px; width: 290px; height: 307px; color: var(--accent); }
+        .s13 .claps svg { width: 100%; height: 100%; }
+
+        /* ===========================================
+           SLIDES 14 and 15: THANKS / SEE YOU
+           =========================================== */
+        .s15 .hero { left: 988px; top: 100px; width: 817px; height: 880px; }
+        /* Slide 14: Thank you (sponsors + supporter) */
+        .s14 .slide-title { left: 152px; top: 84px; }
+        .s14 .grp { top: 262px; font-family: var(--font-display); font-size: 48px; color: var(--accent); text-align: center; }
+        .s14 .grp-sp { left: 152px; width: 1058px; }
+        .s14 .grp-su { left: 1268px; width: 500px; }
+        .s14 .grp::after { content: ''; display: block; height: 2px; margin: 14px auto 0; width: 100%; background: linear-gradient(90deg, transparent, var(--accent-dim), transparent); }
+        .s14 .card { top: 380px; width: 500px; height: 380px; --c: 44px; }
+        .s14 .k1 { left: 152px; } .s14 .k2 { left: 710px; } .s14 .k3 { left: 1268px; }
+        .s14 .card > div {
+            width: 100%; height: 100%;
+            background: #f8f8ff;
+            display: flex; align-items: center; justify-content: center;
+            clip-path: polygon(0 0, calc(100% - var(--c) + 1px) 0, 100% calc(var(--c) - 1px), 100% 100%, calc(var(--c) - 1px) 100%, 0 calc(100% - var(--c) + 1px));
+        }
+        .s14 .card img.vpr { width: 420px; height: auto; display: block; }
+        .s14 .card img.mt { width: 420px; height: auto; display: block; }
+        .s14 .cs { display: flex; flex-direction: column; align-items: center; text-align: center; color: #1f2328; line-height: 1.15; }
+        .s14 .cs-wm { font-family: Georgia, 'Times New Roman', serif; font-size: 38px; letter-spacing: 0.02em; }
+        .s14 .cs-dept { font-family: var(--font-display); font-weight: 700; font-size: 44px; margin-top: 26px; padding-top: 22px; border-top: 2px solid rgba(31, 35, 40, 0.3); }
+        .s14 .cs-sub { font-family: var(--font-display); font-size: 34px; margin-top: 6px; }
+        .s14 .cap { top: 800px; width: 500px; text-align: center; font-family: var(--font-display); font-size: 32px; line-height: 1.3; color: var(--text); }
+        .s14 .cap.c1 { left: 152px; } .s14 .cap.c2 { left: 710px; } .s14 .cap.c3 { left: 1268px; }
+        .s15 h2 {
+            left: 90px; top: 410px; width: 800px; text-align: right;
+            font-size: 96px; font-weight: 700; line-height: 1.15; color: var(--accent);
+            text-shadow: -3px 0 var(--fringe-red), 3px 0 var(--fringe-cyan);
+        }
+
+        .flag.placeholder { color: var(--muted); font-style: italic; border-style: dashed; }
+        /* Long flags wrap anywhere and shrink (fitText) to stay inside their slot */
+        .flag { overflow-wrap: anywhere; overflow: hidden; }
+        .flag.f1 { max-height: 140px; } .flag.f2 { max-height: 186px; } .flag.f3 { max-height: 340px; }
+        .flag.f4 { max-height: 600px; } .flag.f5 { max-height: 700px; }
+        /* Hidden/skipped slides (data-skip) are excluded from navigation and the counter */
+        .slide[data-skip] { display: none !important; }
+
+        .results .prize {
+            left: 488px; top: 880px; width: 1112px; text-align: center;
+            font-family: var(--font-display); font-size: 72px; font-weight: 700; line-height: 1.2; color: var(--accent);
+        }
+        .results .team, .results .members { overflow: hidden; }
+        .results .team { white-space: nowrap; }
+        .results .members { max-height: 170px; }
+
+
+        /* ===========================================
+           DECK CHROME (outside the slides): progress + counter
+           =========================================== */
+        .progress {
+            position: fixed; left: 0; top: 0; height: 3px; width: 0;
+            background: #7ee787; z-index: 1000;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .deck-controls {
+            left: auto; right: 22px; transform: none;
+            display: flex; align-items: center; gap: 6px;
+            font-family: 'Fira Mono', ui-monospace, monospace; font-size: 13px;
+            color: rgba(248, 248, 255, 0.55);
+            opacity: 0.35; transition: opacity 0.3s;
+        }
+        .deck-controls:hover { opacity: 1; }
+        .deck-controls button {
+            background: none; border: 1px solid rgba(248, 248, 255, 0.25); color: inherit;
+            width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font: inherit;
+        }
+        .deck-controls button:hover { color: #7ee787; border-color: #7ee787; }
+
+        /* Inline editing chrome (see html-template.md) */
+        .edit-hotzone { position: fixed; top: 0; left: 0; width: 80px; height: 80px; z-index: 10000; cursor: pointer; }
+        .edit-toggle {
+            position: fixed; top: 16px; left: 16px;
+            width: 44px; height: 44px; border-radius: 8px;
+            border: 1px solid #7ee787; background: #252627; color: #7ee787;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 10001;
+        }
+        .edit-toggle svg { width: 22px; height: 22px; }
+        .edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+        .edit-toggle.active { background: #7ee787; color: #252627; }
+        body.editing [contenteditable="true"] { outline: 1px dashed rgba(126, 231, 135, 0.6); outline-offset: 4px; }
+        body.editing [contenteditable="true"]:focus { outline: 2px solid #7ee787; }
+    </style>
+</head>
+<body>
+    <div class="progress" id="progress"></div>
+
+    <div class="deck-viewport">
+        <main class="deck-stage" id="deckStage">
+
+            <!-- ===== 1. TITLE ===== -->
+            <section class="slide s1 active" aria-label="Slide 1">
+                <div class="chamfer hero reveal-img"><img src="assets/s01-laptop.jpg" alt="Hand typing on a laptop keyboard"></div>
+                <div class="abs title-block">
+                    <h1 class="fringe reveal d1">TribeCTF&nbsp;‘26<br><span class="tag">W&amp;M’s <br>CyberSecurity Challenge</span></h1>
+                </div>
+                <p class="abs closing reveal d3">Closing Ceremony<span class="cursor" aria-hidden="true"></span></p>
+            </section>
+
+            <!-- ===== 2. THE NUMBERS (filled from stats.counts) ===== -->
+            <section class="slide s2" aria-label="Slide 2">
+                <h2 class="abs slide-title fringe reveal">The Numbers</h2>
+                <div class="abs col c1 reveal d1"><div class="ico c-blue"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div></div><p class="num c-blue" data-stat="counts.students">&mdash;</p><p class="label">Students</p></div>
+                <div class="abs col c2 reveal d2"><div class="ico c-red"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div></div><p class="num c-red" data-stat="counts.teams">&mdash;</p><p class="label">Teams</p></div>
+                <div class="abs col c3 reveal d3"><div class="ico c-yellow"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M4 18h16"/><path d="M12 2 20 7H4z"/><path d="M4 7v4h16V7"/></svg></div></div><p class="num c-yellow" data-stat="counts.schools">&mdash;</p><p class="label">Schools</p></div>
+            </section>
+
+            <!-- ===== 3. THE CHALLENGES (bar chart rendered from stats.challenges) ===== -->
+            <section class="slide s3" aria-label="Slide 3">
+                <h2 class="abs slide-title fringe reveal">The Challenges</h2>
+                <p class="abs sub reveal d1"><span data-stat="counts.challenges">&mdash;</span> challenges &middot; <span data-stat="counts.solves">&mdash;</span> solves</p>
+                <p class="abs note reveal d1">bars = teams that solved</p>
+                <ul class="abs legend reveal d2" id="chartLegend"></ul>
+                <div class="abs chart reveal d2" id="chart"><p class="empty">Challenge data unavailable</p></div>
+            </section>
+
+            <!-- ===== 4. FUNNIEST FLAGS (build step 1/5; text from stats.funny_flags) ===== -->
+            <section class="slide flags s4" data-build="flags" aria-label="Slide 4">
+                <h2 class="abs slide-title fringe reveal">Funniest Flags</h2>
+                <p class="flag f1 reveal d1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
+            </section>
+            <!-- ===== 5. FUNNIEST FLAGS (build step 2/5; text from stats.funny_flags) ===== -->
+            <section class="slide flags s5" data-build="flags" aria-label="Slide 5">
+                <h2 class="abs slide-title fringe">Funniest Flags</h2>
+                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f2 reveal d1" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
+            </section>
+            <!-- ===== 6. FUNNIEST FLAGS (build step 3/5; text from stats.funny_flags) ===== -->
+            <section class="slide flags s6" data-build="flags" aria-label="Slide 6">
+                <h2 class="abs slide-title fringe">Funniest Flags</h2>
+                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f2" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f3 reveal d1" data-flag="2">[funny flag #3 &mdash; add to funny_flags.txt]</p>
+            </section>
+            <!-- ===== 7. FUNNIEST FLAGS (build step 4/5; text from stats.funny_flags) ===== -->
+            <section class="slide flags s7" data-build="flags" aria-label="Slide 7">
+                <h2 class="abs slide-title fringe">Funniest Flags</h2>
+                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f2" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f3" data-flag="2">[funny flag #3 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f4 reveal d1" data-flag="3">[funny flag #4 &mdash; add to funny_flags.txt]</p>
+            </section>
+            <!-- ===== 8. FUNNIEST FLAGS (build step 5/5; text from stats.funny_flags) ===== -->
+            <section class="slide flags s8" data-build="flags" aria-label="Slide 8">
+                <h2 class="abs slide-title fringe">Funniest Flags</h2>
+                <p class="flag f1" data-flag="0">[funny flag #1 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f2" data-flag="1">[funny flag #2 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f3" data-flag="2">[funny flag #3 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f4" data-flag="3">[funny flag #4 &mdash; add to funny_flags.txt]</p>
+                <p class="flag f5 reveal d1" data-flag="4">[funny flag #5 &mdash; add to funny_flags.txt]</p>
+            </section>
+
+            <!-- ===== 9. QUOTE: 2024-specific (Musketeers quote + 2024 team photo). Skipped via data-skip;
+                 remove data-skip (and update the text/photo) to show it. ===== -->
+            <section class="slide s9" data-skip aria-label="Slide 9 (skipped)">
+                <p class="abs quote reveal d1">“May your coffee be cold, your pencils be dull, and your scantron be eaten”</p>
+                <p class="abs attrib reveal d3">—Musketeers</p>
+                <div class="chamfer hero reveal-img"><img src="assets/s09-team.jpg" alt="Team working at a table during TribeCTF"></div>
+            </section>
+
+            <!-- ===== 10. TRIBECTF 2026: 1ST (filled from stats.winners[0]) ===== -->
+            <section class="slide results s10" data-winner="0" aria-label="Slide 10">
+                <h2 class="abs fringe reveal">TribeCTF 2026</h2>
+                <p class="abs place reveal d1">1<sup>st</sup> Place</p>
+                <p class="abs team reveal d3" data-field="team">TBA</p>
+                <p class="abs members reveal d4" data-field="members"></p>
+                <p class="abs prize reveal d5" data-field="prize">$2,500</p>
+                <div class="abs medal gold reveal-img d2">
+                    <svg viewBox="0 0 327 342" aria-hidden="true" fill="none" stroke="currentColor" stroke-linejoin="round">
+                        <path d="M62 8h70l64 150-38 30z" stroke-width="5"/><path d="M265 8h-70l-64 150 38 30z" stroke-width="5"/>
+                        <path d="M97 8l58 140M230 8l-58 140" stroke-width="2" stroke-opacity="0.45"/>
+                        <circle cx="163.5" cy="230" r="96" fill="#252627" stroke-width="6"/>
+                        <circle cx="163.5" cy="230" r="78" stroke-width="2" stroke-opacity="0.5" stroke-dasharray="6 7"/>
+                    </svg>
+                    <p class="rank">1<sup>st</sup></p>
+                </div>
+            </section>
+
+            <!-- ===== 11. TRIBECTF 2026: 2ND (filled from stats.winners[1]) ===== -->
+            <section class="slide results s11" data-winner="1" aria-label="Slide 11">
+                <h2 class="abs fringe reveal">TribeCTF 2026</h2>
+                <p class="abs place reveal d1">2<sup>nd</sup> Place</p>
+                <p class="abs team reveal d3" data-field="team">TBA</p>
+                <p class="abs members reveal d4" data-field="members"></p>
+                <p class="abs prize reveal d5" data-field="prize">$1,000</p>
+                <div class="abs medal silver reveal-img d2">
+                    <svg viewBox="0 0 327 342" aria-hidden="true" fill="none" stroke="currentColor" stroke-linejoin="round">
+                        <path d="M62 8h70l64 150-38 30z" stroke-width="5"/><path d="M265 8h-70l-64 150 38 30z" stroke-width="5"/>
+                        <path d="M97 8l58 140M230 8l-58 140" stroke-width="2" stroke-opacity="0.45"/>
+                        <circle cx="163.5" cy="230" r="96" fill="#252627" stroke-width="6"/>
+                        <circle cx="163.5" cy="230" r="78" stroke-width="2" stroke-opacity="0.5" stroke-dasharray="6 7"/>
+                    </svg>
+                    <p class="rank">2<sup>nd</sup></p>
+                </div>
+            </section>
+
+            <!-- ===== 12. TRIBECTF 2026: 3RD (filled from stats.winners[2]) ===== -->
+            <section class="slide results s12" data-winner="2" aria-label="Slide 12">
+                <h2 class="abs fringe reveal">TribeCTF 2026</h2>
+                <p class="abs place reveal d1">3<sup>rd</sup> Place</p>
+                <p class="abs team reveal d3" data-field="team">TBA</p>
+                <p class="abs members reveal d4" data-field="members"></p>
+                <p class="abs prize reveal d5" data-field="prize">$500</p>
+                <div class="abs medal bronze reveal-img d2">
+                    <svg viewBox="0 0 327 342" aria-hidden="true" fill="none" stroke="currentColor" stroke-linejoin="round">
+                        <path d="M62 8h70l64 150-38 30z" stroke-width="5"/><path d="M265 8h-70l-64 150 38 30z" stroke-width="5"/>
+                        <path d="M97 8l58 140M230 8l-58 140" stroke-width="2" stroke-opacity="0.45"/>
+                        <circle cx="163.5" cy="230" r="96" fill="#252627" stroke-width="6"/>
+                        <circle cx="163.5" cy="230" r="78" stroke-width="2" stroke-opacity="0.5" stroke-dasharray="6 7"/>
+                    </svg>
+                    <p class="rank">3<sup>rd</sup></p>
+                </div>
+            </section>
+
+            <!-- ===== 13. HONORABLE MENTION (filled from stats.honorable, places 4-8) ===== -->
+            <section class="slide results s13" aria-label="Slide 13">
+                <h2 class="abs fringe reveal">TribeCTF 2026</h2>
+                <p class="abs place reveal d1">Honorable Mention</p>
+                <ul class="abs hm" id="hmList">
+                    <li class="reveal d3">4. TBA</li>
+                </ul>
+                <div class="abs claps reveal-img d2"><svg viewBox="-1 -1 30 26" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform="translate(0 2)" stroke-opacity="0.45"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g><g transform="translate(5 0)"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g></svg></div>
+            </section>
+
+            <!-- ===== 14. THANK YOU: sponsors + supporter ===== -->
+            <section class="slide s14" aria-label="Slide 14">
+                <h2 class="abs slide-title fringe reveal">Thank You</h2>
+                <p class="abs grp grp-sp reveal d1">Sponsors</p>
+                <p class="abs grp grp-su reveal d1">Supporter</p>
+                <div class="chamfer abs card k1 reveal-img d2"><div><img class="vpr" src="assets/s15-wm-vpr.svg" alt="William &amp; Mary Vice Provost for Research logo"></div></div>
+                <div class="chamfer abs card k2 reveal-img d3"><div><p class="cs"><span class="cs-wm">William &amp; Mary</span><span class="cs-dept">Computer Science</span><span class="cs-sub">Department</span></p></div></div>
+                <div class="chamfer abs card k3 reveal-img d4"><div><img class="mt" src="assets/s14-mantech.png" alt="ManTech logo"></div></div>
+                <p class="abs cap c1 reveal d5">W&amp;M Provost Office</p>
+                <p class="abs cap c2 reveal d5">W&amp;M Computer Science Department</p>
+                <p class="abs cap c3 reveal d5">ManTech</p>
+            </section>
+
+            <!-- ===== 15. SEE YOU ===== -->
+            <section class="slide s15" aria-label="Slide 15">
+                <h2 class="abs reveal d1">See you at TribeCTF&nbsp;'27!</h2>
+                <div class="chamfer hero reveal-img"><img src="assets/organizers-2026.jpg" alt="TribeCTF organizers group photo"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Deck chrome: prev/next + counter (outside the slide content) -->
+    <nav class="deck-controls" aria-label="Slide navigation">
+        <button id="prevBtn" aria-label="Previous slide">&lsaquo;</button>
+        <span id="counter" aria-live="polite"></span>
+        <button id="nextBtn" aria-label="Next slide">&rsaquo;</button>
+    </nav>
+
+    <!-- Inline editing affordance (hover top-left corner or press E) -->
+    <div class="edit-hotzone"></div>
+    <button class="edit-toggle" id="editToggle" title="Edit mode (E)" aria-label="Toggle edit mode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+    </button>
+
+    <!-- Stats injected by scripts/closing_stats.py (rewrites this block in place). -->
+    <script id="stats" type="application/json">
+{
+ "generated_at": "2026-10-04 10:33 EDT",
+ "export_file": "TribeCTF 2026.2026-10-04_14_31_24.zip",
+ "export_time": "Sun Oct 04 10:31 AM EDT",
+ "data_as_of": "Sun Oct 04 10:24 AM EDT",
+ "ctf_name": "TribeCTF 2026",
+ "freeze": null,
+ "counts": {
+  "teams": 25,
+  "teams_with_solve": 25,
+  "students": 68,
+  "students_with_solve": 62,
+  "schools": 8,
+  "challenges": 30,
+  "solves": 324,
+  "submissions": 4118,
+  "correct_submissions": 324,
+  "incorrect_submissions": 3484
+ },
+ "schools": [
+  {
+   "name": "William & Mary",
+   "students": 28
+  },
+  {
+   "name": "Virginia Tech",
+   "students": 12
+  },
+  {
+   "name": "Christopher Newport University",
+   "students": 10
+  },
+  {
+   "name": "Virginia Commonwealth University",
+   "students": 7
+  },
+  {
+   "name": "George Mason University",
+   "students": 4
+  },
+  {
+   "name": "University of Virginia",
+   "students": 4
+  },
+  {
+   "name": "Old Dominion University",
+   "students": 2
+  },
+  {
+   "name": "Norfolk State University",
+   "students": 1
+  }
+ ],
+ "difficulty": {
+  "Intro": {
+   "challenges": 1,
+   "solves": 25
+  },
+  "Easy": {
+   "challenges": 9,
+   "solves": 150
+  },
+  "Medium": {
+   "challenges": 9,
+   "solves": 92
+  },
+  "Hard": {
+   "challenges": 9,
+   "solves": 53
+  },
+  "Insane": {
+   "challenges": 2,
+   "solves": 4
+  }
+ },
+ "challenges": [
+  {
+   "name": "The-First-Flag",
+   "category": "Welcome",
+   "value": 50,
+   "difficulty": "Intro",
+   "solves": 25,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "AltGriffin",
+   "category": "Cage",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 4,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Registeel",
+   "category": "Cage",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 15,
+   "first_blood": "Pro(tein) Protein"
+  },
+  {
+   "name": "RouterEasy",
+   "category": "Cage",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "catacombs",
+   "category": "Cryptography",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 23,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Griffin & Ouroboros",
+   "category": "Cryptography",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 21,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Dig Me Up!",
+   "category": "Forensics",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Who's that Pokemon?",
+   "category": "Forensics",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 19,
+   "first_blood": "Pro(tein) Protein"
+  },
+  {
+   "name": "MFC (Easy)",
+   "category": "Hardware",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "PokeCenter",
+   "category": "RE",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Griffin-Corps-Career",
+   "category": "Cage",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "Piscator",
+   "category": "Cage",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 2,
+   "first_blood": "CNS@UVA"
+  },
+  {
+   "name": "RouterMedium",
+   "category": "Cage",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 4,
+   "first_blood": "WhatIsAstig"
+  },
+  {
+   "name": "iris",
+   "category": "Cryptography",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 14,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "jdvault",
+   "category": "Cryptography",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 13,
+   "first_blood": "Griffins"
+  },
+  {
+   "name": "Insider Threat",
+   "category": "Forensics",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 19,
+   "first_blood": "CNS@UVA"
+  },
+  {
+   "name": "MFC (Medium)",
+   "category": "Hardware",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 14,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Griffin's Lullaby",
+   "category": "Miscellaneous",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 8,
+   "first_blood": "Pro(tein) Protein"
+  },
+  {
+   "name": "Hidden In Differences",
+   "category": "Miscellaneous",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 18,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "RouterHard",
+   "category": "Cage",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "CRCcle",
+   "category": "Crypto",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 6,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Rotom Phone",
+   "category": "Cryptography",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 11,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Griffins Game",
+   "category": "Hardware",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 2,
+   "first_blood": "WhatIsAstig"
+  },
+  {
+   "name": "MFC (Hard)",
+   "category": "Hardware",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 9,
+   "first_blood": "Team AWESOME"
+  },
+  {
+   "name": "GriffinCorp Project Keystone",
+   "category": "misc",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 10,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Ekans.pcap",
+   "category": "Miscellaneous",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 15,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Griffin Droppings",
+   "category": "RE",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "Griffin Tongues",
+   "category": "RE",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "Project Keystone: Aftermath",
+   "category": "misc",
+   "value": 1500,
+   "difficulty": "Insane",
+   "solves": 4,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "RouterInsane",
+   "category": "Cage",
+   "value": 2000,
+   "difficulty": "Insane",
+   "solves": 0,
+   "first_blood": null
+  }
+ ],
+ "top10": [
+  {
+   "rank": 1,
+   "team": "MasonCC",
+   "score": 14250,
+   "members": [
+    "Hurtz",
+    "nsharm22",
+    "kyson",
+    "itzmeamaan"
+   ],
+   "eligible": true,
+   "solves": 25
+  },
+  {
+   "rank": 2,
+   "team": "WhatIsAstig",
+   "score": 13250,
+   "members": [
+    "PlatonicGerm"
+   ],
+   "eligible": true,
+   "solves": 23
+  },
+  {
+   "rank": 3,
+   "team": "CNS@UVA",
+   "score": 12950,
+   "members": [
+    "charlie:3",
+    "ShakyWillow",
+    "boplusnet",
+    "hello"
+   ],
+   "eligible": true,
+   "solves": 23
+  },
+  {
+   "rank": 4,
+   "team": "W VP@CNU",
+   "score": 12750,
+   "members": [
+    "Colemak",
+    "jd",
+    "APR",
+    "hyper"
+   ],
+   "eligible": true,
+   "solves": 23
+  },
+  {
+   "rank": 5,
+   "team": "pwn@vt",
+   "score": 10750,
+   "members": [
+    "toucan",
+    "James Pavlichek",
+    "grayg",
+    "gavinworkman"
+   ],
+   "eligible": true,
+   "solves": 21
+  },
+  {
+   "rank": 6,
+   "team": "Pro(tein) Protein",
+   "score": 10450,
+   "members": [
+    "BBQ",
+    "lkunnas",
+    "mpsteele",
+    "cupcakeninja452"
+   ],
+   "eligible": true,
+   "solves": 20
+  },
+  {
+   "rank": 7,
+   "team": "Wu-Tang LAN",
+   "score": 9450,
+   "members": [
+    "lexzach",
+    "rorova",
+    "godah"
+   ],
+   "eligible": true,
+   "solves": 19
+  },
+  {
+   "rank": 8,
+   "team": "Griffins",
+   "score": 8950,
+   "members": [
+    "evanbritton"
+   ],
+   "eligible": true,
+   "solves": 18
+  },
+  {
+   "rank": 9,
+   "team": "BigOnes@VT",
+   "score": 8450,
+   "members": [
+    "Big Ram",
+    "mmunoz",
+    "nosun",
+    "wheltzel"
+   ],
+   "eligible": true,
+   "solves": 18
+  },
+  {
+   "rank": 10,
+   "team": "Team AWESOME",
+   "score": 7950,
+   "members": [
+    "iltusing",
+    "Alex Anderson",
+    "ehijah"
+   ],
+   "eligible": true,
+   "solves": 17
+  }
+ ],
+ "winners": [
+  {
+   "rank": 1,
+   "team": "MasonCC",
+   "score": 14250,
+   "members": [
+    "Hurtz",
+    "nsharm22",
+    "kyson",
+    "itzmeamaan"
+   ],
+   "eligible": true,
+   "solves": 25,
+   "place": 1,
+   "prize": "$2,500"
+  },
+  {
+   "rank": 2,
+   "team": "WhatIsAstig",
+   "score": 13250,
+   "members": [
+    "PlatonicGerm"
+   ],
+   "eligible": true,
+   "solves": 23,
+   "place": 2,
+   "prize": "$1,000"
+  },
+  {
+   "rank": 3,
+   "team": "CNS@UVA",
+   "score": 12950,
+   "members": [
+    "charlie:3",
+    "ShakyWillow",
+    "boplusnet",
+    "hello"
+   ],
+   "eligible": true,
+   "solves": 23,
+   "place": 3,
+   "prize": "$500"
+  }
+ ],
+ "honorable": [
+  {
+   "rank": 4,
+   "team": "W VP@CNU",
+   "score": 12750,
+   "members": [
+    "Colemak",
+    "jd",
+    "APR",
+    "hyper"
+   ],
+   "eligible": true,
+   "solves": 23,
+   "place": 4
+  },
+  {
+   "rank": 5,
+   "team": "pwn@vt",
+   "score": 10750,
+   "members": [
+    "toucan",
+    "James Pavlichek",
+    "grayg",
+    "gavinworkman"
+   ],
+   "eligible": true,
+   "solves": 21,
+   "place": 5
+  },
+  {
+   "rank": 6,
+   "team": "Pro(tein) Protein",
+   "score": 10450,
+   "members": [
+    "BBQ",
+    "lkunnas",
+    "mpsteele",
+    "cupcakeninja452"
+   ],
+   "eligible": true,
+   "solves": 20,
+   "place": 6
+  },
+  {
+   "rank": 7,
+   "team": "Wu-Tang LAN",
+   "score": 9450,
+   "members": [
+    "lexzach",
+    "rorova",
+    "godah"
+   ],
+   "eligible": true,
+   "solves": 19,
+   "place": 7
+  },
+  {
+   "rank": 8,
+   "team": "Griffins",
+   "score": 8950,
+   "members": [
+    "evanbritton"
+   ],
+   "eligible": true,
+   "solves": 18,
+   "place": 8
+  }
+ ],
+ "eligible_min": 2000,
+ "funny_flags": []
+}
+    </script>
+
+    <script>
+        /* ===========================================
+           SLIDE PRESENTATION CONTROLLER
+           =========================================== */
+        class SlidePresentation {
+            constructor() {
+                this.slides = [...document.querySelectorAll('.slide:not([data-skip])')];
+                this.stage = document.getElementById('deckStage');
+                this.counter = document.getElementById('counter');
+                this.progress = document.getElementById('progress');
+                this.currentSlide = 0;
+                this.wheelLock = false;
+                this.setupStageScale();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupWheelNav();
+                this.setupClickNav();
+                const fromHash = parseInt((location.hash || '').replace('#', ''), 10);
+                this.showSlide(Number.isFinite(fromHash) ? fromHash - 1 : 0);
+            }
+
+            setupStageScale() {
+                const scale = () => {
+                    const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+                    const x = (window.innerWidth - 1920 * factor) / 2;
+                    const y = (window.innerHeight - 1080 * factor) / 2;
+                    this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+                };
+                scale();
+                window.addEventListener('resize', scale);
+            }
+
+            isEditing() { return document.body.classList.contains('editing'); }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (this.isEditing()) return;
+                    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); this.next(); }
+                    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); this.prev(); }
+                    else if (e.key === 'Home') { this.showSlide(0); }
+                    else if (e.key === 'End') { this.showSlide(this.slides.length - 1); }
+                });
+                document.getElementById('prevBtn').addEventListener('click', (e) => { e.stopPropagation(); this.prev(); });
+                document.getElementById('nextBtn').addEventListener('click', (e) => { e.stopPropagation(); this.next(); });
+            }
+
+            setupTouchNav() {
+                let sx = 0, sy = 0;
+                document.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+                document.addEventListener('touchend', (e) => {
+                    if (this.isEditing()) return;
+                    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+                    if (Math.max(Math.abs(dx), Math.abs(dy)) < 50) return;
+                    if (Math.abs(dx) > Math.abs(dy)) { dx < 0 ? this.next() : this.prev(); }
+                    else { dy < 0 ? this.next() : this.prev(); }
+                });
+            }
+
+            setupWheelNav() {
+                window.addEventListener('wheel', (e) => {
+                    if (this.isEditing() || this.wheelLock || Math.abs(e.deltaY) < 30) return;
+                    this.wheelLock = true;
+                    e.deltaY > 0 ? this.next() : this.prev();
+                    setTimeout(() => { this.wheelLock = false; }, 700);
+                }, { passive: true });
+            }
+
+            setupClickNav() {
+                // Click right two-thirds = next, left third = previous (ignores links/buttons and edit mode)
+                document.querySelector('.deck-viewport').addEventListener('click', (e) => {
+                    if (this.isEditing() || e.target.closest('a, button')) return;
+                    e.clientX < window.innerWidth / 3 ? this.prev() : this.next();
+                });
+            }
+
+            next() { this.showSlide(this.currentSlide + 1); }
+            prev() { this.showSlide(this.currentSlide - 1); }
+
+            showSlide(index) {
+                const from = this.currentSlide;
+                this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+                // Progressive build (Funniest Flags): swap steps instantly so earlier flags stay put;
+                // only the newly added flag animates in (going backwards nothing re-animates).
+                const a = this.slides[from], b = this.slides[this.currentSlide];
+                if (this.ready && a !== b && a.dataset.build && a.dataset.build === b.dataset.build) {
+                    a.classList.add('instant'); b.classList.add('instant');
+                    if (this.currentSlide < from) b.classList.add('instant-all');
+                    clearTimeout(this.buildTimer);
+                    this.buildTimer = setTimeout(() => this.slides.forEach((s) => s.classList.remove('instant', 'instant-all')), 80);
+                }
+                this.ready = true;
+                this.slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === this.currentSlide);
+                    slide.classList.toggle('visible', i === this.currentSlide);
+                });
+                const n = this.currentSlide + 1, total = this.slides.length;
+                this.counter.textContent = `${n} / ${total}`;
+                this.progress.style.width = `${(n / total) * 100}%`;
+                history.replaceState(null, '', `#${n}`);
+            }
+        }
+
+        /* ===========================================
+           INLINE EDITOR: toggle with E / top-left hotzone, autosave to localStorage,
+           Ctrl/Cmd+S downloads the edited HTML
+           =========================================== */
+        class InlineEditor {
+            constructor() {
+                this.isActive = false;
+                this.key = 'tribectf-closing-2026-edits-v2';
+                this.selector = '.slide h1, .slide h2, .slide h3, .slide p, .slide li, .slide .rank';
+                this.restore();
+                document.getElementById('deckStage').addEventListener('input', () => this.save());
+                document.addEventListener('keydown', (e) => {
+                    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's' && this.isActive) { e.preventDefault(); this.exportFile(); }
+                });
+            }
+            toggleEditMode() {
+                this.isActive = !this.isActive;
+                document.body.classList.toggle('editing', this.isActive);
+                document.getElementById('editToggle').classList.toggle('active', this.isActive);
+                document.querySelectorAll(this.selector).forEach((el) => {
+                    if (this.isActive) el.setAttribute('contenteditable', 'true'); else el.removeAttribute('contenteditable');
+                });
+                if (!this.isActive) this.save();
+            }
+            save() {
+                try {
+                    const data = [...document.querySelectorAll('.slide')].map((s) => s.innerHTML.replace(/ contenteditable="true"/g, ''));
+                    localStorage.setItem(this.key, JSON.stringify(data));
+                } catch (e) { /* storage unavailable */ }
+            }
+            restore() {
+                try {
+                    const data = JSON.parse(localStorage.getItem(this.key) || 'null');
+                    if (!Array.isArray(data)) return;
+                    document.querySelectorAll('.slide').forEach((s, i) => { if (typeof data[i] === 'string') s.innerHTML = data[i]; });
+                } catch (e) { /* ignore */ }
+            }
+            exportFile() {
+                const clone = document.documentElement.cloneNode(true);
+                clone.querySelectorAll('[contenteditable]').forEach((el) => el.removeAttribute('contenteditable'));
+                clone.querySelector('body').classList.remove('editing');
+                const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'index.html';
+                a.click();
+                URL.revokeObjectURL(a.href);
+            }
+        }
+
+
+        /* ===========================================
+           STATS RENDERING: fills dynamic fields from the inline #stats JSON block
+           (written by scripts/closing_stats.py). Missing fields keep their static fallback.
+           =========================================== */
+        function renderStats() {
+            let S = {};
+            try { S = JSON.parse(document.getElementById('stats').textContent || '{}') || {}; } catch (e) { S = {}; }
+            const get = (path) => path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), S);
+            document.querySelectorAll('[data-stat]').forEach((el) => {
+                const v = get(el.dataset.stat);
+                if (v !== undefined && v !== null) el.textContent = String(v);
+            });
+
+            // Funniest flags (placeholders when not chosen yet)
+            const flags = Array.isArray(S.funny_flags) ? S.funny_flags : [];
+            document.querySelectorAll('[data-flag]').forEach((el) => {
+                const i = +el.dataset.flag;
+                if (flags[i]) { el.textContent = flags[i]; el.classList.remove('placeholder'); }
+                else { el.classList.add('placeholder'); }
+            });
+
+            // Winners
+            document.querySelectorAll('[data-winner]').forEach((sec) => {
+                const w = (S.winners || [])[+sec.dataset.winner];
+                if (!w) return;
+                const set = (f, v) => { const el = sec.querySelector(`[data-field="${f}"]`); if (el && v) el.textContent = v; };
+                set('team', w.team);
+                set('members', (w.members || []).join(', '));
+                set('prize', w.prize);
+            });
+
+            // Honorable mentions
+            const hm = document.getElementById('hmList');
+            if (hm && Array.isArray(S.honorable) && S.honorable.length) {
+                hm.innerHTML = '';
+                S.honorable.forEach((t, i) => {
+                    const li = document.createElement('li');
+                    li.className = `reveal d${Math.min(3 + i, 9)}`;
+                    li.textContent = `${t.place}. ${t.team}`;
+                    hm.appendChild(li);
+                });
+            }
+
+            // Challenge chart: horizontal bars, two columns, colored by difficulty
+            const chart = document.getElementById('chart');
+            const list = Array.isArray(S.challenges) ? S.challenges : [];
+            if (chart && list.length) {
+                const colors = { Intro: '#b7b9c0', Easy: '#7ee787', Medium: '#79c0ff', Hard: '#f2cc60', Insane: '#ff7b72' };
+                const order = ['Intro', 'Easy', 'Medium', 'Hard', 'Insane'];
+                const rows = [...list].sort((a, b) => (order.indexOf(a.difficulty) - order.indexOf(b.difficulty)) || (b.solves - a.solves) || a.name.localeCompare(b.name));
+                const max = Math.max(1, ...rows.map((r) => r.solves));
+                const perCol = Math.ceil(rows.length / 2);
+                const rowH = Math.min(56, Math.floor(760 / perCol));
+                chart.style.setProperty('--row-h', `${rowH}px`);
+                chart.style.setProperty('--row-fs', `${Math.max(16, Math.min(24, Math.round(rowH * 0.5)))}px`);
+                chart.innerHTML = '';
+                [rows.slice(0, perCol), rows.slice(perCol)].forEach((colRows) => {
+                    const col = document.createElement('div');
+                    col.className = 'col';
+                    colRows.forEach((r) => {
+                        const row = document.createElement('div');
+                        row.className = 'bar-row' + (r.solves ? '' : ' zero');
+                        row.title = `${r.name} (${r.category}, ${r.value} pts): ${r.solves} solves`;
+                        const nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = r.name;
+                        const trk = document.createElement('span'); trk.className = 'trk';
+                        const bar = document.createElement('span'); bar.className = 'bar';
+                        bar.style.width = `${(r.solves / max) * 100}%`;
+                        bar.style.background = colors[r.difficulty] || '#b7b9c0';
+                        trk.appendChild(bar);
+                        const ct = document.createElement('span'); ct.className = 'ct'; ct.textContent = r.solves;
+                        row.append(nm, trk, ct);
+                        col.appendChild(row);
+                    });
+                    chart.appendChild(col);
+                });
+                const legend = document.getElementById('chartLegend');
+                if (legend) {
+                    legend.innerHTML = '';
+                    order.filter((d) => rows.some((r) => r.difficulty === d)).forEach((d) => {
+                        const li = document.createElement('li');
+                        const n = rows.filter((r) => r.difficulty === d).length;
+                        li.innerHTML = `<span class="sw" style="background:${colors[d]}"></span>`;
+                        li.append(`${d} (${n})`);
+                        legend.appendChild(li);
+                    });
+                }
+            }
+            fitText();
+        }
+
+        // Shrink long team names / member lists / HM list so nothing overflows the stage.
+        function fitText() {
+            const shrink = (el, minPx) => {
+                if (!el) return;
+                el.style.fontSize = '';
+                let fs = parseFloat(getComputedStyle(el).fontSize);
+                const over = () => el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 8;
+                while (over() && fs > minPx) { fs -= 2; el.style.fontSize = `${fs}px`; }
+            };
+            document.querySelectorAll('.results [data-field="team"]').forEach((el) => shrink(el, 40));
+            document.querySelectorAll('.flag').forEach((el) => shrink(el, 16));
+            document.querySelectorAll('.results [data-field="members"]').forEach((el) => shrink(el, 30));
+            const hm = document.getElementById('hmList');
+            if (hm) {
+                hm.style.fontSize = '';
+                let fs = parseFloat(getComputedStyle(hm).fontSize);
+                while ((hm.scrollWidth > 1112 || hm.scrollHeight > 600) && fs > 30) { fs -= 2; hm.style.fontSize = `${fs}px`; }
+            }
+        }
+
+        const editor = new InlineEditor();
+        renderStats();
+        const deck = new SlidePresentation();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitText);
+
+        const editToggle = document.getElementById('editToggle');
+        const hotzone = document.querySelector('.edit-hotzone');
+        let hideTimeout = null;
+        editToggle.addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); });
+        hotzone.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); });
+        hotzone.addEventListener('mouseleave', () => {
+            hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400);
+        });
+        editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+        editToggle.addEventListener('mouseleave', () => {
+            hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400);
+        });
+        hotzone.addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); });
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'e' || e.key === 'E') && !e.metaKey && !e.ctrlKey && !e.target.getAttribute('contenteditable')) {
+                editor.toggleEditMode();
+                editToggle.classList.toggle('show', editor.isActive);
+            }
+        });
+    </script>
+</body>
+</html>

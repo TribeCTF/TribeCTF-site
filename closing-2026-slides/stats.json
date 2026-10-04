@@ -1,0 +1,556 @@
+{
+ "generated_at": "2026-10-04 10:33 EDT",
+ "export_file": "TribeCTF 2026.2026-10-04_14_31_24.zip",
+ "export_time": "Sun Oct 04 10:31 AM EDT",
+ "data_as_of": "Sun Oct 04 10:24 AM EDT",
+ "ctf_name": "TribeCTF 2026",
+ "freeze": null,
+ "counts": {
+  "teams": 25,
+  "teams_with_solve": 25,
+  "students": 68,
+  "students_with_solve": 62,
+  "schools": 8,
+  "challenges": 30,
+  "solves": 324,
+  "submissions": 4118,
+  "correct_submissions": 324,
+  "incorrect_submissions": 3484
+ },
+ "schools": [
+  {
+   "name": "William & Mary",
+   "students": 28
+  },
+  {
+   "name": "Virginia Tech",
+   "students": 12
+  },
+  {
+   "name": "Christopher Newport University",
+   "students": 10
+  },
+  {
+   "name": "Virginia Commonwealth University",
+   "students": 7
+  },
+  {
+   "name": "George Mason University",
+   "students": 4
+  },
+  {
+   "name": "University of Virginia",
+   "students": 4
+  },
+  {
+   "name": "Old Dominion University",
+   "students": 2
+  },
+  {
+   "name": "Norfolk State University",
+   "students": 1
+  }
+ ],
+ "difficulty": {
+  "Intro": {
+   "challenges": 1,
+   "solves": 25
+  },
+  "Easy": {
+   "challenges": 9,
+   "solves": 150
+  },
+  "Medium": {
+   "challenges": 9,
+   "solves": 92
+  },
+  "Hard": {
+   "challenges": 9,
+   "solves": 53
+  },
+  "Insane": {
+   "challenges": 2,
+   "solves": 4
+  }
+ },
+ "challenges": [
+  {
+   "name": "The-First-Flag",
+   "category": "Welcome",
+   "value": 50,
+   "difficulty": "Intro",
+   "solves": 25,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "AltGriffin",
+   "category": "Cage",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 4,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Registeel",
+   "category": "Cage",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 15,
+   "first_blood": "Pro(tein) Protein"
+  },
+  {
+   "name": "RouterEasy",
+   "category": "Cage",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "catacombs",
+   "category": "Cryptography",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 23,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Griffin & Ouroboros",
+   "category": "Cryptography",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 21,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Dig Me Up!",
+   "category": "Forensics",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Who's that Pokemon?",
+   "category": "Forensics",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 19,
+   "first_blood": "Pro(tein) Protein"
+  },
+  {
+   "name": "MFC (Easy)",
+   "category": "Hardware",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "PokeCenter",
+   "category": "RE",
+   "value": 300,
+   "difficulty": "Easy",
+   "solves": 17,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Griffin-Corps-Career",
+   "category": "Cage",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "Piscator",
+   "category": "Cage",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 2,
+   "first_blood": "CNS@UVA"
+  },
+  {
+   "name": "RouterMedium",
+   "category": "Cage",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 4,
+   "first_blood": "WhatIsAstig"
+  },
+  {
+   "name": "iris",
+   "category": "Cryptography",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 14,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "jdvault",
+   "category": "Cryptography",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 13,
+   "first_blood": "Griffins"
+  },
+  {
+   "name": "Insider Threat",
+   "category": "Forensics",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 19,
+   "first_blood": "CNS@UVA"
+  },
+  {
+   "name": "MFC (Medium)",
+   "category": "Hardware",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 14,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Griffin's Lullaby",
+   "category": "Miscellaneous",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 8,
+   "first_blood": "Pro(tein) Protein"
+  },
+  {
+   "name": "Hidden In Differences",
+   "category": "Miscellaneous",
+   "value": 500,
+   "difficulty": "Medium",
+   "solves": 18,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "RouterHard",
+   "category": "Cage",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "CRCcle",
+   "category": "Crypto",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 6,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "Rotom Phone",
+   "category": "Cryptography",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 11,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Griffins Game",
+   "category": "Hardware",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 2,
+   "first_blood": "WhatIsAstig"
+  },
+  {
+   "name": "MFC (Hard)",
+   "category": "Hardware",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 9,
+   "first_blood": "Team AWESOME"
+  },
+  {
+   "name": "GriffinCorp Project Keystone",
+   "category": "misc",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 10,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Ekans.pcap",
+   "category": "Miscellaneous",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 15,
+   "first_blood": "pwn@vt"
+  },
+  {
+   "name": "Griffin Droppings",
+   "category": "RE",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "Griffin Tongues",
+   "category": "RE",
+   "value": 1000,
+   "difficulty": "Hard",
+   "solves": 0,
+   "first_blood": null
+  },
+  {
+   "name": "Project Keystone: Aftermath",
+   "category": "misc",
+   "value": 1500,
+   "difficulty": "Insane",
+   "solves": 4,
+   "first_blood": "MasonCC"
+  },
+  {
+   "name": "RouterInsane",
+   "category": "Cage",
+   "value": 2000,
+   "difficulty": "Insane",
+   "solves": 0,
+   "first_blood": null
+  }
+ ],
+ "top10": [
+  {
+   "rank": 1,
+   "team": "MasonCC",
+   "score": 14250,
+   "members": [
+    "Hurtz",
+    "nsharm22",
+    "kyson",
+    "itzmeamaan"
+   ],
+   "eligible": true,
+   "solves": 25
+  },
+  {
+   "rank": 2,
+   "team": "WhatIsAstig",
+   "score": 13250,
+   "members": [
+    "PlatonicGerm"
+   ],
+   "eligible": true,
+   "solves": 23
+  },
+  {
+   "rank": 3,
+   "team": "CNS@UVA",
+   "score": 12950,
+   "members": [
+    "charlie:3",
+    "ShakyWillow",
+    "boplusnet",
+    "hello"
+   ],
+   "eligible": true,
+   "solves": 23
+  },
+  {
+   "rank": 4,
+   "team": "W VP@CNU",
+   "score": 12750,
+   "members": [
+    "Colemak",
+    "jd",
+    "APR",
+    "hyper"
+   ],
+   "eligible": true,
+   "solves": 23
+  },
+  {
+   "rank": 5,
+   "team": "pwn@vt",
+   "score": 10750,
+   "members": [
+    "toucan",
+    "James Pavlichek",
+    "grayg",
+    "gavinworkman"
+   ],
+   "eligible": true,
+   "solves": 21
+  },
+  {
+   "rank": 6,
+   "team": "Pro(tein) Protein",
+   "score": 10450,
+   "members": [
+    "BBQ",
+    "lkunnas",
+    "mpsteele",
+    "cupcakeninja452"
+   ],
+   "eligible": true,
+   "solves": 20
+  },
+  {
+   "rank": 7,
+   "team": "Wu-Tang LAN",
+   "score": 9450,
+   "members": [
+    "lexzach",
+    "rorova",
+    "godah"
+   ],
+   "eligible": true,
+   "solves": 19
+  },
+  {
+   "rank": 8,
+   "team": "Griffins",
+   "score": 8950,
+   "members": [
+    "evanbritton"
+   ],
+   "eligible": true,
+   "solves": 18
+  },
+  {
+   "rank": 9,
+   "team": "BigOnes@VT",
+   "score": 8450,
+   "members": [
+    "Big Ram",
+    "mmunoz",
+    "nosun",
+    "wheltzel"
+   ],
+   "eligible": true,
+   "solves": 18
+  },
+  {
+   "rank": 10,
+   "team": "Team AWESOME",
+   "score": 7950,
+   "members": [
+    "iltusing",
+    "Alex Anderson",
+    "ehijah"
+   ],
+   "eligible": true,
+   "solves": 17
+  }
+ ],
+ "winners": [
+  {
+   "rank": 1,
+   "team": "MasonCC",
+   "score": 14250,
+   "members": [
+    "Hurtz",
+    "nsharm22",
+    "kyson",
+    "itzmeamaan"
+   ],
+   "eligible": true,
+   "solves": 25,
+   "place": 1,
+   "prize": "$2,500"
+  },
+  {
+   "rank": 2,
+   "team": "WhatIsAstig",
+   "score": 13250,
+   "members": [
+    "PlatonicGerm"
+   ],
+   "eligible": true,
+   "solves": 23,
+   "place": 2,
+   "prize": "$1,000"
+  },
+  {
+   "rank": 3,
+   "team": "CNS@UVA",
+   "score": 12950,
+   "members": [
+    "charlie:3",
+    "ShakyWillow",
+    "boplusnet",
+    "hello"
+   ],
+   "eligible": true,
+   "solves": 23,
+   "place": 3,
+   "prize": "$500"
+  }
+ ],
+ "honorable": [
+  {
+   "rank": 4,
+   "team": "W VP@CNU",
+   "score": 12750,
+   "members": [
+    "Colemak",
+    "jd",
+    "APR",
+    "hyper"
+   ],
+   "eligible": true,
+   "solves": 23,
+   "place": 4
+  },
+  {
+   "rank": 5,
+   "team": "pwn@vt",
+   "score": 10750,
+   "members": [
+    "toucan",
+    "James Pavlichek",
+    "grayg",
+    "gavinworkman"
+   ],
+   "eligible": true,
+   "solves": 21,
+   "place": 5
+  },
+  {
+   "rank": 6,
+   "team": "Pro(tein) Protein",
+   "score": 10450,
+   "members": [
+    "BBQ",
+    "lkunnas",
+    "mpsteele",
+    "cupcakeninja452"
+   ],
+   "eligible": true,
+   "solves": 20,
+   "place": 6
+  },
+  {
+   "rank": 7,
+   "team": "Wu-Tang LAN",
+   "score": 9450,
+   "members": [
+    "lexzach",
+    "rorova",
+    "godah"
+   ],
+   "eligible": true,
+   "solves": 19,
+   "place": 7
+  },
+  {
+   "rank": 8,
+   "team": "Griffins",
+   "score": 8950,
+   "members": [
+    "evanbritton"
+   ],
+   "eligible": true,
+   "solves": 18,
+   "place": 8
+  }
+ ],
+ "eligible_min": 2000,
+ "funny_flags": []
+}
