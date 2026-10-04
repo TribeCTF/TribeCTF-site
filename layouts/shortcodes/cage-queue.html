@@ -113,6 +113,10 @@
       <div class="cq-ok" data-el="discordOk" hidden></div>
     </details>
     <p class="cq-fine" data-el="soundNote"></p>
+    <div class="cq-row cq-alerts">
+      <button type="button" class="cq-btn cq-alerts-btn" data-el="alertsBtn" hidden>Enable desktop alerts</button>
+      <span class="cq-fine" data-el="alertsNote" hidden></span>
+    </div>
   </section>
 
   <!-- Public live board -->
@@ -158,6 +162,7 @@
 .cq-err { border-color:var(--r); color:var(--r); }
 .cq-teamline { display:flex; flex-wrap:wrap; align-items:center; gap:.5em .8em; }
 .cq-teamline h3 { margin:0; flex:0 1 auto; min-width:0; overflow-wrap:anywhere; }
+.cq-alerts-btn { padding:.35em .8em; font-size:.85em; }
 .cq-signout { margin-left:auto; padding:.3em .7em; font-size:.8em; }
 .cq-badge { font-size:.75em; padding:.15em .5em; border:1px solid var(--y); color:var(--y); }
 .cq-budget { margin:.8em 0 0; }
@@ -225,7 +230,7 @@
   root.dataset.ready = '1';
 
   var TZ = 'America/New_York';
-  var POLL_MS = 5000;
+  var POLL_MS = 5000, POLL_HIDDEN_MS = 10000;
   var MINUTES = [30, 60, 90, 120];
   var $ = {};
   Array.prototype.forEach.call(root.querySelectorAll('[data-el]'), function (n) { $[n.getAttribute('data-el')] = n; });
@@ -347,11 +352,88 @@
   }
   function renderSoundNote() {
     $.soundNote.textContent = gestured
-      ? 'Sound alert is on: this tab will beep when you are invited. Keep it open.'
+      ? 'Sound alert is on: this tab beeps when you are next, called, or warned. Keep it open.'
       : 'Tap or click anywhere on this page once to turn on the sound alert for your invite.';
   }
   var baseTitle = document.title;
   var beepedFor = null;
+
+  // ---- desktop (system) notifications ----
+  var NS = 'Notification' in window;
+  function perm() { try { return NS ? Notification.permission : 'unsupported'; } catch (e) { return 'unsupported'; } }
+  function renderAlerts() {
+    var p = perm();
+    $.alertsBtn.hidden = !NS || p === 'granted';
+    if (!NS) show($.alertsNote, 'Alerts need the page open; on iPhone add this site to your Home Screen. Discord still gets every call.');
+    else if (p === 'denied') show($.alertsNote, 'Alerts are blocked. Click the lock or site icon next to the address, allow Notifications for this site, then reload.');
+    else if (p === 'granted') show($.alertsNote, 'Desktop alerts are on.');
+    else hide($.alertsNote);
+  }
+  $.alertsBtn.addEventListener('click', function () {
+    onGesture(); // also unlocks the beep
+    if (!NS) return renderAlerts();
+    var done = false;
+    function after() { if (!done) { done = true; renderAlerts(); } }
+    try {
+      var pr = Notification.requestPermission(after); // callback form for old Safari
+      if (pr && pr.then) pr.then(after, after);
+    } catch (e) { after(); }
+  });
+  // Keys of events already notified, persisted so reloads / other tabs don't repeat them.
+  var NKEY = 'cage-notified:' + API, notified = [];
+  try { notified = JSON.parse(localStorage.getItem(NKEY) || '[]') || []; } catch (e) { notified = []; }
+  if (!Array.isArray(notified)) notified = [];
+  function notify(key, title, body, noBeep) {
+    try { var fresh = JSON.parse(localStorage.getItem(NKEY) || '[]'); if (Array.isArray(fresh)) notified = fresh; } catch (e) {}
+    if (notified.indexOf(key) !== -1) return;
+    notified.push(key);
+    if (notified.length > 50) notified = notified.slice(-50);
+    try { localStorage.setItem(NKEY, JSON.stringify(notified)); } catch (e) {}
+    if (!noBeep) beep();
+    if (perm() !== 'granted') return;
+    var opts = { body: body, tag: 'cage-' + key, renotify: true };
+    try {
+      var n = new Notification(title, opts);
+      n.onclick = function () { try { window.focus(); } catch (e) {} try { n.close(); } catch (e) {} };
+    } catch (e) {
+      // Android Chrome forbids the constructor; use a service worker only if one already exists.
+      try {
+        if (navigator.serviceWorker && navigator.serviceWorker.getRegistration) {
+          navigator.serviceWorker.getRegistration().then(function (reg) {
+            if (reg && reg.showNotification) return reg.showNotification(title, opts);
+          }).catch(function () {});
+        }
+      } catch (e2) {}
+    }
+  }
+  function snap(m) {
+    var r = m.request || null, s = m.session || null;
+    return {
+      rid: r ? r.id : null, rst: r ? r.status : null, headsup: !!(r && r.headsup),
+      station: r ? r.station_id : null, code: r ? r.checkin_code : null,
+      sid: s ? s.station_id + '@' + s.started_at : null, warn: s ? (s.warning_ends_at || null) : null,
+      missed: !!m.missed_invite
+    };
+  }
+  var lastSnap = null; // null = next /api/me snapshot is the baseline (no alerts)
+  function diffMe(m) {
+    var p = lastSnap, n = snap(m);
+    lastSnap = n;
+    if (!p) return;
+    if (n.rid != null && n.rst === 'queued' && n.headsup && !(p.rid === n.rid && p.headsup))
+      notify('headsup:' + n.rid, "You're next in the CAGE queue", 'Head to the CAGE door now (~10 min).');
+    if (n.rid != null && n.rst === 'invited' && !(p.rid === n.rid && p.rst === 'invited'))
+      notify('invited:' + n.rid, 'Your team is up: station ' + (n.station != null ? n.station : '?'),
+        (n.code ? 'Show code ' + n.code + ' at the CAGE door' : 'Report to the CAGE door') + ' within 10 min.', true);
+    if (n.sid && n.warn && !(p.sid === n.sid && p.warn))
+      notify('warn:' + n.sid + ':' + n.warn, '10-minute warning',
+        'Another team is waiting. Save to your backup drive and leave by ' + hhmm(parseT(n.warn)) + '.');
+    if (n.sid && p.sid === n.sid && p.warn && !n.warn)
+      notify('lift:' + n.sid + ':' + p.warn, 'Warning lifted', 'Nobody is waiting any more. Keep going.');
+    if (n.missed && !p.missed)
+      notify('missed:' + (p.rid != null ? p.rid : (n.rid != null ? n.rid : Math.floor(Date.now() / 60000))),
+        'You missed your CAGE slot', 'Request again on this page.');
+  }
 
   // ---- state ----
   var board = null, me = null, lost = false, lastDiscord = null;
@@ -369,6 +451,7 @@
         $.token.value = '';
         session = r.data.session_token;
         save(session);
+        lastSnap = null;
         render();
         poll();
       } else {
@@ -377,7 +460,7 @@
     });
   });
   function signOut(msg) {
-    session = null; me = null; clear();
+    session = null; me = null; lastSnap = null; clear();
     lastDiscord = null; $.discordInput.value = ''; hide($.discordOk); hide($.discordErr); hide($.reqErr); hide($.meErr);
     render();
     if (msg) show($.authErr, msg);
@@ -447,9 +530,10 @@
   function poll() {
     clearTimeout(pollTimer);
     if (!configured) return;
-    if (document.hidden) return;
+    if (document.hidden && !session) return; // signed in: keep polling in the background
     if (inflight) { pollTimer = setTimeout(poll, 500); return; }
     inflight = true;
+    var sess = session;
     var jobs = [api('GET', '/api/board')];
     if (session) jobs.push(api('GET', '/api/me', undefined, true));
     Promise.all(jobs).then(function (res) {
@@ -463,16 +547,18 @@
       }
       if (res[1]) {
         var m = res[1];
-        if (m.ok && m.data) { me = m.data; hide($.meErr); }
+        if (m.ok && m.data && session === sess) { me = m.data; hide($.meErr); try { diffMe(me); } catch (e) {} }
         else if (m.net) lost = true;
         else if (m.status !== 401) show($.meErr, errText(m.data, m.status));
       }
       render();
-      pollTimer = setTimeout(poll, POLL_MS);
+      if (document.hidden && !session) return;
+      pollTimer = setTimeout(poll, document.hidden ? POLL_HIDDEN_MS : POLL_MS);
     });
   }
   document.addEventListener('visibilitychange', function () {
-    if (document.hidden) clearTimeout(pollTimer); else poll();
+    if (document.hidden) { if (!session) clearTimeout(pollTimer); }
+    else { renderAlerts(); poll(); }
   });
 
   // ---- rendering ----
@@ -692,6 +778,7 @@
   }
 
   renderSoundNote();
+  renderAlerts();
   render();
   setInterval(tick, 1000);
   if (configured) poll();
