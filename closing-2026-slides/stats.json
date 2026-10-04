@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-04 10:33 EDT",
+ "generated_at": "2026-10-04 10:51 EDT",
  "export_file": "TribeCTF 2026.2026-10-04_14_31_24.zip",
  "export_time": "Sun Oct 04 10:31 AM EDT",
  "data_as_of": "Sun Oct 04 10:24 AM EDT",
@@ -552,5 +552,96 @@
   }
  ],
  "eligible_min": 2000,
- "funny_flags": []
+ "funny_flags": [],
+ "cage": {
+  "challenges": 8,
+  "points": 5400,
+  "solves": 42,
+  "teams_solved": 17,
+  "first_solve_team": "MasonCC",
+  "first_solve_at": "Sat 10:46 AM",
+  "most_solves": 5,
+  "most_solves_teams": [
+   "MasonCC"
+  ],
+  "all_solved_teams": [],
+  "unsolved": [
+   "Griffin-Corps-Career",
+   "RouterHard",
+   "RouterInsane"
+  ],
+  "list": [
+   {
+    "name": "AltGriffin",
+    "value": 300,
+    "solves": 4,
+    "first_blood": "MasonCC"
+   },
+   {
+    "name": "Registeel",
+    "value": 300,
+    "solves": 15,
+    "first_blood": "Pro(tein) Protein"
+   },
+   {
+    "name": "RouterEasy",
+    "value": 300,
+    "solves": 17,
+    "first_blood": "MasonCC"
+   },
+   {
+    "name": "Griffin-Corps-Career",
+    "value": 500,
+    "solves": 0,
+    "first_blood": null
+   },
+   {
+    "name": "Piscator",
+    "value": 500,
+    "solves": 2,
+    "first_blood": "CNS@UVA"
+   },
+   {
+    "name": "RouterMedium",
+    "value": 500,
+    "solves": 4,
+    "first_blood": "WhatIsAstig"
+   },
+   {
+    "name": "RouterHard",
+    "value": 1000,
+    "solves": 0,
+    "first_blood": null
+   },
+   {
+    "name": "RouterInsane",
+    "value": 2000,
+    "solves": 0,
+    "first_blood": null
+   }
+  ],
+  "queue": {
+   "snapshot_at": "Sun 10:36 AM",
+   "stations": 4,
+   "teams": 18,
+   "sessions": 79,
+   "requests": 93,
+   "hours": 67.4,
+   "hours_whole": 67,
+   "avg_session_min": 51,
+   "teams_full_budget": 10,
+   "peak_stations": 4,
+   "all_stations_full_hours": 9.7,
+   "peak_queue": 5,
+   "peak_queue_at": "Sat 9:41 PM",
+   "busiest_hour": "Sat 9 PM",
+   "busiest_hour_sessions": 6,
+   "overnight_sessions": 13,
+   "overnight_window": "12-6 AM",
+   "first_session": "Sat 10:38 AM",
+   "last_session_end": "Sun 10:36 AM",
+   "most_time_team": "MasonCC",
+   "most_time_hours": 10.3
+  }
+ }
 }

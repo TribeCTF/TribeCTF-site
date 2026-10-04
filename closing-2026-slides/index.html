@@ -317,24 +317,26 @@
         .s2 .slide-title { left: 152px; top: 84px; }
         .s2 .col { top: 300px; width: 502px; text-align: center; }
         .s2 .c1 { left: 155px; } .s2 .c2 { left: 709px; } .s2 .c3 { left: 1262px; }
-        .s2 .ico {
+        .cage2 .col { width: 502px; text-align: center; }
+        .cage2 .c1 { left: 155px; } .cage2 .c2 { left: 709px; } .cage2 .c3 { left: 1262px; }
+        .s2 .ico, .cage2 .ico {
             --c: 36px; position: relative;
             width: 212px; height: 212px; padding: 2px; margin: 0 auto;
             background: currentColor;
             clip-path: polygon(0 0, calc(100% - var(--c)) 0, 100% var(--c), 100% 100%, var(--c) 100%, 0 calc(100% - var(--c)));
         }
-        .s2 .ico > div {
+        .s2 .ico > div, .cage2 .ico > div {
             width: 100%; height: 100%;
             background: var(--bg-darker);
             display: flex; align-items: center; justify-content: center;
             clip-path: polygon(0 0, calc(100% - var(--c) + 1px) 0, 100% calc(var(--c) - 1px), 100% 100%, calc(var(--c) - 1px) 100%, 0 calc(100% - var(--c) + 1px));
         }
-        .s2 .ico svg { width: 116px; height: 116px; color: var(--text); opacity: 0.85; }
-        .s2 .num {
+        .s2 .ico svg, .cage2 .ico svg { width: 116px; height: 116px; color: var(--text); opacity: 0.85; }
+        .s2 .num, .cage2 .num {
             font-family: var(--font-display); font-weight: 700;
             font-size: 168px; line-height: 1; margin-top: 52px;
         }
-        .s2 .label { font-family: var(--font-display); font-size: 72px; line-height: 1.2; margin-top: 18px; }
+        .s2 .label, .cage2 .label { font-family: var(--font-display); font-size: 72px; line-height: 1.2; margin-top: 18px; }
 
         /* ===========================================
            SLIDE 3: THE CHALLENGES
@@ -391,6 +393,42 @@
         /* New flag enters from slightly lower and lands in place */
         .flags .reveal.flag { transform: translateY(28px); }
         .slide.visible .reveal.flag { transform: none; }
+
+        /* ===========================================
+           SLIDES 3a-3c: THE CAGE (numbers from stats.cage)
+           =========================================== */
+        .cage1 .eyebrow { left: 152px; top: 250px; font-family: var(--font-display); font-size: 40px; color: var(--accent); letter-spacing: 0.04em; }
+        .cage1 h2 { left: 152px; top: 310px; font-size: 168px; font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; }
+        .cage1 .rules { left: 152px; top: 530px; width: 1000px; font-family: var(--font-display); font-size: 40px; line-height: 1.35; color: var(--muted); }
+        .cage1 .warm { left: 152px; top: 670px; width: 1000px; font-size: 48px; line-height: 1.35; font-weight: 600; }
+        .cage1 .warm .n { color: var(--accent); font-family: var(--font-display); font-weight: 700; }
+        .cage1 .ico {
+            --c: 64px; left: 1300px; top: 320px; width: 468px; height: 468px; padding: 3px; color: var(--accent);
+            background: linear-gradient(135deg, var(--accent) 0%, rgba(126, 231, 135, 0.25) 45%, rgba(0, 255, 249, 0.35) 100%);
+            clip-path: polygon(0 0, calc(100% - var(--c)) 0, 100% var(--c), 100% 100%, var(--c) 100%, 0 calc(100% - var(--c)));
+        }
+        .cage1 .ico > div {
+            width: 100%; height: 100%; background: var(--bg-darker);
+            display: flex; align-items: center; justify-content: center;
+            clip-path: polygon(0 0, calc(100% - var(--c) + 1px) 0, 100% calc(var(--c) - 1px), 100% 100%, calc(var(--c) - 1px) 100%, 0 calc(100% - var(--c) + 1px));
+        }
+        .cage1 .ico svg { width: 260px; height: 260px; }
+        .cage2 .slide-title { left: 152px; top: 84px; }
+        .cage2 .sub { left: 152px; top: 190px; font-family: var(--font-display); font-size: 28px; color: var(--muted); }
+        .cage2 .col { top: 290px; }
+        .cage2 .facts {
+            left: 152px; top: 880px; width: 1616px; text-align: center;
+            font-family: var(--font-display); font-size: 30px; line-height: 1.5; color: var(--muted);
+        }
+        .cage2 .facts b { color: var(--text); font-weight: 500; }
+        .cage3 .slide-title { left: 152px; top: 84px; }
+        .cage3 .sub { left: 152px; top: 190px; font-family: var(--font-display); font-size: 28px; color: var(--muted); }
+        .cage3 .shot { --c: 28px; top: 290px; }
+        .cage3 .k1 { left: 152px; width: 960px; height: 572px; }
+        .cage3 .k2 { left: 1160px; width: 608px; height: 394px; }
+        .cage3 .cap { font-family: var(--font-display); font-size: 28px; color: var(--accent); }
+        .cage3 .cap1 { left: 152px; top: 890px; }
+        .cage3 .cap2 { left: 1160px; top: 712px; }
 
         /* ===========================================
            SLIDE 9: QUOTE
@@ -574,6 +612,35 @@
                 <div class="abs chart reveal d2" id="chart"><p class="empty">Challenge data unavailable</p></div>
             </section>
 
+            <!-- ===== 3a. THE CAGE: section title (team count from stats.cage.queue) ===== -->
+            <section class="slide cage1" aria-label="Slide 3a: The Cage">
+                <p class="abs eyebrow reveal">// new this year</p>
+                <h2 class="abs fringe reveal d1">The Cage</h2>
+                <p class="abs rules reveal d2">No AI. No phones. No laptops.<br>Just your team and the problem.</p>
+                <p class="abs warm reveal d4"><span class="n" data-stat="cage.queue.teams">&mdash;</span> teams walked in anyway, and worked it through themselves, right through the night. That was something to watch.</p>
+                <div class="abs ico reveal-img d3"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><path d="M12 15v2"/></svg></div></div>
+            </section>
+
+            <!-- ===== 3b. THE CAGE: numbers (stats.cage + stats.cage.queue snapshot) ===== -->
+            <section class="slide cage2" aria-label="Slide 3b: The Cage in numbers">
+                <h2 class="abs slide-title fringe reveal">The Cage, in Numbers</h2>
+                <p class="abs sub reveal d1"><span data-stat="cage.challenges">&mdash;</span> cage-only challenges &middot; <span data-stat="cage.queue.stations">&mdash;</span> stations &middot; open all night</p>
+                <div class="abs col c1 reveal d1"><div class="ico c-blue"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div></div><p class="num c-blue" data-stat="cage.queue.teams">&mdash;</p><p class="label">Teams</p></div>
+                <div class="abs col c2 reveal d2"><div class="ico c-red"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9 2h6"/></svg></div></div><p class="num c-red" data-stat="cage.queue.hours_whole">&mdash;</p><p class="label">Hours</p></div>
+                <div class="abs col c3 reveal d3"><div class="ico c-yellow"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg></div></div><p class="num c-yellow" data-stat="cage.solves">&mdash;</p><p class="label">Cage Flags</p></div>
+                <p class="abs facts reveal d4"><b data-stat="cage.queue.sessions">&mdash;</b> sessions &middot; <b data-stat="cage.queue.overnight_sessions">&mdash;</b> started between midnight and 6&nbsp;AM &middot; <b data-stat="cage.teams_solved">&mdash;</b> teams captured a cage flag<br>first cage flag: <b data-stat="cage.first_solve_team">&mdash;</b>, <span data-stat="cage.first_solve_at">&mdash;</span></p>
+            </section>
+
+            <!-- ===== 3c. THE CAGE: system screenshots (replayed from a Sat 9:40 PM queue backup) ===== -->
+            <section class="slide cage3" aria-label="Slide 3c: The Cage queue">
+                <h2 class="abs slide-title fringe reveal">Running the Cage</h2>
+                <p class="abs sub reveal d1">Saturday, 9:40&nbsp;PM: every station taken, four teams in line</p>
+                <div class="chamfer abs shot k1 reveal-img d2"><img src="assets/cage-staff.png" alt="CAGE staff desk: four stations in session and four teams in the queue"></div>
+                <div class="chamfer abs shot k2 reveal-img d3"><img src="assets/cage-board.png" alt="Public CAGE live board on the TribeCTF site"></div>
+                <p class="abs cap cap1 reveal d4">staff desk</p>
+                <p class="abs cap cap2 reveal d4">public live board</p>
+            </section>
+
             <!-- ===== 4. FUNNIEST FLAGS (build step 1/5; text from stats.funny_flags) ===== -->
             <section class="slide flags s4" data-build="flags" aria-label="Slide 4">
                 <h2 class="abs slide-title fringe reveal">Funniest Flags</h2>
@@ -720,7 +787,7 @@
     <!-- Stats injected by scripts/closing_stats.py (rewrites this block in place). -->
     <script id="stats" type="application/json">
 {
- "generated_at": "2026-10-04 10:33 EDT",
+ "generated_at": "2026-10-04 10:51 EDT",
  "export_file": "TribeCTF 2026.2026-10-04_14_31_24.zip",
  "export_time": "Sun Oct 04 10:31 AM EDT",
  "data_as_of": "Sun Oct 04 10:24 AM EDT",
@@ -1273,7 +1340,98 @@
   }
  ],
  "eligible_min": 2000,
- "funny_flags": []
+ "funny_flags": [],
+ "cage": {
+  "challenges": 8,
+  "points": 5400,
+  "solves": 42,
+  "teams_solved": 17,
+  "first_solve_team": "MasonCC",
+  "first_solve_at": "Sat 10:46 AM",
+  "most_solves": 5,
+  "most_solves_teams": [
+   "MasonCC"
+  ],
+  "all_solved_teams": [],
+  "unsolved": [
+   "Griffin-Corps-Career",
+   "RouterHard",
+   "RouterInsane"
+  ],
+  "list": [
+   {
+    "name": "AltGriffin",
+    "value": 300,
+    "solves": 4,
+    "first_blood": "MasonCC"
+   },
+   {
+    "name": "Registeel",
+    "value": 300,
+    "solves": 15,
+    "first_blood": "Pro(tein) Protein"
+   },
+   {
+    "name": "RouterEasy",
+    "value": 300,
+    "solves": 17,
+    "first_blood": "MasonCC"
+   },
+   {
+    "name": "Griffin-Corps-Career",
+    "value": 500,
+    "solves": 0,
+    "first_blood": null
+   },
+   {
+    "name": "Piscator",
+    "value": 500,
+    "solves": 2,
+    "first_blood": "CNS@UVA"
+   },
+   {
+    "name": "RouterMedium",
+    "value": 500,
+    "solves": 4,
+    "first_blood": "WhatIsAstig"
+   },
+   {
+    "name": "RouterHard",
+    "value": 1000,
+    "solves": 0,
+    "first_blood": null
+   },
+   {
+    "name": "RouterInsane",
+    "value": 2000,
+    "solves": 0,
+    "first_blood": null
+   }
+  ],
+  "queue": {
+   "snapshot_at": "Sun 10:36 AM",
+   "stations": 4,
+   "teams": 18,
+   "sessions": 79,
+   "requests": 93,
+   "hours": 67.4,
+   "hours_whole": 67,
+   "avg_session_min": 51,
+   "teams_full_budget": 10,
+   "peak_stations": 4,
+   "all_stations_full_hours": 9.7,
+   "peak_queue": 5,
+   "peak_queue_at": "Sat 9:41 PM",
+   "busiest_hour": "Sat 9 PM",
+   "busiest_hour_sessions": 6,
+   "overnight_sessions": 13,
+   "overnight_window": "12-6 AM",
+   "first_session": "Sat 10:38 AM",
+   "last_session_end": "Sun 10:36 AM",
+   "most_time_team": "MasonCC",
+   "most_time_hours": 10.3
+  }
+ }
 }
     </script>
 
@@ -1413,6 +1571,8 @@
                 try {
                     const data = JSON.parse(localStorage.getItem(this.key) || 'null');
                     if (!Array.isArray(data)) return;
+                    // Saved edits are stored by slide position; skip them if slides were added/removed since.
+                    if (data.length !== document.querySelectorAll('.slide').length) return;
                     document.querySelectorAll('.slide').forEach((s, i) => { if (typeof data[i] === 'string') s.innerHTML = data[i]; });
                 } catch (e) { /* ignore */ }
             }
