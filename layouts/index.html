@@ -115,20 +115,61 @@
             margin-bottom: 0.5rem;
         }
 
-        #eventDate.counting {
-            color: #7ee787;
+        /* 2026 by the numbers: compact terminal-style stat strip. */
+        .stats2026 {
+            margin: 2rem 0 1rem;
         }
 
-        /* Venue now carries the William & Mary attribution on its own, so it
-           reads a step up from the other detail lines. */
-        .eventLocation {
-            color: #ddd;
-            font-size: 1.25rem;
+        .stats2026 h2 {
             margin-bottom: 1rem;
         }
 
-        .register-btn.cmd {
+        .statGrid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .statTile {
+            flex: 1 1 7rem;
+            box-sizing: border-box;
+            padding: 0.75rem 1rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            transition: border-color 0.2s ease;
+        }
+
+        .statTile:hover {
+            border-color: #7ee787;
+        }
+
+        .statNum {
+            display: block;
             font-family: 'Fira Mono', monospace;
+            font-size: 1.75rem;
+            color: #7ee787;
+        }
+
+        .statLabel {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .podium {
+            list-style: none;
+            padding: 0;
+            margin: 1.25rem 0 0.75rem;
+            font-family: 'Fira Mono', monospace;
+            color: #ddd;
+        }
+
+        .podium li {
+            margin-bottom: 0.35rem;
+            overflow-wrap: anywhere;
+        }
+
+        .podium .pts {
+            color: #7ee787;
         }
     </style>
 </head>
@@ -147,16 +188,31 @@
                         <p>{{ .Site.Params.site.detail }} </p>
                     </div>
 
-                    <h3 id="eventDate" aria-label="October 3-4, 2026">October 3-4, 2026</h3>
-                    <p class="eventLocation">📍 ISC 4 (CDSP Building), William &amp; Mary</p>
+                    <h3 id="eventDate" aria-label="October 3-4, 2026 (ISC 4 @ W&amp;M)">October 3-4, 2026 (ISC 4 @ W&amp;M)</h3>
+                    <p style="color: #ccc; margin-bottom: 1rem;">TribeCTF 2026 was a success: 24.5 hours of hacking at William &amp; Mary and the debut of the CAGE. Thanks to everyone who played. We're already looking forward to next year!</p>
                     <p style="color: #ccc; margin-bottom: 1rem;">🏆 Winner: $2,500 | Runner-up: $1,000 | Third: $500</p>
 
-                    <a href="/cage"><button class="register-btn">Enter the CAGE</button></a>
-                    <p style="margin-top: 0.75rem;"><a href="/schedule">View the event schedule &rarr;</a></p>
+                    <section class="stats2026" aria-labelledby="stats2026Heading">
+                        <h2 id="stats2026Heading">$ ./stats --year 2026</h2>
+                        <div class="statGrid">
+                            <div class="statTile"><span class="statNum">25</span><span class="statLabel">teams</span></div>
+                            <div class="statTile"><span class="statNum">68</span><span class="statLabel">students</span></div>
+                            <div class="statTile"><span class="statNum">8</span><span class="statLabel">schools</span></div>
+                            <div class="statTile"><span class="statNum">30</span><span class="statLabel">challenges</span></div>
+                            <div class="statTile"><span class="statNum">324</span><span class="statLabel">flags captured</span></div>
+                        </div>
+                        <ol class="podium">
+                            <li>🥇 MasonCC <span class="pts">14,250 pts</span></li>
+                            <li>🥈 WhatIsAstig <span class="pts">13,250 pts</span></li>
+                            <li>🥉 CNS@UVA <span class="pts">12,950 pts</span></li>
+                        </ol>
+                        <p style="color: #ccc;">The CAGE: 18 teams, 82 sessions, and 70 hours of no-AI hacking on 4 sealed stations. <a href="/2026-stats/#-the-cage">CAGE highlights &rarr;</a></p>
+                        <p><a href="/2026-stats/">Full 2026 stats &rarr;</a></p>
+                    </section>
 
                     {{ partial "sponsors.html" (dict "ctx" . "showCta" true "heading" "$ ./thanks" "tagline" "The folks funding the prizes, the pizza, and the servers.") }}
 
-                    <h3>Missed last year? Read the <a href="/2025-recap">2025 recap!</a></h3>
+                    <h3>Past: read the <a href="/2025-recap">2025 recap!</a></h3>
 
                 </div>
             </main>
@@ -214,64 +270,6 @@
                     if (i <= tagText.length) setTimeout(() => type(i + 1), 45);
                 }, 1200);
             }
-
-            // Countdown to game day, shown in place of the date while it is
-            // hovered. Targets the usual 10 AM ET Saturday start; the closing
-            // time is still TBD, so "GAME ON" runs through end of Sunday.
-            const start = new Date('2026-10-03T10:00:00-04:00');
-            const end = new Date('2026-10-05T00:00:00-04:00');
-            const dateEl = document.getElementById('eventDate');
-            const dateText = dateEl.textContent;
-            const pad = n => String(n).padStart(2, '0');
-            let clockTimer = null;
-            function remaining() {
-                const now = new Date();
-                if (now >= end) return null;
-                if (now >= start) return '>> GAME ON <<';
-                let s = Math.floor((start - now) / 1000);
-                const d = Math.floor(s / 86400); s %= 86400;
-                const h = Math.floor(s / 3600); s %= 3600;
-                const m = Math.floor(s / 60); s %= 60;
-                return 'T-' + d + 'd ' + pad(h) + ':' + pad(m) + ':' + pad(s) + ' until game day';
-            }
-            dateEl.addEventListener('mouseenter', () => {
-                const tickClock = () => {
-                    const t = remaining();
-                    if (t === null) return;
-                    dateEl.classList.add('counting');
-                    dateEl.textContent = t;
-                    clockTimer = setTimeout(tickClock, 1000);
-                };
-                tickClock();
-            });
-            dateEl.addEventListener('mouseleave', () => {
-                clearTimeout(clockTimer);
-                dateEl.classList.remove('counting');
-                dateEl.textContent = dateText;
-            });
-
-            // Register button morphs into a shell command on hover.
-            const btn = document.querySelector('.register-btn');
-            const btnText = btn.textContent;
-            const cmdText = '$ ./register.sh';
-            // Lock the button to the wider of its two labels so the
-            // hover swap doesn't resize it.
-            btn.style.minHeight = btn.offsetHeight + 'px';
-            const w1 = btn.offsetWidth;
-            btn.classList.add('cmd');
-            btn.textContent = cmdText;
-            const w2 = btn.offsetWidth;
-            btn.classList.remove('cmd');
-            btn.textContent = btnText;
-            btn.style.minWidth = Math.max(w1, w2) + 'px';
-            btn.addEventListener('mouseenter', () => {
-                btn.classList.add('cmd');
-                btn.textContent = cmdText;
-            });
-            btn.addEventListener('mouseleave', () => {
-                btn.classList.remove('cmd');
-                btn.textContent = btnText;
-            });
         })();
     </script>
 

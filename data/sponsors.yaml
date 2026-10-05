@@ -13,3 +13,7 @@
   tier: sudo
   url: "https://www.wm.edu/offices/research/"
   logo: "/sponsors/wm-vp-research.svg"
+- name: "Department of Computer Science, William & Mary"
+  tier: sudo
+  url: "https://www.wm.edu/as/computerscience/"
+  logo: "/sponsors/wm-cs.svg"

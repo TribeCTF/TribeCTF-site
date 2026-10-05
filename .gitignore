@@ -89,3 +89,6 @@ Temporary Items
 .claude/settings.local.json
 *.log
 archive/
+
+# Original event photos (full-size, with metadata); site uses converted copies in page bundles
+static/*-pics/

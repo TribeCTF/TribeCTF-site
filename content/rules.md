@@ -3,8 +3,6 @@ title = "Rules"
 description = ""
 +++
 
-{{< rawhtml >}}<!-- The Griffin is listening. Open your console. -->{{< /rawhtml >}}
-
 ### $ Terms for Participation
 All information provided to establish an account must be true and correct. You are responsible for keeping such information up-to-date. Failure to keep your account up-to-date may, among other things, jeopardize your eligibility for prizes.
 
@@ -13,7 +11,6 @@ You are solely responsible for keeping your account names and passwords confiden
 If you register to be on a Team with other Participants, you understand that information about you may be provided to other Team Participants. In addition, you understand that your School may be informed about your participation in TribeCTF and/or may be asked to verify your enrollment in order to verify your eligibility to receive prizes. To the extent your School cannot legally release such information about you without your consent and you do not provide such consent, you agree that you and/or your Team may be ineligible for certain prizes if TribeCTF cannot verify your eligibility.
 
 ### $ Eligibility/Team Formation
-{{< rawhtml >}}<span id="griffin-feather" hidden data-word="wings"></span>{{< /rawhtml >}}
 To be eligible to participate in TribeCTF, you must be at least 18 years of age and currently enrolled as an undergraduate or graduate student at an accredited college or university. Registration requires a valid `.edu` email address, and Participants must present a valid student ID at the event. Participants who do not meet these criteria are not eligible to compete or to receive prizes.
 
 While you can participate as an individual, teams may be formed of up to 4 total participants, who may or may not be from the same institution. While there are no limitations on the resources or tools that Participants can use, only the eligible Team Participants may solve challenges as part of the Competition. Team advisors, or anyone outside the Team, may not provide direct assistance on any problems.
@@ -59,7 +56,3 @@ Limitation of Liability, Disclaimer of Warranties
 IN NO EVENT WILL TribeCTF BE RESPONSIBLE OR LIABLE FOR ANY DAMAGES OR LOSSES OF ANY KIND, INCLUDING DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL OR PUNITIVE DAMAGES ARISING OUT OF YOUR PARTICIPATION IN THE CONTEST OR FOR ANY ACTION OR OMISSION MADE IN CONNECTION WITH THE CONTEST. WITHOUT LIMITING THE FOREGOING, EVERYTHING IN THESE RULES AND IN THIS CONTEST, INCLUDING THE PRIZES AWARDED, IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. SOME JURISDICTIONS MAY NOT ALLOW THE LIMITATIONS OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES OR EXCLUSION OF IMPLIED WARRANTIES SO SOME OF THE ABOVE LIMITATIONS OR EXCLUSIONS MAY NOT APPLY TO YOU. CHECK YOUR LOCAL LAWS FOR ANY RESTRICTIONS OR LIMITATIONS REGARDING THESE LIMITATIONS OR EXCLUSIONS.
 
 The TribeCTF 2026 site or materials may link to and/or refer to third party websites and/or services. W&M/TribeCTF does not control or endorse such sites. You are responsible for determining the suitability of those sites or services.
-
-<div style="display: none;" data-secret="dHJpYmVjdGZ7Zmw0NjVfNHIzXzczbXAwcjRyeV81azFsbDVfNHIzX2YwcjN2M3J9">
-Hint: Decode me to find the flag format!
-</div>
