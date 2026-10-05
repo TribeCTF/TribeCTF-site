@@ -31,7 +31,7 @@ Check the [schedule page](/schedule) for how the weekend went down.
 
 ![TribeCTF 2026 Organizing Committee](images/oc-2026.jpg)
 
-\> **Left to right:** Adwait Nadkarni, Lily Gloudemans, Pankaj Niroula, Asher Montague, Victor Olaiya, Stephen Herwig, Nicholas Janis, Chengao Du, Aashutosh Poudel, and Md Akram Khan. Not pictured: Yue Xiao.
+\> **Left to right:** Adwait Nadkarni, Lily Gloudemans, Pankaj Niroula, Asher Montague, Victor Olaiya, Stephen Herwig, Nicolas Janis, Chengao Du, Aashutosh Poudel, and Md Akram Khan. Not pictured: Yue Xiao.
 
 
 {{< sponsors >}}
