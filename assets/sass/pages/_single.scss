@@ -32,3 +32,12 @@ dd {
 dt::after {
     content: ":";
 }
+// Past-tense, post-event notes (e.g. the CAGE page after the event)
+.past {
+    font-style: italic;
+    color: #a8b0b8;
+    border-left: 2px solid #7ee787;
+    padding-left: 0.4em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}

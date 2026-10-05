@@ -4,9 +4,9 @@ meta_description = "Schedule of TribeCTF 2026"
 +++
 
 
-## $ What's the event timeline like?
+## $ What was the event timeline like?
 
-**TribeCTF 2026 runs October 3-4** in **ISC 4 (CDSP Building)** at William & Mary —
+**TribeCTF 2026 ran October 3-4** in **ISC 4 (CDSP Building)** at William & Mary —
 ~24 hours of hacking, from Saturday morning to Sunday morning.
 
 ### Saturday, October 3
@@ -31,6 +31,6 @@ meta_description = "Schedule of TribeCTF 2026"
 
 
 ## $ What about Food?
-\> Every meal is free and on the timeline above — breakfast through Sunday breakfast, plus midnight snacks.
+\> Every meal was free and on the timeline above — breakfast through Sunday breakfast, plus midnight snacks.
 
-**You won't be hungry, we promise!!**
+**Nobody went hungry, as promised!!**

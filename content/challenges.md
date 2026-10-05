@@ -3,10 +3,10 @@ title = "Challenges"
 description = ""
 +++
 
-Get ready to put your cybersecurity skills to the test! TribeCTF will feature a diverse array of challenges designed to challenge and excite participants of all skill levels.
+TribeCTF 2026 put everyone's cybersecurity skills to the test! The competition featured a diverse array of challenges designed to challenge and excite participants of all skill levels.
 
-### $ What to Expect
-While we're keeping the specifics under wraps for now, here's a sneak peek at what's in store:
+### $ What Was in Store
+Here's what participants took on:
 
 - Difficulty Levels: Easy, Medium, Hard, and Insane challenges to suit everyone from beginners to seasoned pros.
 
@@ -18,7 +18,7 @@ While we're keeping the specifics under wraps for now, here's a sneak peek at wh
    - Hardware
    - Miscellaneous (AI, Coding, Web)
 
-Whether you're a reversing wizard, a crypto enthusiast, or a digital detective, TribeCTF has something to challenge and intrigue you.
+Whether you're a reversing wizard, a crypto enthusiast, or a digital detective, TribeCTF had something to challenge and intrigue you.
 
 ### $ Newbie here,  How do I Prepare
 
@@ -32,4 +32,4 @@ If you are completely new and want to get started with some practice, here are s
 
 ----
 
-Are you ready to seize the flag? [>>>>Register Now!<<<<]({{< ref "registration" >}})
+Writeups and the 2026 recap are coming soon. Start practicing now, and we'll see you at TribeCTF 2027!

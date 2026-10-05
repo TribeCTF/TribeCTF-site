@@ -514,17 +514,21 @@
         .s14 .contact { left: 700px; top: 800px; font-size: 32px; line-height: 1.45; }
         .s14 .contact a { color: var(--accent); }
 
+        /* Sponsors: W&M Vice Provost for Research + W&M Computer Science Department (matches closing deck) */
         .s15 .card {
-            left: 520px; top: 320px; width: 880px; height: 440px;
+            top: 300px; width: 760px; height: 400px;
             --c: 48px;
         }
+        .s15 .k1 { left: 160px; } .s15 .k2 { left: 1000px; }
         .s15 .card > div {
             width: 100%; height: 100%;
             background: #f8f8ff;
             display: flex; align-items: center; justify-content: center;
             clip-path: polygon(0 0, calc(100% - var(--c) + 1px) 0, 100% calc(var(--c) - 1px), 100% 100%, calc(var(--c) - 1px) 100%, 0 calc(100% - var(--c) + 1px));
         }
-        .s15 .card img { width: 760px; height: auto; display: block; }
+        .s15 .card img { width: 640px; height: auto; display: block; }
+        .s15 .cap { top: 740px; width: 760px; text-align: center; font-size: 36px; line-height: 1.3; color: var(--text); }
+        .s15 .cap.c1 { left: 160px; } .s15 .cap.c2 { left: 1000px; }
 
         /* ===========================================
            SLIDE 16: GOOD LUCK
@@ -785,10 +789,13 @@
                 </div>
             </section>
 
-            <!-- ===== 15. SPONSOR ===== -->
+            <!-- ===== 15. SPONSORS ===== -->
             <section class="slide s15" aria-label="Slide 15">
-                <h2 class="abs tl-title fringe reveal">Sponsor</h2>
-                <div class="chamfer abs card reveal-img d1"><div><img src="assets/s15-wm-vpr.svg" alt="William &amp; Mary Vice Provost for Research logo"></div></div>
+                <h2 class="abs tl-title fringe reveal">Sponsors</h2>
+                <div class="chamfer abs card k1 reveal-img d1"><div><img src="assets/s15-wm-vpr.svg" alt="William &amp; Mary Vice Provost for Research logo"></div></div>
+                <div class="chamfer abs card k2 reveal-img d2"><div><img src="assets/wm-cs.svg" alt="William &amp; Mary Computer Science Department"></div></div>
+                <p class="abs cap c1 reveal d3">W&amp;M Vice Provost for Research</p>
+                <p class="abs cap c2 reveal d3">W&amp;M Computer Science Department</p>
             </section>
 
             <!-- ===== 16. GOOD LUCK ===== -->

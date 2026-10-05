@@ -4,21 +4,23 @@ description = ""
 draft = false
 +++
 
+> <span class="past">**The CAGE ran during TribeCTF 2026 (October 3-4, 2026), and its queue is now closed.** The rules below are kept for the record.</span>
+
 ### $ The CAGE
-This year we're raising the stakes with the **CAGE**: a sealed, monitored room where you hack with only what we give you. No personal devices, no AI, restricted internet, no shortcuts. Think of it as a SCIF for hackers: you bring the skills, we provide everything else.
+<span class="past">For TribeCTF 2026 we raised the stakes with the **CAGE**: a sealed, monitored room where you hacked with only what we gave you. No personal devices, no AI, restricted internet, no shortcuts. Think of it as a SCIF for hackers: you brought the skills, we provided everything else.</span>
 
-A set of challenges, from easy to insane, can **only** be reached from inside the CAGE. Skip the CAGE and they stay locked.
+<span class="past">A set of challenges, from easy to insane, could **only** be reached from inside the CAGE. Teams that skipped the CAGE found them locked.</span>
 
-The CAGE is monitored for the entire event. Any violation of the rules below by any team member disqualifies **the entire team**.
+<span class="past">The CAGE was monitored for the entire event. Any violation of the rules below by any team member disqualified **the entire team**.</span>
 
 ### $ Entering the CAGE
 - **Come in empty-handed, or check in at the door.** No personal computing or communication devices go inside: laptops, phones, tablets, smartwatches, earbuds, headphones, or USB drives. Hand them to a teammate, or check them in at the CAGE door and we'll hold them until you're out. Pen and paper are provided inside.
-- **Request, then wait for your invite.** Request CAGE time at [tribectf.cs.wm.edu/enter-the-cage](https://tribectf.cs.wm.edu/enter-the-cage). First-timers go to the front of the line. Everyone else is served first-come, first-served. Once we tell you you're next, your place is held.
+- **Request, then wait for your invite.** <span class="past">Teams requested CAGE time through an online queue on this site (now closed).</span> First-timers go to the front of the line. Everyone else is served first-come, first-served. Once we tell you you're next, your place is held.
 - **One team, one machine.** Your whole team is welcome inside, but you get one machine between you. Choose your keyboard wisely.
 - **Be on time.** If your team doesn't arrive within 10 minutes of your invite, the slot passes to the next team in line.
 
 ### $ Time in the CAGE
-The CAGE is open from **10:30 AM Saturday to 10:30 AM Sunday**.
+<span class="past">The CAGE was open from **10:30 AM Saturday to 10:30 AM Sunday**.</span>
 
 - **Book in 30-minute blocks.** Request 30, 60, 90, or 120 minutes, up to whatever remains of your 2 hours. Once your session starts, the full booking counts against you, even if you leave early.
 - **2 hours per team.** Each team gets 2 hours of guaranteed CAGE time across the whole event.
@@ -31,9 +33,9 @@ The CAGE is open from **10:30 AM Saturday to 10:30 AM Sunday**.
 - **A clean slate.** Every station boots a fresh **Kali Linux 2026.2 Live** image. Nothing carries over between sessions, whether yours or anyone else's.
 - **Install what you need.** You can install tools and use the web as you normally would on a Live boot. Just remember that a Live boot forgets everything when it shuts down.
 - **Save to the backup drive, and only the backup drive.** Each team gets a USB backup drive. It never leaves the CAGE. We keep it, labeled with your team name, and hand it back at the start of your next session. Pack light.
-- **Wiped after the event.** All backup drives are erased when TribeCTF ends.
+- **Yours to keep.** <span class="past">After the event, teams took their backup drives home as memorabilia. Unclaimed drives were wiped.</span>
 - **Submit flags from inside.** The scoreboard is reachable from your CAGE machine.
-- **Track your time.** Open [tribectf.cs.wm.edu/enter-the-cage](https://tribectf.cs.wm.edu/enter-the-cage) on your CAGE machine and click **Follow** on your station for a countdown and alerts.
+- **Track your time.** <span class="past">The CAGE queue page let teams **Follow** their station from the CAGE machine for a countdown and alerts.</span>
 
 ### $ What Happens in the CAGE
 - **No AI.** AI assistants, chatbots, copilots, and AI-powered features of any tool are off-limits in the CAGE, whether in a browser, a terminal, or an editor plugin. Your brain is the only model allowed in the room.
@@ -44,4 +46,4 @@ The CAGE is open from **10:30 AM Saturday to 10:30 AM Sunday**.
   - the network: attacking it, or bypassing its restrictions with VPNs, proxies, tunnels, DNS tricks, or anything similar. Scanning and attacking devices that a challenge points you to is fair game.
   - the backup drives: accessing any drive except your own
   - the room itself
-- **The organizers have the final word.** Any issues in the CAGE are handled by the Organizing Committee, and its decisions are final. Questions go to `@committee` on Discord or to any committee member.
+- **The organizers have the final word.** <span class="past">Any issues in the CAGE were handled by the Organizing Committee, and its decisions were final. During the event, questions went to `@committee` on Discord or to any committee member.</span>
