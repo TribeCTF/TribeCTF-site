@@ -32,4 +32,8 @@ If you are completely new and want to get started with some practice, here are s
 
 ----
 
-Writeups and the 2026 recap are coming soon. Start practicing now, and we'll see you at TribeCTF 2027!
+### $ Looking for Writeups?
+
+We're publishing writeups for [TribeCTF 2026](/writeups/2026/) as they're ready. We can't promise one for every challenge. Past years: [2024 writeups](/writeups/2024/). The [2026 recap](/2026/) has the event stats.
+
+Start practicing now, and we'll see you at TribeCTF 2027!

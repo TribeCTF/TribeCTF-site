@@ -2,6 +2,7 @@
 title = "TribeCTF 2026 Stats"
 description = ""
 draft = false
+aliases = ["/2026"]
 +++
 
 ## $ Quick Stats

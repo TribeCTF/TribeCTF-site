@@ -18,26 +18,40 @@ theme = "nightfall"
     name = "rules"
     weight = 3
     url = "rules"
-  # Past events. The header template renders only one level of children, so these
+  # Past events and writeups. The header template renders only one level of children, so these
   # stay flat rather than nesting a dropdown per year.
   [[menu.header]]
-    name = "past"
+    name = "recaps"
     weight = 4
-    identifier = "past"
+    identifier = "recaps"
+  [[menu.header]]
+    name = "↳ 2026 recap"
+    parent = "recaps"
+    weight = 1
+    url = "2026-stats"
   [[menu.header]]
     name = "↳ 2025 recap"
-    parent = "past"
-    weight = 1
+    parent = "recaps"
+    weight = 2
     url = "2025-recap"
   [[menu.header]]
     name = "↳ 2024 recap"
-    parent = "past"
-    weight = 2
+    parent = "recaps"
+    weight = 3
     url = "2024-recap"
   [[menu.header]]
+    name = "writeups"
+    weight = 5
+    identifier = "writeups"
+  [[menu.header]]
+    name = "↳ 2026 writeups"
+    parent = "writeups"
+    weight = 1
+    url = "writeups/2026"
+  [[menu.header]]
     name = "↳ 2024 writeups"
-    parent = "past"
-    weight = 3
+    parent = "writeups"
+    weight = 2
     url = "writeups/2024"
 
 [params]
